@@ -1,6 +1,6 @@
 <template lang="html">
-  <div id="app">
-    <router-view></router-view>
+  <div class="login">
+    <h1>login</h1>
   </div>
 </template>
 
