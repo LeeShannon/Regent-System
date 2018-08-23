@@ -44,7 +44,7 @@
           </a>
 
           <div class="d-flex justify-content-end welcome">
-            <h2 class="greeting">Welcome User</h2>
+            <h2 class="greeting">Hello User</h2>
           </div>
 
         </div>

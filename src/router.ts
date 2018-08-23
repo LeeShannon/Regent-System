@@ -4,7 +4,8 @@ import Login from './views/Login.vue';
 import Home from './views/Home.vue';
 import Shipping from './views/Shipping.vue';
 import Dashboard from './views/Dashboard.vue';
-import Inventory from './views/Inventory.vue'
+import Inventory from './views/Inventory.vue';
+import Welcome from './views/Welcome.vue';
 
 Vue.use(Router);
 
@@ -14,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'login',
       component: Login,
+    },
+    {
+      path: '/welcome',
+      name: 'welcome',
+      component: Welcome,
     },
     {
       path: '/home',
