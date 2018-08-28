@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <h1>Users</h1>
+    <h1 class="page-headers">Users</h1>
     <br />
     <div>
       <button type="button" class=" my-btn" data-toggle="modal" data-target="#addUserModal">
@@ -28,13 +28,56 @@
         </button>
       </div>
       <div class="modal-body">
-       <form class="" action="index.html" method="post">
 
-       </form>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="name" class="grey-text font-weight-light">Name</label>
+            <input type="text" id="name" class="form-control">
+          </div>
+          <div class="col-lg-6">
+            <label for="surname" class="grey-text font-weight-light">Surname</label>
+            <input type="text" id="surname" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="e-mail" class="grey-text font-weight-light">E-mail</label>
+            <input type="e-mail" id="e-mail" class="form-control">
+          </div>
+          <div class="col-lg-6">
+            <label for="password" class="grey-text font-weight-light">Password</label>
+            <input type="password" id="password" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="phone" class="grey-text font-weight-light">Phone</label>
+            <input type="number" id="phone" class="form-control">
+          </div>
+          <div class="col-lg-6">
+            <label for="userType" class="grey-text font-weight-light">User Type</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option value="1">Admin</option>
+                <option value="2">Manager</option>
+                <option value="2">Employee</option>
+            </select>
+          </div>
+        </div>
+
+
+
+              <br>
+
+              <!-- Default input email -->
+
+
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Submit</button>
+
       </div>
     </div>
   </div>
@@ -558,5 +601,14 @@ export default {
   color: white;
   border: none;
   letter-spacing:1px;
+}
+
+.page-headers {
+  margin-bottom: .8rem;
+  padding-top: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-size: 1.5rem;
+  margin-top: 0;
 }
 </style>
