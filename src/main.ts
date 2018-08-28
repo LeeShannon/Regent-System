@@ -1,12 +1,12 @@
 import Vue from 'vue';
+import './plugins/vuetify'
 import App from './App.vue';
 import router from './router';
-import vueCalendar from 'vue2-simple-calendar';
 import 'mdbvue/build/css/mdb.css';
-
-Vue.use(vueCalendar, {
-  // configuration goes here.
-});
+// import Vuetify from 'vuetify';
+// import 'vuetify/dist/vuetify.min.css';
+//
+// Vue.use(Vuetify)
 
 Vue.config.productionTip = false;
 

@@ -37,10 +37,6 @@
             <i class="fas fa-bars bar"></i>
           </a>
 
-          <div class="d-flex justify-content-end welcome">
-            <h2 class="greeting">Hello User</h2>
-          </div>
-
         </div>
 
         <div class="row">
@@ -67,7 +63,7 @@ export default {
 
 <style>
 body {
-  background-color: #F2F4F7;
+  background-color: #F2F4F7 !important;
 }
 /* sidebar (currently hidden) */
 
