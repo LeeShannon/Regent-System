@@ -17,19 +17,13 @@
           <router-link to="/inventory"> <i class="fas fa-box-open" id="icon"></i> <span class="test">Inventory</span></router-link>
         </li>
         <li>
-          <router-link to="/"> <i class="far fa-chart-bar" id="icon"></i> <span class="test">Statistics</span> </router-link>
-        </li>
-        <li>
-          <router-link to="/"> <i class="fas fa-envelope" id="icon"></i> <span class="test">Mail</span> </router-link>
-        </li>
-        <li>
-          <router-link to="/"> <i class="fas fa-comment-alt" id="icon"></i> <span class="test">Forum</span></router-link>
+          <router-link to="/mail"> <i class="fas fa-envelope" id="icon"></i> <span class="test">Mail</span> </router-link>
         </li>
         <li> <i class="fas fa-user" id="icon"></i>
-          <router-link to="/"> <span class="test">Users</span></router-link>
+          <router-link to="/users"> <span class="test">Users</span></router-link>
         </li>
         <li>
-          <router-link to="/"> <i class="fas fa-sign-out-alt" id="icon"></i> <span class="test">Logout</span></router-link>
+          <router-link to="/logout"> <i class="fas fa-sign-out-alt" id="icon"></i> <span class="test">Logout</span></router-link>
         </li>
       </ul>
     </div>

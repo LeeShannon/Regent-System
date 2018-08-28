@@ -80,7 +80,7 @@
       </div>
     </div>
 
-    <div class="col-lg-4">
+    <!-- <div class="col-lg-4">
       <div class="graph calendar">
         <h3 class="home-headers">calendar</h3>
         <vue-calendar
@@ -94,9 +94,25 @@
           @event-clicked="eventClicked"
           @month-changed="monthChanged">
         </vue-calendar>
+      </div> -->
 
+    <div class="col-lg-4">
+
+      <div class="stats-wrapper">
+
+        <div class="revenue-stat">
+        <h3 class="home-headers">revenue</h3>
+      </div>
+
+      <div class="orders-stat">
+        <h3 class="home-headers">orders</h3>
+      </div>
 
       </div>
+
+    </div>
+
+
     </div>
   </div>
 
@@ -317,5 +333,26 @@ export default {
 }
 .events .more-link {
   color: rgba(0, 0, 0, 0.38);
+}
+
+/* stats */
+.stats-wrapper{
+  margin-top: 20px;
+  width: 100%;
+}
+
+.revenue-stat {
+  height: 190px;
+  background-color: white;
+  width: 100%;
+  border-radius: 7px;
+  margin-bottom: 10px;
+}
+
+.orders-stat {
+  height: 190px;
+  background-color: white;
+  width: 100%;
+  border-radius: 7px;
 }
 </style>

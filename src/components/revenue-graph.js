@@ -35,7 +35,7 @@ export default {
         backgroundColor: this.gradient,
         data: [60, 55, 32, 10, 2, 12, 53]
 
-      }]
+      }]  
     }, {
       responsive: true,
       maintainAspectRatio: false

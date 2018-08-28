@@ -6,6 +6,8 @@ import Shipping from './views/Shipping.vue';
 import Dashboard from './views/Dashboard.vue';
 import Inventory from './views/Inventory.vue';
 import Welcome from './views/Welcome.vue';
+import Users from './views/Users.vue';
+import Mail from './views/Mail.vue';
 
 Vue.use(Router);
 
@@ -39,6 +41,16 @@ export default new Router({
           path: '/inventory',
           name: 'inventory',
           component: Inventory,
+        },
+        {
+          path: '/users',
+          name: 'users',
+          component: Users,
+        },
+        {
+          path: '/mail',
+          name: 'mail',
+          component: Mail,
         }
       ]
     }
