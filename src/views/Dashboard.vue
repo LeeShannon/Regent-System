@@ -190,7 +190,7 @@ export default {
   letter-spacing: .02em;
   font-size: 1.1rem;
   color: white;
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 
 .tasks ul li {
