@@ -547,7 +547,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .my-btn {
   outline:none;
   height: 40px;
