@@ -75,7 +75,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Submit</button>
 
       </div>
@@ -601,6 +601,10 @@ export default {
   color: white;
   border: none;
   letter-spacing:1px;
+}
+
+.btn {
+  border-radius: 40px !important;
 }
 
 .page-headers {
