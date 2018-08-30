@@ -1,21 +1,15 @@
 <template lang="html">
   <div class="login ">
-    <div class="login-div">
-      <h1 class="thin-header">Login</h1>
+    <div class="cp-div">
+      <h1 class="thin-header">Change Password</h1>
       <div class="login-form">
         <!-- need to prevent form from posting right away and redirect to welcome -->
         <form>
-          <input v-model="email" class="login-input" type="email" name="email" placeholder="E-mail">
           <input v-model="password" class="login-input" type="password" name="password" placeholder="Password">
           <div class="btn-container">
             <input @click="showProgress($event)" class="form-button" type="submit" name="login" value="Submit">
           </div>
         </form>
-        <br>
-        <br>
-        <div class="forgot">
-          <router-link to="/changepassword" class="forgot">Forgot Password?</router-link>
-        </div>
       </div>
     </div>
   </div>
@@ -25,7 +19,6 @@
 export default {
   data() {
     return{
-      email: '',
       password: ''
     }
   },
@@ -50,8 +43,8 @@ export default {
   text-align: center;
 }
 
-.login-div {
-  height: 500px;
+.cp-div {
+  height: 400px;
   width: 400px;
   background-color: red;
   border-radius: 20px;

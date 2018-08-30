@@ -47,31 +47,41 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-lg-6">
-              <label for="name" class="grey-text font-weight-light">Name</label>
-              <input type="text" id="name" class="form-control">
+              <md-field class="modal-input">
+                <label>Name</label>
+                <md-input type="text"></md-input>
+              </md-field>
             </div>
             <div class="col-lg-6">
-              <label for="surname" class="grey-text font-weight-light">Surname</label>
-              <input type="text" id="surname" class="form-control">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="e-mail" class="grey-text font-weight-light">E-mail</label>
-              <input type="e-mail" id="e-mail" class="form-control">
-            </div>
-            <div class="col-lg-6">
-              <label for="password" class="grey-text font-weight-light">Password</label>
-              <input type="password" id="password" class="form-control">
+              <md-field class="modal-input">
+                <label>Surname</label>
+                <md-input type="text"></md-input>
+              </md-field>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-6">
-              <label for="phone" class="grey-text font-weight-light">Phone</label>
-              <input type="number" id="phone" class="form-control">
+              <md-field class="modal-input">
+                <label>E-mail</label>
+                <md-input type="email"></md-input>
+              </md-field>
             </div>
             <div class="col-lg-6">
-              <label for="userType" class="grey-text font-weight-light">User Type</label>
+              <md-field class="modal-input">
+                <label>Password</label>
+                <md-input type="password"></md-input>
+              </md-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <md-field class="modal-input">
+                <label>Phone</label>
+                <md-input type="number"></md-input>
+              </md-field>
+            </div>
+            <div class="col-lg-6">
+              <label for="userType">User Type</label>
               <select class="form-control" id="exampleFormControlSelect1">
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
@@ -102,27 +112,41 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-lg-6">
-              <label for="name" class="grey-text font-weight-light">Name</label>
-              <input type="text" id="name" class="form-control">
+              <md-field class="modal-input">
+                <label>Name</label>
+                <md-input type="text"></md-input>
+              </md-field>
             </div>
             <div class="col-lg-6">
-              <label for="surname" class="grey-text font-weight-light">Surname</label>
-              <input type="text" id="surname" class="form-control">
+              <md-field class="modal-input">
+                <label>Surname</label>
+                <md-input type="text"></md-input>
+              </md-field>
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-12">
-              <label for="e-mail" class="grey-text font-weight-light">E-mail</label>
-              <input type="e-mail" id="e-mail" class="form-control">
+            <div class="col-lg-6">
+              <md-field class="modal-input">
+                <label>E-mail</label>
+                <md-input type="email"></md-input>
+              </md-field>
+            </div>
+            <div class="col-lg-6">
+              <md-field class="modal-input">
+                <label>Password</label>
+                <md-input type="password"></md-input>
+              </md-field>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-6">
-              <label for="phone" class="grey-text font-weight-light">Phone</label>
-              <input type="number" id="phone" class="form-control">
+              <md-field class="modal-input">
+                <label>Phone</label>
+                <md-input type="number"></md-input>
+              </md-field>
             </div>
             <div class="col-lg-6">
-              <label for="userType" class="grey-text font-weight-light">User Type</label>
+              <label for="userType">User Type</label>
               <select class="form-control" id="exampleFormControlSelect1">
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
@@ -133,7 +157,7 @@
           <br>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>

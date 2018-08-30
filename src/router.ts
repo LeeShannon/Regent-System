@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Login from './views/Login.vue';
+import ChangePass from './views/ChangePass.vue';
 import Home from './views/Home.vue';
 import Orders from './views/Orders.vue';
 import Dashboard from './views/Dashboard.vue';
@@ -18,6 +19,11 @@ export default new Router({
       path: '/',
       name: 'login',
       component: Login,
+    },
+    {
+      path: '/changePassword',
+      name: 'changePassword',
+      component: ChangePass,
     },
     {
       path: '/welcome',

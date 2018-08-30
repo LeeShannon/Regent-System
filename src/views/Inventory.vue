@@ -49,12 +49,16 @@
      <form class="" action="index.html" method="post">
        <div class="form-row">
            <div class="col">
-             <label for="exampleInputEmail1">Name</label>
-             <input type="text" class="form-control" placeholder="Name">
+             <md-field class="modal-input">
+               <label>Name</label>
+               <md-input type="text"></md-input>
+             </md-field>
            </div>
            <div class="col">
-             <label for="exampleInputEmail1">Quantity</label>
-             <input type="number" class="form-control" placeholder="Quantity">
+             <md-field class="modal-input">
+               <label>Quantity</label>
+               <md-input type="number"></md-input>
+             </md-field>
            </div>
          </div>
 
@@ -82,12 +86,16 @@
 
          <div class="form-row">
              <div class="col">
-               <label for="exampleInputEmail1">Origin</label>
-               <input type="text" class="form-control" placeholder="Origin">
+               <md-field class="modal-input">
+                 <label>Origin</label>
+                 <md-input type="text"></md-input>
+               </md-field>
              </div>
              <div class="col">
-               <label for="exampleInputEmail1">Supplier</label>
-               <input type="text" class="form-control" placeholder="Supplier">
+               <md-field class="modal-input">
+                 <label>Supplier</label>
+                 <md-input type="text"></md-input>
+               </md-field>
              </div>
            </div>
 
@@ -115,12 +123,16 @@
          <form class="" action="index.html" method="post">
            <div class="form-row">
                <div class="col">
-                 <label for="exampleInputEmail1">Name</label>
-                 <input type="text" class="form-control" placeholder="Name">
+                 <md-field class="modal-input">
+                   <label>Name</label>
+                   <md-input type="text"></md-input>
+                 </md-field>
                </div>
                <div class="col">
-                 <label for="exampleInputEmail1">Quantity</label>
-                 <input type="number" class="form-control" placeholder="Quantity">
+                 <md-field class="modal-input">
+                   <label>Quantity</label>
+                   <md-input type="number"></md-input>
+                 </md-field>
                </div>
              </div>
 
@@ -148,19 +160,23 @@
 
              <div class="form-row">
                  <div class="col">
-                   <label for="exampleInputEmail1">Origin</label>
-                   <input type="text" class="form-control" placeholder="Origin">
+                   <md-field class="modal-input">
+                     <label>Origin</label>
+                     <md-input type="text"></md-input>
+                   </md-field>
                  </div>
                  <div class="col">
-                   <label for="exampleInputEmail1">Supplier</label>
-                   <input type="text" class="form-control" placeholder="Supplier">
+                   <md-field class="modal-input">
+                     <label>Supplier</label>
+                     <md-input type="text"></md-input>
+                   </md-field>
                  </div>
                </div>
 
          </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>

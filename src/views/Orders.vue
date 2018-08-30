@@ -55,62 +55,68 @@
         </button>
         </div>
         <div class="modal-body">
+
           <form class="" action="index.html" method="post">
             <div class="form-row">
               <div class="col">
-                <label for="exampleInputEmail1">Supplier Name</label>
-                <input type="text" class="form-control" placeholder="Supplier Name">
+                <md-field class="modal-input">
+                  <label>Product</label>
+                  <md-input type="text"></md-input>
+                </md-field>
               </div>
               <div class="col">
-                <label for="exampleInputEmail1">Product</label>
-                <input type="text" class="form-control" placeholder="Product">
+                <md-field class="modal-input">
+                  <label>Quantity</label>
+                  <md-input type="number"></md-input>
+                </md-field>
               </div>
             </div>
             <div class="form-row">
               <div class="col">
-                <label for="exampleInputEmail1"> Quantity</label>
-                <input type="number" class="form-control" placeholder="Quantity Ordered">
+                <md-field class="modal-input">
+                  <label>Customer</label>
+                  <md-input type="number"></md-input>
+                </md-field>
               </div>
               <div class="col">
-                <label for="exampleInputEmail1">Origin</label>
-                <input type="text" class="form-control" placeholder="Origin">
+                <md-field class="modal-input">
+                  <label>Supplier</label>
+                  <md-input type="text"></md-input>
+                </md-field>
               </div>
             </div>
-
             <div class="form-row">
               <div class="form-group col">
-                <label for="exampleFormControlSelect1">Category</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-              <option></option>
-              <option>Fruit</option>
-              <option>Vegetables</option>
-
-            </select>
+                <md-field class="modal-input">
+                  <label>Departure</label>
+                  <md-input type="date" placeholder="year-month-day"></md-input>
+                </md-field>
               </div>
               <div class="form-group col">
-                <label for="exampleFormControlSelect1">Subcategory</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-              <option></option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-            </select>
+                <md-field class="modal-input">
+                  <label>Arrival</label>
+                  <md-input type="date" placeholder="year-month-day"></md-input>
+                </md-field>
               </div>
             </div>
 
             <div class="form-row">
               <div class="col">
-                <label for="exampleInputEmail1">Origin</label>
-                <input type="text" class="form-control" placeholder="Origin">
+                <md-field class="modal-input">
+                  <label>Shipment</label>
+                  <md-input type="text"></md-input>
+                </md-field>
               </div>
               <div class="col">
-                <label for="exampleInputEmail1">Supplier</label>
-                <input type="text" class="form-control" placeholder="Supplier">
+                <md-field class="modal-input">
+                  <label>Status</label>
+                  <md-input type="text"></md-input>
+                </md-field>
               </div>
             </div>
 
           </form>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -131,52 +137,68 @@
     </button>
         </div>
         <div class="modal-body">
+
           <form class="" action="index.html" method="post">
             <div class="form-row">
               <div class="col">
-                <label for="exampleInputEmail1">Name</label>
-                <input type="text" class="form-control" placeholder="Name">
+                <md-field class="modal-input">
+                  <label>Product</label>
+                  <md-input type="text"></md-input>
+                </md-field>
               </div>
               <div class="col">
-                <label for="exampleInputEmail1">Quantity</label>
-                <input type="number" class="form-control" placeholder="Quantity">
+                <md-field class="modal-input">
+                  <label>Quantity</label>
+                  <md-input type="number"></md-input>
+                </md-field>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Customer</label>
+                  <md-input type="number"></md-input>
+                </md-field>
+              </div>
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Supplier</label>
+                  <md-input type="text"></md-input>
+                </md-field>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <md-field class="modal-input">
+                  <label>Departure</label>
+                  <md-input type="date" placeholder="year-month-day"></md-input>
+                </md-field>
+              </div>
+              <div class="form-group col">
+                <md-field class="modal-input">
+                  <label>Arrival</label>
+                  <md-input type="date" placeholder="year-month-day"></md-input>
+                </md-field>
               </div>
             </div>
 
             <div class="form-row">
-              <div class="form-group col">
-                <label for="exampleFormControlSelect1">Category</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-          <option></option>
-          <option>Fruit</option>
-          <option>Vegetables</option>
-
-        </select>
-              </div>
-              <div class="form-group col">
-                <label for="exampleFormControlSelect1">Subcategory</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-          <option></option>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-        </select>
-              </div>
-            </div>
-
-            <div class="form-row">
               <div class="col">
-                <label for="exampleInputEmail1">Origin</label>
-                <input type="text" class="form-control" placeholder="Origin">
+                <md-field class="modal-input">
+                  <label>Shipment</label>
+                  <md-input type="text"></md-input>
+                </md-field>
               </div>
               <div class="col">
-                <label for="exampleInputEmail1">Supplier</label>
-                <input type="text" class="form-control" placeholder="Supplier">
+                <md-field class="modal-input">
+                  <label>Status</label>
+                  <md-input type="text"></md-input>
+                </md-field>
               </div>
             </div>
 
           </form>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -185,6 +207,88 @@
       </div>
     </div>
   </div>
+
+<!-- edit modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserModalLabel">Edit Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+
+        <form class="" action="index.html" method="post">
+          <div class="form-row">
+            <div class="col">
+              <md-field class="modal-input">
+                <label>Product</label>
+                <md-input type="text"></md-input>
+              </md-field>
+            </div>
+            <div class="col">
+              <md-field class="modal-input">
+                <label>Quantity</label>
+                <md-input type="number"></md-input>
+              </md-field>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <md-field class="modal-input">
+                <label>Customer</label>
+                <md-input type="number"></md-input>
+              </md-field>
+            </div>
+            <div class="col">
+              <md-field class="modal-input">
+                <label>Supplier</label>
+                <md-input type="text"></md-input>
+              </md-field>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col">
+              <md-field class="modal-input">
+                <label>Departure</label>
+                <md-input type="date" placeholder="year-month-day"></md-input>
+              </md-field>
+            </div>
+            <div class="form-group col">
+              <md-field class="modal-input">
+                <label>Arrival</label>
+                <md-input type="date" placeholder="year-month-day"></md-input>
+              </md-field>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col">
+              <md-field class="modal-input">
+                <label>Shipment</label>
+                <md-input type="text"></md-input>
+              </md-field>
+            </div>
+            <div class="col">
+              <md-field class="modal-input">
+                <label>Status</label>
+                <md-input type="text"></md-input>
+              </md-field>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </div>
 </template>
@@ -261,6 +365,9 @@ export default {
 </script>
 
 <style lang="css">
+.modal-input{
+  border-bottom: 1px solid gray;
+}
   .md-field {
     max-width: 300px;
   }
