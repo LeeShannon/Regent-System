@@ -57,14 +57,7 @@
             <h3 class="task-header">Tasks</h3>
           </div>
           <div class="tasks">
-            <div class="col-sm-7" style="margin-left: 25%">
-              <input type="text" name="task" value="Add a task" class="form-control input-field">
-            </div>
-            <ul>
-              <li>Task 1</li>
-              <li>Task 2</li>
-              <li>Task 3</li>
-            </ul>
+            <todo-list></todo-list>
           </div>
         </div>
       </div>
@@ -106,17 +99,23 @@
 
 <script lang="ts">
 import LineExample from '../components/revenue-graph.js'
-
+import TodoList from '../components/todo-list.vue'
 export default {
   name: 'app',
   components: {
     LineExample,
+    TodoList
   }
 }
 
 </script>
 
 <style media="screen">
+
+.to-dos{
+  height: 180px;
+  overflow-y: scroll;
+}
 
 .div-style {
   height: 300px;
