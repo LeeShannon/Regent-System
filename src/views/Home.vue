@@ -1,5 +1,5 @@
 <template>
-<div id="home">
+<div id="home animated fadeIn">
   <div id="wrapper" :class="{ show: showMenu }">
 
     <!-- sidebar -->
@@ -11,7 +11,7 @@
           <router-link to="/home" tag="a"> <i class="fas fa-home" id="icon"></i> <span class="test">Dashboard</span></router-link>
         </li>
         <li>
-          <router-link to="/shipping"> <i class="fas fa-truck" id="icon"></i> <span class="test">Shipping</span></router-link>
+          <router-link to="/orders"> <i class="fas fa-truck" id="icon"></i> <span class="test">Orders</span></router-link>
         </li>
         <li>
           <router-link to="/inventory"> <i class="fas fa-box-open" id="icon"></i> <span class="test">Inventory</span></router-link>
@@ -19,8 +19,8 @@
         <li>
           <router-link to="/mail"> <i class="fas fa-envelope" id="icon"></i> <span class="test">Mail</span> </router-link>
         </li>
-        <li> <i class="fas fa-user" id="icon"></i>
-          <router-link to="/users"> <span class="test">Users</span></router-link>
+        <li>
+          <router-link to="/users"> <i class="fas fa-user" id="icon"></i> <span class="test">Users</span></router-link>
         </li>
         <li>
           <router-link to="/logout"> <i class="fas fa-sign-out-alt" id="icon"></i> <span class="test">Logout</span></router-link>

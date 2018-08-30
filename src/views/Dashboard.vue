@@ -1,12 +1,12 @@
 <template>
-<div class="home">
+<div class="home animated fadeIn">
   <div class="row">
 
     <div class="col-lg-4">
       <div class="div-style">
         <h3 class="home-headers">Shipping Status</h3>
 <!-- status table -->
-        <table class="table table-responsive-lg table-borderless table-status">
+        <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 0;">
           <thead class="table-header">
             <tr>
               <th scope="col">Customer</th>

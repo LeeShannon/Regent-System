@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="login">
+  <div class="login ">
     <div class="login-div">
       <h1 class="thin-header">Login</h1>
       <div class="login-form">
@@ -13,7 +13,6 @@
         </form>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -86,7 +85,7 @@ export default {
 .login-input::placeholder {
   color: white;
   font-size: 20px;
-  font-weight: lighter;
+  font-weight: normal;
   opacity: 1
 }
 
@@ -109,7 +108,7 @@ export default {
   color: white;
   text-transform: uppercase;
   letter-spacing: .02em;
-  font-weight: lighter;
+  font-weight: normal;
   cursor: pointer;
   transition: all 0.25s ease;
 

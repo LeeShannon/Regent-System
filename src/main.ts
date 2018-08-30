@@ -2,12 +2,12 @@ import Vue from 'vue';
 import './plugins/vuetify'
 import App from './App.vue';
 import router from './router';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbvue/build/css/mdb.css';
-// import Vuetify from 'vuetify';
-// import 'vuetify/dist/vuetify.min.css';
-//
-// Vue.use(Vuetify)
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+
+Vue.use(VueMaterial)
 
 Vue.config.productionTip = false;
 

@@ -1,612 +1,333 @@
 <template>
-  <div class="container-fluid">
-    <h1 class="page-headers">Users</h1>
-    <br />
-    <div>
-      <button type="button" class=" my-btn" data-toggle="modal" data-target="#addUserModal">
-        Add User
-      </button>
-    </div>
-<br>
-<div class="col-lg-12">
-  <mdb-datatable class=""
-    :columns="columns"
-    :rows="rows"
-    striped
-    bordered
-  />
-</div>
-
-
-    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addUserModalLabel">Add user</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="space-top ">
+  <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+    <md-table-toolbar class="table-header">
+      <div class=" md-toolbar-section-start">
+        <h1 class="md-title page-headers">Users</h1>
       </div>
-      <div class="modal-body">
+      <button type="button" class=" my-btn" data-toggle="modal" data-target="#addUserModal">
+          Add User
+      </button>
+      <md-field md-clearable class="md-toolbar-section-end">
+        <i class="fas fa-search" style="padding-right: 1em"></i>
+        <md-input class="search-bar" placeholder="Search by name..." v-model="search" @input="searchOnTable" />
+      </md-field>
+    </md-table-toolbar>
 
-        <div class="row">
-          <div class="col-lg-6">
-            <label for="name" class="grey-text font-weight-light">Name</label>
-            <input type="text" id="name" class="form-control">
-          </div>
-          <div class="col-lg-6">
-            <label for="surname" class="grey-text font-weight-light">Surname</label>
-            <input type="text" id="surname" class="form-control">
-          </div>
+    <md-table-empty-state md-label="No users found" :md-description="`No user found for this '${search}' query. Try a different search term or create a new user.`">
+    </md-table-empty-state>
+
+      <md-table-row slot="md-table-row" slot-scope="{ item }">
+        <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
+        <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
+        <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
+        <md-table-cell md-label="phone" md-sort-by="phone">{{ item.phone }}</md-table-cell>
+        <md-table-cell md-label="Job Title" md-sort-by="title">{{ item.title }}</md-table-cell>
+        <md-table-cell md-label="Actions">
+          <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editUserModal">
+              <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button type="button" class="my-btn-icon">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </md-table-cell>
+      </md-table-row>
+  </md-table>
+
+  <!-- add user modal -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="row">
-          <div class="col-lg-6">
-            <label for="e-mail" class="grey-text font-weight-light">E-mail</label>
-            <input type="e-mail" id="e-mail" class="form-control">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <label for="name" class="grey-text font-weight-light">Name</label>
+              <input type="text" id="name" class="form-control">
+            </div>
+            <div class="col-lg-6">
+              <label for="surname" class="grey-text font-weight-light">Surname</label>
+              <input type="text" id="surname" class="form-control">
+            </div>
           </div>
-          <div class="col-lg-6">
-            <label for="password" class="grey-text font-weight-light">Password</label>
-            <input type="password" id="password" class="form-control">
+          <div class="row">
+            <div class="col-lg-6">
+              <label for="e-mail" class="grey-text font-weight-light">E-mail</label>
+              <input type="e-mail" id="e-mail" class="form-control">
+            </div>
+            <div class="col-lg-6">
+              <label for="password" class="grey-text font-weight-light">Password</label>
+              <input type="password" id="password" class="form-control">
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6">
-            <label for="phone" class="grey-text font-weight-light">Phone</label>
-            <input type="number" id="phone" class="form-control">
-          </div>
-          <div class="col-lg-6">
-            <label for="userType" class="grey-text font-weight-light">User Type</label>
-            <select class="form-control" id="exampleFormControlSelect1">
+          <div class="row">
+            <div class="col-lg-6">
+              <label for="phone" class="grey-text font-weight-light">Phone</label>
+              <input type="number" id="phone" class="form-control">
+            </div>
+            <div class="col-lg-6">
+              <label for="userType" class="grey-text font-weight-light">User Type</label>
+              <select class="form-control" id="exampleFormControlSelect1">
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
                 <option value="2">Employee</option>
-            </select>
+              </select>
+            </div>
           </div>
+          <br>
         </div>
-
-
-
-              <br>
-
-              <!-- Default input email -->
-
-
-
-
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
 
+  <!-- EditUserModal -->
+  <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <label for="name" class="grey-text font-weight-light">Name</label>
+              <input type="text" id="name" class="form-control">
+            </div>
+            <div class="col-lg-6">
+              <label for="surname" class="grey-text font-weight-light">Surname</label>
+              <input type="text" id="surname" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <label for="e-mail" class="grey-text font-weight-light">E-mail</label>
+              <input type="e-mail" id="e-mail" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <label for="phone" class="grey-text font-weight-light">Phone</label>
+              <input type="number" id="phone" class="form-control">
+            </div>
+            <div class="col-lg-6">
+              <label for="userType" class="grey-text font-weight-light">User Type</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option value="1">Admin</option>
+                <option value="2">Manager</option>
+                <option value="2">Employee</option>
+              </select>
+            </div>
+          </div>
+          <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-  </div>
 </template>
 
 <script>
-import { mdbDatatable } from 'mdbvue';
+const toLower = text => {
+  return text.toString().toLowerCase()
+}
+
+const searchByName = (items, term) => {
+  if (term) {
+    return items.filter(item => toLower(item.name).includes(toLower(term)))
+  }
+
+  return items
+}
 
 export default {
-  name: 'DatatablePage',
-  components: {
-    mdbDatatable
+  name: 'TableSearch',
+  data: () => ({
+    search: null,
+    searched: [],
+    users: [{
+        id: 1,
+        name: "Shawna Dubbin",
+        email: "sdubbin0@geocities.com",
+        phone: "123 456 789",
+        title: "Assistant Media Planner"
+      },
+      {
+        id: 2,
+        name: "Odette Demageard",
+        email: "odemageard1@spotify.com",
+        phone: "123 456 789",
+        title: "Account Coordinator"
+      },
+      {
+        id: 3,
+        name: "Vera Taleworth",
+        email: "vtaleworth2@google.ca",
+        phone: "123 456 789",
+        title: "Community Outreach Specialist"
+      },
+      {
+        id: 4,
+        name: "Lonnie Izkovitz",
+        email: "lizkovitz3@youtu.be",
+        phone: "123 456 789",
+        title: "Operator"
+      },
+      {
+        id: 5,
+        name: "Thatcher Stave",
+        email: "tstave4@reference.com",
+        phone: "123 456 789",
+        title: "Software Test Engineer III"
+      },
+      {
+        id: 6,
+        name: "Karim Chipping",
+        email: "kchipping5@scribd.com",
+        phone: "123 456 789",
+        title: "Safety Technician II"
+      },
+      {
+        id: 7,
+        name: "Helge Holyard",
+        email: "hholyard6@howstuffworks.com",
+        phone: "123 456 789",
+        title: "Internal Auditor"
+      },
+      {
+        id: 8,
+        name: "Rod Titterton",
+        email: "rtitterton7@nydailynews.com",
+        phone: "123 456 789",
+        title: "Technical Writer"
+      },
+      {
+        id: 9,
+        name: "Gawen Applewhite",
+        email: "gapplewhite8@reverbnation.com",
+        phone: "123 456 789",
+        title: "GIS Technical Architect"
+      },
+      {
+        id: 10,
+        name: "Nero Mulgrew",
+        email: "nmulgrew9@plala.or.jp",
+        phone: "123 456 789",
+        title: "Staff Scientist"
+      },
+      {
+        id: 11,
+        name: "Cybill Rimington",
+        email: "crimingtona@usnews.com",
+        phone: "123 456 789",
+        title: "Assistant Professor"
+      },
+      {
+        id: 12,
+        name: "Maureene Eggleson",
+        email: "megglesonb@elpais.com",
+        phone: "123 456 789",
+        title: "Recruiting Manager"
+      },
+      {
+        id: 13,
+        name: "Cortney Caulket",
+        email: "ccaulketc@cbsnews.com",
+        phone: "123 456 789",
+        title: "Safety Technician IV"
+      },
+      {
+        id: 14,
+        name: "Selig Swynfen",
+        email: "sswynfend@cpanel.net",
+        phone: "123 456 789",
+        title: "Environmental Specialist"
+      },
+      {
+        id: 15,
+        name: "Ingar Raggles",
+        email: "iragglese@cbc.ca",
+        phone: "123 456 789",
+        title: "VP Sales"
+      },
+      {
+        id: 16,
+        name: "Karmen Mines",
+        email: "kminesf@topsy.com",
+        phone: "123 456 789",
+        title: "Administrative Officer"
+      },
+      {
+        id: 17,
+        name: "Salome Judron",
+        email: "sjudrong@jigsy.com",
+        phone: "123 456 789",
+        title: "Staff Scientist"
+      },
+      {
+        id: 18,
+        name: "Clarinda Marieton",
+        email: "cmarietonh@theatlantic.com",
+        phone: "123 456 789",
+        title: "Paralegal"
+      },
+      {
+        id: 19,
+        name: "Paxon Lotterington",
+        email: "plotteringtoni@netvibes.com",
+        phone: "123 456 789",
+        title: "Marketing Assistant"
+      },
+      {
+        id: 20,
+        name: "Maura Thoms",
+        email: "mthomsj@webeden.co.uk",
+        phone: "123 456 789",
+        title: "Actuary"
+      }
+    ]
+  }),
+  methods: {
+    newUser() {
+      window.alert('Noop')
+    },
+    searchOnTable() {
+      this.searched = searchByName(this.users, this.search)
+    }
   },
-  data() {
-    return {
-      columns: [
-        {
-          label: 'Name',
-          field: 'name',
-          sort: 'asc'
-        },
-        {
-          label: 'Position',
-          field: 'position',
-          sort: 'asc'
-        },
-        {
-          label: 'Office',
-          field: 'office',
-          sort: 'asc'
-        },
-        {
-          label: 'Age',
-          field: 'age',
-          sort: 'asc'
-        },
-        {
-          label: 'Start date',
-          field: 'date',
-          sort: 'asc'
-        },
-        {
-          label: 'Salary',
-          field: 'salary',
-          sort: 'asc'
-        }
-      ],
-      rows: [
-        {
-          name: 'Tiger Nixon',
-          position: 'System Architect',
-          office: 'Edinburgh',
-          age: '61',
-          date: '2011/04/25',
-          salary: '$320'
-        },
-        {
-          name: 'Garrett Winters',
-          position: 'Accountant',
-          office: 'Tokyo',
-          age: '63',
-          date: '2011/07/25',
-          salary: '$170'
-        },
-        {
-          name: 'Ashton Cox',
-          position: 'Junior Technical Author',
-          office: 'San Francisco',
-          age: '66',
-          date: '2009/01/12',
-          salary: '$86'
-        },
-        {
-          name: 'Cedric Kelly',
-          position: 'Senior Javascript Developer',
-          office: 'Edinburgh',
-          age: '22',
-          date: '2012/03/29',
-          salary: '$433'
-        },
-        {
-          name: 'Airi Satou',
-          position: 'Accountant',
-          office: 'Tokyo',
-          age: '33',
-          date: '2008/11/28',
-          salary: '$162'
-        },
-        {
-          name: 'Brielle Williamson',
-          position: 'Integration Specialist',
-          office: 'New York',
-          age: '61',
-          date: '2012/12/02',
-          salary: '$372'
-        },
-        {
-          name: 'Herrod Chandler',
-          position: 'Sales Assistant',
-          office: 'San Francisco',
-          age: '59',
-          date: '2012/08/06',
-          salary: '$137'
-        },
-        {
-          name: 'Rhona Davidson',
-          position: 'Integration Specialist',
-          office: 'Tokyo',
-          age: '55',
-          date: '2010/10/14',
-          salary: '$327'
-        },
-        {
-          name: 'Colleen Hurst',
-          position: 'Javascript Developer',
-          office: 'San Francisco',
-          age: '39',
-          date: '2009/09/15',
-          salary: '$205'
-        },
-        {
-          name: 'Sonya Frost',
-          position: 'Software Engineer',
-          office: 'Edinburgh',
-          age: '23',
-          date: '2008/12/13',
-          salary: '$103'
-        },
-        {
-          name: 'Jena Gaines',
-          position: 'Office Manager',
-          office: 'London',
-          age: '30',
-          date: '2008/12/19',
-          salary: '$90'
-        },
-        {
-          name: 'Quinn Flynn',
-          position: 'Support Lead',
-          office: 'Edinburgh',
-          age: '22',
-          date: '2013/03/03',
-          salary: '$342'
-        },
-        {
-          name: 'Charde Marshall',
-          position: 'Regional Director',
-          office: 'San Francisco',
-          age: '36',
-          date: '2008/10/16',
-          salary: '$470'
-        },
-        {
-          name: 'Haley Kennedy',
-          position: 'Senior Marketing Designer',
-          office: 'London',
-          age: '43',
-          date: '2012/12/18',
-          salary: '$313'
-        },
-        {
-          name: 'Tatyana Fitzpatrick',
-          position: 'Regional Director',
-          office: 'London',
-          age: '19',
-          date: '2010/03/17',
-          salary: '$385'
-        },
-        {
-          name: 'Michael Silva',
-          position: 'Marketing Designer',
-          office: 'London',
-          age: '66',
-          date: '2012/11/27',
-          salary: '$198'
-        },
-        {
-          name: 'Paul Byrd',
-          position: 'Chief Financial Officer (CFO)',
-          office: 'New York',
-          age: '64',
-          date: '2010/06/09',
-          salary: '$725'
-        },
-        {
-          name: 'Gloria Little',
-          position: 'Systems Administrator',
-          office: 'New York',
-          age: '59',
-          date: '2009/04/10',
-          salary: '$237'
-        },
-        {
-          name: 'Bradley Greer',
-          position: 'Software Engineer',
-          office: 'London',
-          age: '41',
-          date: '2012/10/13',
-          salary: '$132'
-        },
-        {
-          name: 'Dai Rios',
-          position: 'Personnel Lead',
-          office: 'Edinburgh',
-          age: '35',
-          date: '2012/09/26',
-          salary: '$217'
-        },
-        {
-          name: 'Jenette Caldwell',
-          position: 'Development Lead',
-          office: 'New York',
-          age: '30',
-          date: '2011/09/03',
-          salary: '$345'
-        },
-        {
-          name: 'Yuri Berry',
-          position: 'Chief Marketing Officer (CMO)',
-          office: 'New York',
-          age: '40',
-          date: '2009/06/25',
-          salary: '$675'
-        },
-        {
-          name: 'Caesar Vance',
-          position: 'Pre-Sales Support',
-          office: 'New York',
-          age: '21',
-          date: '2011/12/12',
-          salary: '$106'
-        },
-        {
-          name: 'Doris Wilder',
-          position: 'Sales Assistant',
-          office: 'Sidney',
-          age: '23',
-          date: '2010/09/20',
-          salary: '$85'
-        },
-        {
-          name: 'Angelica Ramos',
-          position: 'Chief Executive Officer (CEO)',
-          office: 'London',
-          age: '47',
-          date: '2009/10/09',
-          salary: '$1'
-        },
-        {
-          name: 'Gavin Joyce',
-          position: 'Developer',
-          office: 'Edinburgh',
-          age: '42',
-          date: '2010/12/22',
-          salary: '$92'
-        },
-        {
-          name: 'Jennifer Chang',
-          position: 'Regional Director',
-          office: 'Singapore',
-          age: '28',
-          date: '2010/11/14',
-          salary: '$357'
-        },
-        {
-          name: 'Brenden Wagner',
-          position: 'Software Engineer',
-          office: 'San Francisco',
-          age: '28',
-          date: '2011/06/07',
-          salary: '$206'
-        },
-        {
-          name: 'Fiona Green',
-          position: 'Chief Operating Officer (COO)',
-          office: 'San Francisco',
-          age: '48',
-          date: '2010/03/11',
-          salary: '$850'
-        },
-        {
-          name: 'Shou Itou',
-          position: 'Regional Marketing',
-          office: 'Tokyo',
-          age: '20',
-          date: '2011/08/14',
-          salary: '$163'
-        },
-        {
-          name: 'Michelle House',
-          position: 'Integration Specialist',
-          office: 'Sidney',
-          age: '37',
-          date: '2011/06/02',
-          salary: '$95'
-        },
-        {
-          name: 'Suki Burks',
-          position: 'Developer',
-          office: 'London',
-          age: '53',
-          date: '2009/10/22',
-          salary: '$114'
-        },
-        {
-          name: 'Prescott Bartlett',
-          position: 'Technical Author',
-          office: 'London',
-          age: '27',
-          date: '2011/05/07',
-          salary: '$145'
-        },
-        {
-          name: 'Gavin Cortez',
-          position: 'Team Leader',
-          office: 'San Francisco',
-          age: '22',
-          date: '2008/10/26',
-          salary: '$235'
-        },
-        {
-          name: 'Martena Mccray',
-          position: 'Post-Sales support',
-          office: 'Edinburgh',
-          age: '46',
-          date: '2011/03/09',
-          salary: '$324'
-        },
-        {
-          name: 'Unity Butler',
-          position: 'Marketing Designer',
-          office: 'San Francisco',
-          age: '47',
-          date: '2009/12/09',
-          salary: '$85'
-        },
-        {
-          name: 'Howard Hatfield',
-          position: 'Office Manager',
-          office: 'San Francisco',
-          age: '51',
-          date: '2008/12/16',
-          salary: '$164'
-        },
-        {
-          name: 'Hope Fuentes',
-          position: 'Secretary',
-          office: 'San Francisco',
-          age: '41',
-          date: '2010/02/12',
-          salary: '$109'
-        },
-        {
-          name: 'Vivian Harrell',
-          position: 'Financial Controller',
-          office: 'San Francisco',
-          age: '62',
-          date: '2009/02/14',
-          salary: '$452'
-        },
-        {
-          name: 'Timothy Mooney',
-          position: 'Office Manager',
-          office: 'London',
-          age: '37',
-          date: '2008/12/11',
-          salary: '$136'
-        },
-        {
-          name: 'Jackson Bradshaw',
-          position: 'Director',
-          office: 'New York',
-          age: '65',
-          date: '2008/09/26',
-          salary: '$645'
-        },
-        {
-          name: 'Olivia Liang',
-          position: 'Support Engineer',
-          office: 'Singapore',
-          age: '64',
-          date: '2011/02/03',
-          salary: '$234'
-        },
-        {
-          name: 'Bruno Nash',
-          position: 'Software Engineer',
-          office: 'London',
-          age: '38',
-          date: '2011/05/03',
-          salary: '$163'
-        },
-        {
-          name: 'Sakura Yamamoto',
-          position: 'Support Engineer',
-          office: 'Tokyo',
-          age: '37',
-          date: '2009/08/19',
-          salary: '$139'
-        },
-        {
-          name: 'Thor Walton',
-          position: 'Developer',
-          office: 'New York',
-          age: '61',
-          date: '2013/08/11',
-          salary: '$98'
-        },
-        {
-          name: 'Finn Camacho',
-          position: 'Support Engineer',
-          office: 'San Francisco',
-          age: '47',
-          date: '2009/07/07',
-          salary: '$87'
-        },
-        {
-          name: 'Serge Baldwin',
-          position: 'Data Coordinator',
-          office: 'Singapore',
-          age: '64',
-          date: '2012/04/09',
-          salary: '$138'
-        },
-        {
-          name: 'Zenaida Frank',
-          position: 'Software Engineer',
-          office: 'New York',
-          age: '63',
-          date: '2010/01/04',
-          salary: '$125'
-        },
-        {
-          name: 'Zorita Serrano',
-          position: 'Software Engineer',
-          office: 'San Francisco',
-          age: '56',
-          date: '2012/06/01',
-          salary: '$115'
-        },
-        {
-          name: 'Jennifer Acosta',
-          position: 'Junior Javascript Developer',
-          office: 'Edinburgh',
-          age: '43',
-          date: '2013/02/01',
-          salary: '$75'
-        },
-        {
-          name: 'Cara Stevens',
-          position: 'Sales Assistant',
-          office: 'New York',
-          age: '46',
-          date: '2011/12/06',
-          salary: '$145'
-        },
-        {
-          name: 'Hermione Butler',
-          position: 'Regional Director',
-          office: 'London',
-          age: '47',
-          date: '2011/03/21',
-          salary: '$356'
-        },
-        {
-          name: 'Lael Greer',
-          position: 'Systems Administrator',
-          office: 'London',
-          age: '21',
-          date: '2009/02/27',
-          salary: '$103'
-        },
-        {
-          name: 'Jonas Alexander',
-          position: 'Developer',
-          office: 'San Francisco',
-          age: '30',
-          date: '2010/07/14',
-          salary: '$86'
-        },
-        {
-          name: 'Shad Decker',
-          position: 'Regional Director',
-          office: 'Edinburgh',
-          age: '51',
-          date: '2008/11/13',
-          salary: '$183'
-        },
-        {
-          name: 'Michael Bruce',
-          position: 'Javascript Developer',
-          office: 'Singapore',
-          age: '29',
-          date: '2011/06/27',
-          salary: '$183'
-        },
-        {
-          name: 'Donna Snider',
-          position: 'Customer Support',
-          office: 'New York',
-          age: '27',
-          date: '2011/01/25',
-          salary: '$112'
-        }
-      ]
-    };
+  created() {
+    this.searched = this.users
   }
-};
+}
 </script>
 
-<style>
-.my-btn {
-  outline:none;
-  height: 40px;
-  text-align: center;
-  width: 130px;
-  border-radius:40px;
-  background: #239ECC;
+<style lang="css">
+.md-field {
+  max-width: 300px;
+}
+
+.search-bar {
   color: white;
-  border: none;
-  letter-spacing:1px;
 }
-
-.btn {
-  border-radius: 40px !important;
+.search-bar::placeholder  {
+  color: white;
+  opacity: 1;
 }
-
 .page-headers {
   margin-bottom: .8rem;
   padding-top: .8rem;
@@ -614,5 +335,34 @@ export default {
   letter-spacing: .02em;
   font-size: 1.5rem;
   margin-top: 0;
+}
+
+.my-btn {
+  outline:none;
+  height: auto;
+  text-align: center;
+  width: auto;
+  border-radius:50px;
+  background: none;
+  border: 1px solid white;
+  color: white;
+  letter-spacing:1px;
+  padding: 5px 10px 5px 10px;
+  margin-right: 1em;
+}
+
+.my-btn-icon {
+  outline:none;
+  height: auto;
+  text-align: center;
+  width: auto;
+  color: black;
+  padding: 5px 10px 5px 10px;
+  border: none;
+  background: none;
+}
+
+.space-top {
+  margin-top: 10px;
 }
 </style>

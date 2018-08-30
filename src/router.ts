@@ -2,10 +2,11 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Login from './views/Login.vue';
 import Home from './views/Home.vue';
-import Shipping from './views/Shipping.vue';
+import Orders from './views/Orders.vue';
 import Dashboard from './views/Dashboard.vue';
 import Inventory from './views/Inventory.vue';
 import Welcome from './views/Welcome.vue';
+//test need to change later
 import Users from './views/Users.vue';
 import Mail from './views/Mail.vue';
 
@@ -33,9 +34,9 @@ export default new Router({
           component: Dashboard,
         },
         {
-          path: '/shipping',
-          name: 'shipping',
-          component: Shipping,
+          path: '/orders',
+          name: 'orders',
+          component: Orders,
         },
         {
           path: '/inventory',
