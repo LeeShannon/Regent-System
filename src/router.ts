@@ -9,7 +9,7 @@ import Inventory from './views/Inventory.vue';
 import Welcome from './views/Welcome.vue';
 //test need to change later
 import Users from './views/Users.vue';
-import Mail from './views/Mail.vue';
+import Statistics from './views/Statistics.vue';
 
 Vue.use(Router);
 
@@ -55,9 +55,9 @@ export default new Router({
           component: Users,
         },
         {
-          path: '/mail',
-          name: 'mail',
-          component: Mail,
+          path: '/statistics',
+          name: 'statistics',
+          component: Statistics,
         }
       ]
     }

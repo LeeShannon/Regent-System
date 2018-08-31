@@ -21,21 +21,20 @@ export default {
     this.renderChart({
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [{
-        label: 'Data One',
+        label: 'Sales',
         borderColor: '#77DFED',
         borderWidth: 1,
         backgroundColor: this.gradient2,
         // data = this.data1
         data: [40, 39, 10, 40, 39, 80, 40]
-
       }, {
-        label: 'Data Two',
+        label: 'Revenue',
         borderColor: '#379AE3',
         borderWidth: 1,
         backgroundColor: this.gradient,
         data: [60, 55, 32, 10, 2, 12, 53]
 
-      }]  
+      }]
     }, {
       responsive: true,
       maintainAspectRatio: false

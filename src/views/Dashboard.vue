@@ -78,12 +78,22 @@
 
       <div class="stats-wrapper">
 
-        <div class="revenue-stat">
-        <h3 class="home-headers">revenue</h3>
-      </div>
+        <div class="revenue-stat" >
+            <div class="" align="center" style="text-align: center">
+              <h3 class="home-headers">revenue</h3>
+              <h1>R 60,235</h1>
+              <br>
+              <p class="stats-color">Since last month</p>
+            </div>
+        </div>
 
-      <div class="orders-stat">
-        <h3 class="home-headers">orders</h3>
+      <div class="orders-stat" style="margin-bottom: 1.8rem;">
+        <div class="" align="center" style="text-align: center">
+          <h3 class="home-headers">Orders</h3>
+          <h1>500</h1>
+          <br>
+          <p class="stats-color">Since last month</p>
+        </div>
       </div>
 
       </div>

@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "ammap3": "^3.21.13",
     "buefy": "^0.6.6",
     "chart.js": "^2.7.2",
     "mdbvue": "^4.5.1",

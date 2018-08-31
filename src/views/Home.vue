@@ -17,7 +17,7 @@
           <router-link to="/inventory"> <i class="fas fa-box-open" id="icon"></i> <span class="test">Inventory</span></router-link>
         </li>
         <li>
-          <router-link to="/mail"> <i class="fas fa-envelope" id="icon"></i> <span class="test">Mail</span> </router-link>
+          <router-link to="/statistics"> <i class="fas fa-chart-bar" id="icon"></i> <span class="test">statistics</span> </router-link>
         </li>
         <li>
           <router-link to="/users"> <i class="fas fa-user" id="icon"></i> <span class="test">Users</span></router-link>
