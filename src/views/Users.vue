@@ -24,10 +24,10 @@
         <md-table-cell md-label="phone" md-sort-by="phone">{{ item.phone }}</md-table-cell>
         <md-table-cell md-label="Job Title" md-sort-by="title">{{ item.title }}</md-table-cell>
         <md-table-cell md-label="Actions">
-          <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editUserModal">
+          <button @click="onSelect(item)"  type="button" class="my-btn-icon" data-toggle="modal" data-target="#editUserModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-          <button type="button" class="my-btn-icon">
+          <button  @click="onSelect(item)" type="button" class="my-btn-icon">
             <i class="fas fa-trash-alt"></i>
           </button>
         </md-table-cell>
@@ -114,27 +114,21 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Name</label>
-                <md-input type="text"></md-input>
+                <md-input type="text" v-model="selected.name" value="selected.name"></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Surname</label>
-                <md-input type="text"></md-input>
+                <md-input type="text" v-model="selected.surname" value="selected.surname"></md-input>
               </md-field>
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
               <md-field class="modal-input">
                 <label>E-mail</label>
-                <md-input type="email"></md-input>
-              </md-field>
-            </div>
-            <div class="col-lg-6">
-              <md-field class="modal-input">
-                <label>Password</label>
-                <md-input type="password"></md-input>
+                <md-input type="email" v-model="selected.email" value="selected.email"></md-input>
               </md-field>
             </div>
           </div>
@@ -142,12 +136,12 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Phone</label>
-                <md-input type="number"></md-input>
+                <md-input type="number" v-model="selected.phone" value="selected.phone"></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <label for="userType">User Type</label>
-              <select class="form-control" id="exampleFormControlSelect1">
+              <select class="form-control" id="exampleFormControlSelect1" v-model="selected.title" value="selected.title">
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
                 <option value="2">Employee</option>
@@ -184,11 +178,12 @@ export default {
   data: () => ({
     search: null,
     searched: [],
+    selected: {},
     users: [{
         id: 1,
         name: "Shawna Dubbin",
         email: "sdubbin0@geocities.com",
-        phone: "123 456 789",
+        phone: "123456789",
         title: "Assistant Media Planner"
       },
       {
@@ -202,7 +197,7 @@ export default {
         id: 3,
         name: "Vera Taleworth",
         email: "vtaleworth2@google.ca",
-        phone: "123 456 789",
+        phone: "123456789",
         title: "Community Outreach Specialist"
       },
       {
@@ -332,6 +327,9 @@ export default {
     },
     searchOnTable() {
       this.searched = searchByName(this.users, this.search)
+    },
+    onSelect (item) {
+      this.selected = item
     }
   },
   created() {

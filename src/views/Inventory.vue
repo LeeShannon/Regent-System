@@ -14,26 +14,28 @@
       </md-field>
     </md-table-toolbar>
 
-    <md-table-empty-state md-label="No users found" :md-description="`No user found for this '${search}' query. Try a different search term or create a new user.`">
+    <md-table-empty-state md-label="No users found" :md-description="`No results found for this '${search}' query. Try a different search term or create a new user.`">
     </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="Name" md-sort-by="id" md-numeric>{{ item.name }}</md-table-cell>
+        <md-table-cell md-label="Name" md-sort-by="id" md-numeric> {{ item.name }} </md-table-cell>
         <md-table-cell md-label="Category" md-sort-by="name">{{ item.category }}</md-table-cell>
         <md-table-cell md-label="Subcategory" md-sort-by="email">{{ item.subcategory }}</md-table-cell>
         <md-table-cell md-label="Quantity" md-sort-by="phone">{{ item.quantity }}</md-table-cell>
         <md-table-cell md-label="Origin" md-sort-by="title">{{ item.origin }}</md-table-cell>
         <md-table-cell md-label="Supplier" md-sort-by="title">{{ item.supplier }}</md-table-cell>
         <md-table-cell md-label="Actions">
-          <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editProductModal">
+          <button @click="onSelect(item)"  type="button" class="my-btn-icon" data-toggle="modal" data-target="#editProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-          <button type="button" class="my-btn-icon">
+          <button @click="onSelect(item)" type="button" class="my-btn-icon">
             <i class="fas fa-trash-alt"></i>
           </button>
         </md-table-cell>
       </md-table-row>
   </md-table>
+
+Selected: {{ selected }}
 
   <!-- add product modal -->
   <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
@@ -125,13 +127,13 @@
                <div class="col">
                  <md-field class="modal-input">
                    <label>Name</label>
-                   <md-input type="text"></md-input>
+                   <md-input type="text" v-model="selected.name" value="selected.name"></md-input>
                  </md-field>
                </div>
                <div class="col">
                  <md-field class="modal-input">
                    <label>Quantity</label>
-                   <md-input type="number"></md-input>
+                   <md-input type="number" v-model="selected.quantity" value="selected.quantity"></md-input>
                  </md-field>
                </div>
              </div>
@@ -139,7 +141,7 @@
              <div class="form-row">
                <div class="form-group col">
               <label for="exampleFormControlSelect1">Category</label>
-              <select class="form-control" id="exampleFormControlSelect1">
+              <select class="form-control" id="exampleFormControlSelect1" v-model="selected.category" value="selected.category">
                 <option></option>
                 <option>Fruit</option>
                 <option>Vegetables</option>
@@ -148,7 +150,7 @@
             </div>
                <div class="form-group col">
               <label for="exampleFormControlSelect1">Subcategory</label>
-              <select class="form-control" id="exampleFormControlSelect1">
+              <select class="form-control" id="exampleFormControlSelect1" v-model="selected.subcategory" value="selected.subcategory">
                 <option></option>
                 <option>1</option>
                 <option>2</option>
@@ -162,13 +164,13 @@
                  <div class="col">
                    <md-field class="modal-input">
                      <label>Origin</label>
-                     <md-input type="text"></md-input>
+                     <md-input type="text" v-model="selected.origin" value="selected.origin"></md-input>
                    </md-field>
                  </div>
                  <div class="col">
                    <md-field class="modal-input">
                      <label>Supplier</label>
-                     <md-input type="text"></md-input>
+                     <md-input type="text" v-model="selected.supplier" value="selected.supplier"></md-input>
                    </md-field>
                  </div>
                </div>
@@ -203,6 +205,7 @@ export default {
   data: () => ({
     search: null,
     searched: [],
+    selected: {},
     products: [
       {
         name: 'Apples',
@@ -297,6 +300,9 @@ export default {
   methods: {
     searchOnTable() {
       this.searched = searchByName(this.products, this.search)
+    },
+    onSelect (item) {
+      this.selected = item
     }
   },
   created() {
