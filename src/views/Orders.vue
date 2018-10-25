@@ -29,6 +29,7 @@
         <md-table-cell md-label="Departure" md-sort-by="title">{{ item.departure }}</md-table-cell>
         <md-table-cell md-label="Arrival" md-sort-by="title">{{ item.arrival }}</md-table-cell>
         <md-table-cell md-label="Quantity" md-sort-by="title">{{ item.quantity }}</md-table-cell>
+        <md-table-cell md-label="Price" md-sort-by="title">R{{ item.price }}</md-table-cell>
         <md-table-cell md-label="Shipment" md-sort-by="title">{{ item.shipment }}</md-table-cell>
         <md-table-cell md-label="Submitted By" md-sort-by="title">{{ item.creator }}</md-table-cell>
         <md-table-cell md-label="Status" md-sort-by="title">{{ item.status }}</md-table-cell>
@@ -64,9 +65,17 @@
                   <md-input type="text"></md-input>
                 </md-field>
               </div>
+            </div>
+            <div class="form-row">
               <div class="col">
                 <md-field class="modal-input">
                   <label>Quantity</label>
+                  <md-input type="number"></md-input>
+                </md-field>
+              </div>
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Price</label>
                   <md-input type="number"></md-input>
                 </md-field>
               </div>
@@ -89,13 +98,13 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="year-month-day"></md-input>
+                  <md-input type="date" placeholder="departure"></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" placeholder="year-month-day"></md-input>
+                  <md-input type="date" placeholder="arrival"></md-input>
                 </md-field>
               </div>
             </div>
@@ -146,9 +155,17 @@
                   <md-input type="text"></md-input>
                 </md-field>
               </div>
+            </div>
+            <div class="form-row">
               <div class="col">
                 <md-field class="modal-input">
                   <label>Quantity</label>
+                  <md-input type="number"></md-input>
+                </md-field>
+              </div>
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Price</label>
                   <md-input type="number"></md-input>
                 </md-field>
               </div>
@@ -323,6 +340,7 @@ export default {
         departure: '2018-08-09',
         arrival:'2018-08-08',
         quantity: '150',
+        price: '1000',
         shipment: 'Maersk',
         creator : 'admin1@test.com',
         status : 'Pending'
@@ -336,6 +354,7 @@ export default {
         departure: '2018-08-08',
         arrival:'2018-08-08',
         quantity: '75',
+        price: '2000',
         shipment: 'Turner Shipment',
         creator : 'admin2@test.com',
         status: 'Completed'
@@ -349,6 +368,7 @@ export default {
         departure: '2018-08-08',
         arrival:'2018-08-08',
         quantity: '60',
+        price: '7000',
         shipment: 'Maersk',
         creator : 'admin1@test.com',
         status:'Completed'

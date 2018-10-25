@@ -70,7 +70,7 @@
               </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row" style="padding-left: 18%;">
               <md-field :class="messageClass" id="textarea">
                 <label>Description</label>
                 <md-textarea v-model="textarea" required></md-textarea>
