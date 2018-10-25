@@ -62,7 +62,7 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Product</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -70,13 +70,13 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Quantity</label>
-                  <md-input type="number"></md-input>
+                  <md-input type="number" required></md-input>
                 </md-field>
               </div>
               <div class="col">
                 <md-field class="modal-input">
                   <label>Price</label>
-                  <md-input type="number"></md-input>
+                  <md-input type="number" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -84,13 +84,13 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Customer</label>
-                  <md-input type="number"></md-input>
+                  <md-input type="number" required></md-input>
                 </md-field>
               </div>
               <div class="col">
                 <md-field class="modal-input">
                   <label>Supplier</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -98,13 +98,13 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="departure"></md-input>
+                  <md-input type="date" placeholder="departure" required></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" placeholder="arrival"></md-input>
+                  <md-input type="date" placeholder="arrival" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -113,13 +113,13 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Shipment</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
               <div class="col">
                 <md-field class="modal-input">
                   <label>Status</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -152,7 +152,7 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Product</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -160,13 +160,13 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Quantity</label>
-                  <md-input type="number"></md-input>
+                  <md-input type="number" required></md-input>
                 </md-field>
               </div>
               <div class="col">
                 <md-field class="modal-input">
                   <label>Price</label>
-                  <md-input type="number"></md-input>
+                  <md-input type="number" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -174,13 +174,13 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Customer</label>
-                  <md-input type="number"></md-input>
+                  <md-input type="number" required></md-input>
                 </md-field>
               </div>
               <div class="col">
                 <md-field class="modal-input">
                   <label>Supplier</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -188,13 +188,13 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="year-month-day"></md-input>
+                  <md-input type="date" placeholder="year-month-day" required></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" placeholder="year-month-day"></md-input>
+                  <md-input type="date" placeholder="year-month-day" required></md-input>
                 </md-field>
               </div>
             </div>
@@ -203,13 +203,13 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Shipment</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
               <div class="col">
                 <md-field class="modal-input">
                   <label>Status</label>
-                  <md-input type="text"></md-input>
+                  <md-input type="text" required></md-input>
                 </md-field>
               </div>
             </div>

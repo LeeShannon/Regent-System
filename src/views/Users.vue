@@ -49,13 +49,13 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Name</label>
-                <md-input type="text"></md-input>
+                <md-input type="text" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Surname</label>
-                <md-input type="text"></md-input>
+                <md-input type="text" required></md-input>
               </md-field>
             </div>
           </div>
@@ -63,13 +63,13 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>E-mail</label>
-                <md-input type="email"></md-input>
+                <md-input type="email" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Password</label>
-                <md-input type="password"></md-input>
+                <md-input type="password" required></md-input>
               </md-field>
             </div>
           </div>
