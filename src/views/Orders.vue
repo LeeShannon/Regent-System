@@ -80,6 +80,36 @@
                 </md-field>
               </div>
             </div>
+
+            <!-- product rows for additional products -->
+            <div v-for="(row, index) in inputRows">
+              <div class="form-row">
+                <div class="col">
+                  <md-field class="modal-input">
+                    <label>Product</label>
+                    <md-input type="text" v-model="row.product" required></md-input>
+                  </md-field>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <md-field class="modal-input">
+                    <label>Quantity</label>
+                    <md-input type="number" v-model="row.quantity" required></md-input>
+                  </md-field>
+                </div>
+                <div class="col">
+                  <md-field class="modal-input">
+                    <label>Price</label>
+                    <md-input type="number" v-model="row.price" required></md-input>
+                  </md-field>
+                </div>
+              </div>
+              <button type="button" name="button" @click="removeRow(index)">Remove</button>
+            </div>
+
+            <button type="button" name="button" @click="addRow">Add</button>
+            <!-- the rest of the fields -->
             <div class="form-row">
               <div class="col">
                 <md-field class="modal-input">
@@ -330,6 +360,7 @@ export default {
     search: null,
     searched: [],
     selected: {},
+    inputRows: [],
     orders: [
       {
         id : '0001',
@@ -381,6 +412,17 @@ export default {
     },
     onSelect (item) {
       this.selected = item
+    },
+    addRow(){
+      var elem = document.createElement("div");
+      this.inputRows.push({
+        product: "",
+        quantity: "",
+        price: ""
+      });
+    },
+    removeRow(index){
+      this.inputRows.splice(index, 1);
     }
   },
   created() {
