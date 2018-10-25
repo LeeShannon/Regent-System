@@ -136,7 +136,7 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Phone</label>
-                <md-input type="number" v-model="selected.phone" value="selected.phone"></md-input>
+                <md-input type="text" v-model="selected.phone" value="selected.phone"></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
@@ -161,6 +161,8 @@
 </template>
 
 <script>
+import {HTTP} from '../http-common'
+
 const toLower = text => {
   return text.toString().toLowerCase()
 }
@@ -179,149 +181,34 @@ export default {
     search: null,
     searched: [],
     selected: {},
-    users: [{
-        id: 1,
-        name: "Shawna Dubbin",
-        email: "sdubbin0@geocities.com",
-        phone: "123456789",
-        title: "Assistant Media Planner"
-      },
-      {
-        id: 2,
-        name: "Odette Demageard",
-        email: "odemageard1@spotify.com",
-        phone: "123 456 789",
-        title: "Account Coordinator"
-      },
-      {
-        id: 3,
-        name: "Vera Taleworth",
-        email: "vtaleworth2@google.ca",
-        phone: "123456789",
-        title: "Community Outreach Specialist"
-      },
-      {
-        id: 4,
-        name: "Lonnie Izkovitz",
-        email: "lizkovitz3@youtu.be",
-        phone: "123 456 789",
-        title: "Operator"
-      },
-      {
-        id: 5,
-        name: "Thatcher Stave",
-        email: "tstave4@reference.com",
-        phone: "123 456 789",
-        title: "Software Test Engineer III"
-      },
-      {
-        id: 6,
-        name: "Karim Chipping",
-        email: "kchipping5@scribd.com",
-        phone: "123 456 789",
-        title: "Safety Technician II"
-      },
-      {
-        id: 7,
-        name: "Helge Holyard",
-        email: "hholyard6@howstuffworks.com",
-        phone: "123 456 789",
-        title: "Internal Auditor"
-      },
-      {
-        id: 8,
-        name: "Rod Titterton",
-        email: "rtitterton7@nydailynews.com",
-        phone: "123 456 789",
-        title: "Technical Writer"
-      },
-      {
-        id: 9,
-        name: "Gawen Applewhite",
-        email: "gapplewhite8@reverbnation.com",
-        phone: "123 456 789",
-        title: "GIS Technical Architect"
-      },
-      {
-        id: 10,
-        name: "Nero Mulgrew",
-        email: "nmulgrew9@plala.or.jp",
-        phone: "123 456 789",
-        title: "Staff Scientist"
-      },
-      {
-        id: 11,
-        name: "Cybill Rimington",
-        email: "crimingtona@usnews.com",
-        phone: "123 456 789",
-        title: "Assistant Professor"
-      },
-      {
-        id: 12,
-        name: "Maureene Eggleson",
-        email: "megglesonb@elpais.com",
-        phone: "123 456 789",
-        title: "Recruiting Manager"
-      },
-      {
-        id: 13,
-        name: "Cortney Caulket",
-        email: "ccaulketc@cbsnews.com",
-        phone: "123 456 789",
-        title: "Safety Technician IV"
-      },
-      {
-        id: 14,
-        name: "Selig Swynfen",
-        email: "sswynfend@cpanel.net",
-        phone: "123 456 789",
-        title: "Environmental Specialist"
-      },
-      {
-        id: 15,
-        name: "Ingar Raggles",
-        email: "iragglese@cbc.ca",
-        phone: "123 456 789",
-        title: "VP Sales"
-      },
-      {
-        id: 16,
-        name: "Karmen Mines",
-        email: "kminesf@topsy.com",
-        phone: "123 456 789",
-        title: "Administrative Officer"
-      },
-      {
-        id: 17,
-        name: "Salome Judron",
-        email: "sjudrong@jigsy.com",
-        phone: "123 456 789",
-        title: "Staff Scientist"
-      },
-      {
-        id: 18,
-        name: "Clarinda Marieton",
-        email: "cmarietonh@theatlantic.com",
-        phone: "123 456 789",
-        title: "Paralegal"
-      },
-      {
-        id: 19,
-        name: "Paxon Lotterington",
-        email: "plotteringtoni@netvibes.com",
-        phone: "123 456 789",
-        title: "Marketing Assistant"
-      },
-      {
-        id: 20,
-        name: "Maura Thoms",
-        email: "mthomsj@webeden.co.uk",
-        phone: "123 456 789",
-        title: "Actuary"
-      }
-    ]
+    usersData: [],
+    users: []
   }),
   methods: {
+    async populate() {
+      this.usersData = await HTTP.get('/admin')
+     console.log(this.usersData.data.admin.records);
+     console.log(this.usersData.data.admin.records.length);
+
+
+let count =0;
+     while (count < this.usersData.data.admin.records.length) {
+
+       console.log(this.usersData.data.admin.records[count][2]);
+
+       this.users.push({
+         id: this.usersData.data.admin.records[count][0],
+         name: this.usersData.data.admin.records[count][1],
+         email: this.usersData.data.admin.records[count][7],
+         phone: this.usersData.data.admin.records[count][5],
+         title: this.usersData.data.admin.records[count][8]
+       })
+
+       count++
+     }
+
+
+    },
     newUser() {
       window.alert('Noop')
     },
@@ -334,6 +221,9 @@ export default {
   },
   created() {
     this.searched = this.users
+  },
+  beforeMount () {
+    this.populate()
   }
 }
 </script>

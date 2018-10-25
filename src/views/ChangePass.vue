@@ -6,6 +6,7 @@
         <!-- need to prevent form from posting right away and redirect to welcome -->
         <form>
           <input v-model="password" class="login-input" type="password" name="password" placeholder="Password">
+          <input v-model="password" class="login-input" type="password" name="password" placeholder="Re-enter Password">
           <div class="btn-container">
             <input @click="showProgress($event)" class="form-button" type="submit" name="login" value="Submit">
           </div>

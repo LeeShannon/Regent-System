@@ -14,7 +14,7 @@ export default {
   },
   mounted() {
     window.onload(setTimeout(function(){
-        window.location.href="http://localhost:8080/#/home"
+        window.location.href="http://localhost:8081/#/home"
       },4000))
   }
 }

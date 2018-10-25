@@ -1,6 +1,6 @@
 <template>
 <div class="space-top">
-  <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+  <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="background-color: white">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
         <h1 class="md-title page-headers">Orders</h1>
@@ -171,13 +171,13 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date"></md-input>
+                  <md-input type="date" placeholder="year-month-day"></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date"></md-input>
+                  <md-input type="date" placeholder="year-month-day"></md-input>
                 </md-field>
               </div>
             </div>
@@ -253,13 +253,14 @@
             <div class="form-group col">
               <md-field class="modal-input">
                 <label>Departure</label>
-                <md-input type="date" placeholder="selected.departure" v-model="selected.departure" value="selected.departure"></md-input>
+                <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
+                 <md-input type="date" v-model="selected.departure"></md-input>
               </md-field>
             </div>
             <div class="form-group col">
               <md-field class="modal-input">
                 <label>Arrival</label>
-                <md-input type="date" placeholder="selected.arrival" v-model="selected.arrival" value="selected.arrival"></md-input>
+                <md-input type="date" v-model="selected.arrival" value="selected.arrival"></md-input>
               </md-field>
             </div>
           </div>
@@ -319,8 +320,8 @@ export default {
         supplier: 'Fruit and Veg',
         customer: 'Regent',
         type: 'Acquisition',
-        departure: '09/08/2018',
-        arrival:'09/08/2018',
+        departure: '2018-08-09',
+        arrival:'2018-08-08',
         quantity: '150',
         shipment: 'Maersk',
         creator : 'admin1@test.com',
@@ -332,8 +333,8 @@ export default {
         supplier: 'Fruit and Veg',
         customer: 'Pick n Pay',
         type: 'Requesition',
-        departure: '08/08/2018',
-        arrival:'09/08/2018',
+        departure: '2018-08-08',
+        arrival:'2018-08-08',
         quantity: '75',
         shipment: 'Turner Shipment',
         creator : 'admin2@test.com',
@@ -345,8 +346,8 @@ export default {
         supplier: 'All sweet',
         customer: 'Rocco Mama',
         type: 'Requisition',
-        departure: '07/07/2018',
-        arrival:'09/08/2018',
+        departure: '2018-08-08',
+        arrival:'2018-08-08',
         quantity: '60',
         shipment: 'Maersk',
         creator : 'admin1@test.com',

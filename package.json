@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "ammap3": "^3.21.13",
+    "axios": "^0.18.0",
     "buefy": "^0.6.6",
     "chart.js": "^2.7.2",
     "mdbvue": "^4.5.1",
