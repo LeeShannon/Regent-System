@@ -25,10 +25,10 @@
         <md-table-cell md-label="phone" md-sort-by="phone">{{ item.phone }}</md-table-cell>
         <md-table-cell md-label="Job Title" md-sort-by="title">{{ item.title }}</md-table-cell>
         <md-table-cell md-label="Actions">
-          <button @click="onSelect(item)"  type="button" class="my-btn-icon" data-toggle="modal" data-target="#editUserModal">
+          <button @click="getUserInfo(item.id)"  type="button" class="my-btn-icon" data-toggle="modal" data-target="#editUserModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-          <button  @click="onSelect(item)" type="button" class="my-btn-icon">
+          <button  @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteUserModal">
             <i class="fas fa-trash-alt"></i>
           </button>
         </md-table-cell>
@@ -78,12 +78,12 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Phone</label>
-                <md-input type="number" v-model="newUser.adminPhoneNumber" ></md-input>
+                <md-input type="number" v-model="newUser.adminPhoneNumber" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <label for="userType">User Type</label>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="newUser.adminType">
+              <select class="form-control" id="exampleFormControlSelect1" v-model="newUser.admin" required>
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
                 <option value="2">Employee</option>
@@ -94,7 +94,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" @click="addUser()" data-dismiss="modal">Submit</button>
+          <button type="submit" class="btn btn-primary" @click="addUser()">Submit</button>
         </div>
       </div>
     </div>
@@ -115,27 +115,21 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Name</label>
-                <md-input type="text" v-model="selected.name" value="selected.name"></md-input>
+                <md-input type="text" v-model="userDetails.adminName" value="userDetails.adminName"></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Surname</label>
-                <md-input type="text" v-model="selected.surname" value="selected.surname"></md-input>
+                <md-input type="text" v-model="userDetails.adminSurname" value="userDetails.adminSurname"></md-input>
               </md-field>
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
               <md-field class="modal-input">
                 <label>E-mail</label>
-                <md-input type="email" v-model="selected.email" value="selected.email"></md-input>
-              </md-field>
-            </div>
-            <div class="col-lg-6">
-              <md-field class="modal-input">
-                <label>Password</label>
-                <md-input type="password" v-model="selected.password"></md-input>
+                <md-input type="email" v-model="userDetails.adminEmail" value="userDetails.adminEmail"></md-input>
               </md-field>
             </div>
           </div>
@@ -143,12 +137,12 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Phone</label>
-                <md-input type="text" v-model="selected.phone" value="selected.phone"></md-input>
+                <md-input type="text" v-model="userDetails.adminPhoneNumber" value="userDetails.adminPhoneNumber"></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <label for="userType">User Type</label>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="selected.title" value="selected.title">
+              <select class="form-control" id="exampleFormControlSelect1" v-model="userDetails.adminType" value="userDetails.adminType">
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
                 <option value="2">Employee</option>
@@ -159,7 +153,29 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" >Save changes</button>
+          <button @click="updateUser(userDetails.adminId)" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- deleteUserModal -->
+  <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <h3 class="del-headers">Are you sure you wish to delete user: <b>{{ selected.name }} {{selected.surname}}</b> ?</h3>
+          <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+          <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
@@ -189,12 +205,14 @@ export default {
     searched: [],
     selected: {},
     usersData: [],
+    userDetails: [],
     newUser: {
       adminName: '',
       adminSurname: '',
       adminUsername: '',
       adminPassword: '',
       adminPhoneNumber: '',
+      adminAddress: 'test',
       adminEmail: '',
       adminType: 0
     },
@@ -206,50 +224,50 @@ export default {
       console.log(this.usersData.data.admin.records);
       console.log(this.usersData.data.admin.records.length);
 
+
       let count =0;
-
       while (count < this.usersData.data.admin.records.length) {
-        console.log(this.usersData.data.admin.records[count][2]);
 
-        this.users.push({
+       console.log(this.usersData.data.admin.records[count][2]);
+
+       this.users.push({
           id: this.usersData.data.admin.records[count][0],
           name: this.usersData.data.admin.records[count][1],
           surname: this.usersData.data.admin.records[count][2],
           email: this.usersData.data.admin.records[count][7],
           phone: this.usersData.data.admin.records[count][5],
-          title: this.usersData.data.admin.records[count][8]
-        })
+          title: this.usersData.data.admin.records[count][8],
+          surname: this.usersData.data.admin.records[count][2]
+       })
        count++
      }
-    },
-    async addUser(){
+   },
+   async addUser(){
       let item = this.newUser;
       await HTTP.post('/admin', item).then((res) => {
         console.log(res)
+        console.log("success adding");
       })
-      //get the data to "refresh" the table
-
     },
-    async editUser(){
-    //need ID
-
-    //not sure if this works but  my logic is to bind the data with the selected data
-      // let item = {
-      //   adminName: this.selected.name,
-      //   adminSurname: this.selected.surname,
-      //   adminPhoneNumber: this.selected.phone,
-      //   adminEmail: this.selected.email,
-      //   adminType: this.selected.title
-      // }
-      //
-      // await HTTP.put('/admin/' + itemId, item)
-      //
+    async getUserInfo(id) {
+      console.log(id);
+      await HTTP.get('/admin/' + id).then((res) => {
+        // console.log(res.data);
+        this.userDetails = res.data;
+      })
     },
     searchOnTable() {
       this.searched = searchByName(this.users, this.search)
     },
     onSelect (item) {
       this.selected = item
+    },
+    async updateUser(id){
+      console.log(id);
+      let item = this.userDetails;
+
+      console.log(item.adminName);
+      await HTTP.put('/admin/' + id, item)
     }
   },
   created() {
@@ -262,6 +280,11 @@ export default {
 </script>
 
 <style lang="css">
+
+.my-btn-icon{
+  cursor: pointer;
+}
+
 .md-field {
   max-width: 300px;
 }
@@ -310,4 +333,14 @@ export default {
 .space-top {
   margin-top: 10px;
 }
+
+.del-headers {
+  text-align: center;
+  margin-bottom: .8rem;
+  padding-top: .8rem;
+  letter-spacing: .02em;
+  font-size: 1.1rem;
+  margin-top: 0;
+}
+
 </style>

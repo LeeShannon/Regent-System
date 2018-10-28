@@ -37,7 +37,7 @@
           <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-          <button @click="onSelect(item)" type="button" class="my-btn-icon">
+          <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteOrderModal">
             <i class="fas fa-trash-alt"></i>
           </button>
         </md-table-cell>
@@ -333,6 +333,28 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- deleteOrderModal -->
+<div class="modal fade" id="deleteOrderModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteOrderModalLabel">Delete Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+          <h3 class="del-headers">Are you sure you wish to delete order number: <b>{{ selected.id }}</b> ?</h3>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+        <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
       </div>
     </div>
   </div>

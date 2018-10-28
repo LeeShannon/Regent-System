@@ -34,7 +34,7 @@
         <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-        <button @click="onDelete(item)" type="button" class="my-btn-icon">
+        <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteProductModal">
             <i class="fas fa-trash-alt"></i>
           </button>
       </md-table-cell>
@@ -128,13 +128,13 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Creator ID</label>
-                  <md-input type="text" v-model="newProduct.adminId" value="newProduct.adminId" readonly></md-input>
+                  <md-input type="hidden" v-model="newProduct.adminId" value="newProduct.adminId" readonly></md-input>
                 </md-field>
               </div>
               <div class="col">
                 <md-field class="modal-input">
                   <label>Timestamp</label>
-                  <md-input type="text" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></md-input>
+                  <md-input type="hidden" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></md-input>
                 </md-field>
               </div>
             </div>
@@ -252,6 +252,29 @@
       </div>
     </div>
   </div>
+
+  <!-- deleteProductModal -->
+  <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <h3 class="del-headers">Are you sure you wish to delete product: <b>{{ selected.productName }}</b> ?</h3>
+          <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+          <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 </template>
 
