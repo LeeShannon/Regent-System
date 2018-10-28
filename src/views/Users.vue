@@ -20,6 +20,7 @@
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
+        <md-table-cell md-label="Surname" md-sort-by="name">{{ item.surname }}</md-table-cell>
         <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
         <md-table-cell md-label="phone" md-sort-by="phone">{{ item.phone }}</md-table-cell>
         <md-table-cell md-label="Job Title" md-sort-by="title">{{ item.title }}</md-table-cell>
@@ -49,13 +50,13 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Name</label>
-                <md-input type="text" required></md-input>
+                <md-input type="text" v-model="newUser.adminName" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Surname</label>
-                <md-input type="text" required></md-input>
+                <md-input type="text" v-model="newUser.adminSurname" required></md-input>
               </md-field>
             </div>
           </div>
@@ -63,13 +64,13 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>E-mail</label>
-                <md-input type="email" required></md-input>
+                <md-input type="email" v-model="newUser.adminEmail" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Password</label>
-                <md-input type="password" required></md-input>
+                <md-input type="password" v-model="newUser.adminPassword" required></md-input>
               </md-field>
             </div>
           </div>
@@ -77,12 +78,12 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Phone</label>
-                <md-input type="number"></md-input>
+                <md-input type="number" v-model="newUser.adminPhoneNumber" ></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <label for="userType">User Type</label>
-              <select class="form-control" id="exampleFormControlSelect1">
+              <select class="form-control" id="exampleFormControlSelect1" v-model="newUser.adminType">
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
                 <option value="2">Employee</option>
@@ -93,7 +94,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" @click="addUser()" data-dismiss="modal">Submit</button>
         </div>
       </div>
     </div>
@@ -125,10 +126,16 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>E-mail</label>
                 <md-input type="email" v-model="selected.email" value="selected.email"></md-input>
+              </md-field>
+            </div>
+            <div class="col-lg-6">
+              <md-field class="modal-input">
+                <label>Password</label>
+                <md-input type="password" v-model="selected.password"></md-input>
               </md-field>
             </div>
           </div>
@@ -152,7 +159,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" >Save changes</button>
         </div>
       </div>
     </div>
@@ -182,35 +189,61 @@ export default {
     searched: [],
     selected: {},
     usersData: [],
+    newUser: {
+      adminName: '',
+      adminSurname: '',
+      adminUsername: '',
+      adminPassword: '',
+      adminPhoneNumber: '',
+      adminEmail: '',
+      adminType: 0
+    },
     users: []
   }),
   methods: {
     async populate() {
       this.usersData = await HTTP.get('/admin')
-     console.log(this.usersData.data.admin.records);
-     console.log(this.usersData.data.admin.records.length);
+      console.log(this.usersData.data.admin.records);
+      console.log(this.usersData.data.admin.records.length);
 
+      let count =0;
 
-let count =0;
-     while (count < this.usersData.data.admin.records.length) {
+      while (count < this.usersData.data.admin.records.length) {
+        console.log(this.usersData.data.admin.records[count][2]);
 
-       console.log(this.usersData.data.admin.records[count][2]);
-
-       this.users.push({
-         id: this.usersData.data.admin.records[count][0],
-         name: this.usersData.data.admin.records[count][1],
-         email: this.usersData.data.admin.records[count][7],
-         phone: this.usersData.data.admin.records[count][5],
-         title: this.usersData.data.admin.records[count][8]
-       })
-
+        this.users.push({
+          id: this.usersData.data.admin.records[count][0],
+          name: this.usersData.data.admin.records[count][1],
+          surname: this.usersData.data.admin.records[count][2],
+          email: this.usersData.data.admin.records[count][7],
+          phone: this.usersData.data.admin.records[count][5],
+          title: this.usersData.data.admin.records[count][8]
+        })
        count++
      }
-
+    },
+    async addUser(){
+      let item = this.newUser;
+      await HTTP.post('/admin', item).then((res) => {
+        console.log(res)
+      })
+      //get the data to "refresh" the table
 
     },
-    newUser() {
-      window.alert('Noop')
+    async editUser(){
+    //need ID
+
+    //not sure if this works but  my logic is to bind the data with the selected data
+      // let item = {
+      //   adminName: this.selected.name,
+      //   adminSurname: this.selected.surname,
+      //   adminPhoneNumber: this.selected.phone,
+      //   adminEmail: this.selected.email,
+      //   adminType: this.selected.title
+      // }
+      //
+      // await HTTP.put('/admin/' + itemId, item)
+      //
     },
     searchOnTable() {
       this.searched = searchByName(this.users, this.search)

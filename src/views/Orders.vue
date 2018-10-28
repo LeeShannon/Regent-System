@@ -182,7 +182,7 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Product</label>
-                  <md-input type="text" required></md-input>
+                  <md-input type="text" class="invalid"></md-input>
                 </md-field>
               </div>
             </div>
