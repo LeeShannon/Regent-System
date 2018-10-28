@@ -11,13 +11,16 @@
           <router-link to="/home" tag="a"> <i class="fas fa-home" id="icon"></i> <span class="test">Dashboard</span></router-link>
         </li>
         <li>
-          <router-link to="/orders"> <i class="fas fa-truck" id="icon"></i> <span class="test">Orders</span></router-link>
+          <router-link to="/orders"> <i class="fas fa-ship" id="icon"></i> <span class="test">Orders</span></router-link>
         </li>
         <li>
           <router-link to="/inventory"> <i class="fas fa-box-open" id="icon"></i> <span class="test">Inventory</span></router-link>
         </li>
         <li>
-          <router-link to="/statistics"> <i class="fas fa-chart-bar" id="icon"></i> <span class="test">statistics</span> </router-link>
+          <router-link to="/suppliers"> <i class="fas fa-truck" id="icon"></i> <span class="test">Suppliers</span></router-link>
+        </li>
+        <li>
+          <router-link to="/statistics"> <i class="fas fa-chart-bar" id="icon"></i> <span class="test">Statistics</span> </router-link>
         </li>
         <li>
           <router-link to="/users"> <i class="fas fa-user" id="icon"></i> <span class="test">Users</span></router-link>

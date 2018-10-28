@@ -3,10 +3,10 @@
   <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
-        <h1 class="md-title page-headers">Users</h1>
+        <h1 class="md-title page-headers">Suppliers</h1>
       </div>
-      <button type="button" class=" my-btn" data-toggle="modal" data-target="#addUserModal">
-          Add User
+      <button type="button" class=" my-btn" data-toggle="modal" data-target="#addSupplierModal">
+          Add Supplier
       </button>
       <md-field md-clearable class="md-toolbar-section-end">
         <i class="fas fa-search" style="padding-right: 1em"></i>
@@ -19,16 +19,16 @@
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-        <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="Surname" md-sort-by="name">{{ item.surname }}</md-table-cell>
+        <md-table-cell md-label="Supplier" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
         <md-table-cell md-label="phone" md-sort-by="phone">{{ item.phone }}</md-table-cell>
-        <md-table-cell md-label="Job Title" md-sort-by="title">{{ item.title }}</md-table-cell>
+        <md-table-cell md-label="City" md-sort-by="title">{{ item.city }}</md-table-cell>
+        <md-table-cell md-label="Country" md-sort-by="title">{{ item.country }}</md-table-cell>
         <md-table-cell md-label="Actions">
-          <button @click="getUserInfo(item.id)"  type="button" class="my-btn-icon" data-toggle="modal" data-target="#editUserModal">
+          <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editSupplierModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-          <button  @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteUserModal">
+          <button  @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteSupplierModal">
             <i class="fas fa-trash-alt"></i>
           </button>
         </md-table-cell>
@@ -36,11 +36,11 @@
   </md-table>
 
   <!-- add user modal -->
-  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addSupplierModal" tabindex="-1" role="dialog" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+          <h5 class="modal-title" id="addSupplierModalLabel">Add User</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -49,28 +49,14 @@
           <div class="row">
             <div class="col-lg-6">
               <md-field class="modal-input">
-                <label>Name</label>
-                <md-input type="text" v-model="newUser.adminName" required></md-input>
+                <label> Supplier Name</label>
+                <md-input type="text" v-model="newSupplier.supplierName" required></md-input>
               </md-field>
             </div>
-            <div class="col-lg-6">
-              <md-field class="modal-input">
-                <label>Surname</label>
-                <md-input type="text" v-model="newUser.adminSurname" required></md-input>
-              </md-field>
-            </div>
-          </div>
-          <div class="row">
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>E-mail</label>
-                <md-input type="email" v-model="newUser.adminEmail" required></md-input>
-              </md-field>
-            </div>
-            <div class="col-lg-6">
-              <md-field class="modal-input">
-                <label>Password</label>
-                <md-input type="password" v-model="newUser.adminPassword" required></md-input>
+                <md-input type="email" v-model="newSupplier.email" required></md-input>
               </md-field>
             </div>
           </div>
@@ -78,34 +64,40 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Phone</label>
-                <md-input type="number" v-model="newUser.adminPhoneNumber" required></md-input>
+                <md-input type="number" v-model="newSupplier.phone" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
-              <label for="userType">User Type</label>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="newUser.admin" required>
-                <option value="1">Admin</option>
-                <option value="2">Manager</option>
-                <option value="2">Employee</option>
-              </select>
+              <md-field class="modal-input">
+                <label>City</label>
+                <md-input type="text" v-model="newSupplier.city" required></md-input>
+              </md-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <md-field class="modal-input">
+                <label>Country</label>
+                <md-input type="text" v-model="newSupplier.country" required></md-input>
+              </md-field>
             </div>
           </div>
           <br>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" @click="addUser()" data-dismiss="modal">Submit</button>
+          <button type="submit" class="btn btn-primary" @click="addSupplier()" data-dismiss="modal">Submit</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- EditUserModal -->
-  <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <!-- editSupplierModal -->
+  <div class="modal fade" id="editSupplierModal" tabindex="-1" role="dialog" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editUserModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="editSupplierModalLabel">Modal title</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -114,22 +106,14 @@
           <div class="row">
             <div class="col-lg-6">
               <md-field class="modal-input">
-                <label>Name</label>
-                <md-input type="text" v-model="userDetails.adminName" value="userDetails.adminName"></md-input>
+                <label> Supplier Name</label>
+                <md-input type="text" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
               <md-field class="modal-input">
-                <label>Surname</label>
-                <md-input type="text" v-model="userDetails.adminSurname" value="userDetails.adminSurname"></md-input>
-              </md-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <md-field class="modal-input">
                 <label>E-mail</label>
-                <md-input type="email" v-model="userDetails.adminEmail" value="userDetails.adminEmail"></md-input>
+                <md-input type="email" required></md-input>
               </md-field>
             </div>
           </div>
@@ -137,16 +121,22 @@
             <div class="col-lg-6">
               <md-field class="modal-input">
                 <label>Phone</label>
-                <md-input type="text" v-model="userDetails.adminPhoneNumber" value="userDetails.adminPhoneNumber"></md-input>
+                <md-input type="number" required></md-input>
               </md-field>
             </div>
             <div class="col-lg-6">
-              <label for="userType">User Type</label>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="userDetails.adminType" value="userDetails.adminType">
-                <option value="1">Admin</option>
-                <option value="2">Manager</option>
-                <option value="2">Employee</option>
-              </select>
+              <md-field class="modal-input">
+                <label>City</label>
+                <md-input type="text" required></md-input>
+              </md-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <md-field class="modal-input">
+                <label>Country</label>
+                <md-input type="text" required></md-input>
+              </md-field>
             </div>
           </div>
           <br>
@@ -159,23 +149,23 @@
     </div>
   </div>
 
-  <!-- deleteUserModal -->
-  <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <!-- deleteSupplierModal -->
+  <div class="modal fade" id="deleteSupplierModal" tabindex="-1" role="dialog" aria-labelledby="deleteSupplierModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
+          <h5 class="modal-title" id="deleteSupplierModalLabel">Delete User</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers">Are you sure you wish to delete user: <b>{{ selected.name }} {{selected.surname}}</b> ?</h3>
+            <h3 class="del-headers">Are you sure you wish to delete supplier: <b>{{ selected.name }}</b> ?</h3>
           <br>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <button @click="deleteSupplier()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
@@ -204,77 +194,50 @@ export default {
     search: null,
     searched: [],
     selected: {},
-    usersData: [],
-    userDetails: [],
-    newUser: {
-      adminName: '',
-      adminSurname: '',
-      adminUsername: '',
-      adminPassword: '',
-      adminPhoneNumber: '',
-      adminAddress: 'test',
-      adminEmail: '',
-      adminType: 0
+    newSupplier: {
+      supplierName: '',
+      email: '',
+      phone: '',
+      city: '',
+      country: ''
     },
-    users: []
+    suppliers: [
+      {
+        id: '001',
+        name: 'Fruit & Veg',
+        email: 'fruitandveg@gmail',
+        phone: '0213445632',
+        city: 'Cape Town',
+        country: 'South Africa'
+      }
+    ]
   }),
   methods: {
-    async populate() {
-      this.usersData = await HTTP.get('/admin')
-      console.log(this.usersData.data.admin.records);
-      console.log(this.usersData.data.admin.records.length);
-
-
-      let count =0;
-      while (count < this.usersData.data.admin.records.length) {
-
-       console.log(this.usersData.data.admin.records[count][2]);
-
-       this.users.push({
-          id: this.usersData.data.admin.records[count][0],
-          name: this.usersData.data.admin.records[count][1],
-          surname: this.usersData.data.admin.records[count][2],
-          email: this.usersData.data.admin.records[count][7],
-          phone: this.usersData.data.admin.records[count][5],
-          title: this.usersData.data.admin.records[count][8],
-          surname: this.usersData.data.admin.records[count][2]
-       })
-       count++
-     }
-   },
-   async addUser(){
-      let item = this.newUser;
-      await HTTP.post('/admin', item).then((res) => {
-        console.log(res)
-        console.log("success adding");
-      })
-    },
-    async getUserInfo(id) {
-      console.log(id);
-      await HTTP.get('/admin/' + id).then((res) => {
-        // console.log(res.data);
-        this.userDetails = res.data;
-      })
-    },
+   //  async populate() {
+   //
+   // },
+   // async addSupplier(){
+   //
+   //  },
+   //  async getSupplierInfo(id) {
+   //    console.log(id);
+   //
+   //  },
     searchOnTable() {
-      this.searched = searchByName(this.users, this.search)
+      this.searched = searchByName(this.suppliers, this.search)
     },
     onSelect (item) {
       this.selected = item
     },
-    async updateUser(id){
-      console.log(id);
-      let item = this.userDetails;
+    async updateSupplier(id){
 
-      console.log(item.adminName);
-      await HTTP.put('/admin/' + id, item)
     }
   },
   created() {
-    this.searched = this.users
+    this.searched = this.suppliers
   },
   beforeMount () {
-    this.populate()
+    // this.populate()
   }
 }
 </script>
