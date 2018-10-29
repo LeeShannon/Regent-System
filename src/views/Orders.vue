@@ -82,7 +82,8 @@
             </div>
 
             <!-- product rows for additional products -->
-            <div v-for="(row, index) in inputRows">
+            <!-- v-for="cat in category" :key="cat.id" -->
+            <div v-for="row in inputRows" :key="row.id">
               <div class="form-row">
                 <div class="col">
                   <md-field class="modal-input">
@@ -105,7 +106,7 @@
                   </md-field>
                 </div>
               </div>
-              <button type="button" name="button" @click="removeRow(index)">Remove</button>
+              <button type="button" name="button" @click="removeRow(row.id)">Remove</button>
             </div>
 
             <button type="button" name="button" @click="addRow">Add</button>
@@ -128,7 +129,7 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="departure" required></md-input>
+                  <md-input type="date" id="date" placeholder="departure" required></md-input>
                 </md-field>
               </div>
               <div class="form-group col">

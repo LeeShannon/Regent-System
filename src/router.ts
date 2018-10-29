@@ -11,6 +11,8 @@ import Welcome from './views/Welcome.vue';
 import Users from './views/Users.vue';
 import Suppliers from './views/Suppliers.vue';
 import Statistics from './views/Statistics.vue';
+import Category from './views/Category.vue';
+import Subcategory from './views/Subcategory'
 
 Vue.use(Router);
 
@@ -64,6 +66,16 @@ export default new Router({
           path: '/suppliers',
           name: 'suppliers',
           component: Suppliers
+        },
+        {
+          path: '/category',
+          name: 'category',
+          component: Category
+        },
+        {
+          path: '/subcategory',
+          name: 'subcategory',
+          component: Subcategory
         }
       ]
     }
