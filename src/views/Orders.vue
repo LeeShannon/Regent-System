@@ -128,7 +128,7 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="departure" required></md-input>
+                  <md-input type="date" id="date" placeholder="departure" required></md-input>
                 </md-field>
               </div>
               <div class="form-group col">

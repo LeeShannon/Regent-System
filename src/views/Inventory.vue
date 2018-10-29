@@ -1,5 +1,12 @@
 <template>
 <div class="space-top ">
+
+  <ul class="nav nav-tabs tabs">
+    <li class="nav-item"><router-link to="/inventory" class="nav-link active tab-link" style="border-bottom: grey">Inventory</router-link></li>
+    <li class="nav-item"><router-link to="/category" class="nav-link tab-link">Category</router-link></li>
+    <li class="nav-item"><router-link to="/subcategory" class="nav-link tab-link">Subcategory</router-link></li>
+  </ul>
+
   <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
@@ -16,9 +23,9 @@
 
     <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">{{errorData}}
     </md-table-empty-state>
-<!-- v-if="item.productId != 0" -->
-<!-- v-if="item != null" -->
-<!-- v-if="item.productName"  -->
+    <!-- v-if="item.productId != 0" -->
+    <!-- v-if="item != null" -->
+    <!-- v-if="item.productName"  -->
     <md-table-row slot="md-table-row" slot-scope="{ item }">
       <md-table-cell md-label="ProductId" md-sort-by="productId" md-numeric> {{ item.productId }} </md-table-cell>
       <md-table-cell md-label="Name" md-sort-by="productName" md-numeric> {{ item.productName }} </md-table-cell>
@@ -96,7 +103,7 @@
             <div class="form-row">
               <md-field>
                 <label>Upload New Image</label>
-                <md-file v-model="newProduct.productImgUrl" placeholder="Upload Image" required/>
+                <md-file v-model="newProduct.productImgUrl" placeholder="Upload Image" required />
               </md-field>
             </div>
 
@@ -122,10 +129,10 @@
 
             <div class="form-row">
               <div class="col">
-                  <input type="hidden" v-model="newProduct.adminId" value="newProduct.adminId" readonly></input>
+                <input type="hidden" v-model="newProduct.adminId" value="newProduct.adminId" readonly></input>
               </div>
               <div class="col">
-                  <input type="hidden" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></input>
+                <input type="hidden" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></input>
               </div>
             </div>
 
@@ -160,9 +167,9 @@
               </div>
               <div class="col">
                 <!-- <md-field class="modal-input"> -->
-                  <!-- <label>Active</label> -->
-                  <!-- <md-input type="checkbox" v-model="selected.productActive" value="selected.productActive" required></md-input> -->
-                  <button id="btnActiveEdit" class="btn CBactiveToggle" @click="toggleActiveEdit()">{{activeText}}</button>
+                <!-- <label>Active</label> -->
+                <!-- <md-input type="checkbox" v-model="selected.productActive" value="selected.productActive" required></md-input> -->
+                <button id="btnActiveEdit" class="btn CBactiveToggle" @click="toggleActiveEdit()">{{activeText}}</button>
                 <!-- </md-field> -->
               </div>
             </div>
@@ -194,7 +201,7 @@
               <md-field>
                 <label>Upload New Image</label>
                 <!-- <md-file v-model="selected.productImgUrl" placeholder="Upload Image" required/> -->
-                <md-file @change="onFilePicked" placeholder="Upload Image" accept="image/*"/>
+                <md-file @change="onFilePicked" placeholder="Upload Image" accept="image/*" />
               </md-field>
             </div>
 
@@ -250,22 +257,21 @@
         <div class="modal-header">
           <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+              <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers">Are you sure you wish to delete product: <b>{{ selected.productName }}</b> ?</h3>
+          <h3 class="del-headers">Are you sure you wish to delete product: <b>{{ selected.productName }}</b> ?</h3>
           <br>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+            <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-</div>
 </template>
 
 <script>
@@ -273,8 +279,12 @@
 
 import State from "../store/state";
 
-import {HTTP} from '../http-common';
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
+import {
+  HTTP
+} from '../http-common';
+import {
+  POINT_CONVERSION_COMPRESSED
+} from 'constants';
 import * as firebase from 'firebase';
 
 const toLower = text => {
@@ -341,7 +351,7 @@ export default {
       if (this.dataAccessSuccess) {
         //Category
         let count = 0;
-        while (count < this.categoryData[this.categoryData.length-1][0]) {
+        while (count < this.categoryData[this.categoryData.length - 1][0]) {
           //Default values for missing entries
           this.category.push({
             categoryId: 0,
@@ -359,7 +369,7 @@ export default {
         // console.log(this.category)
         //Sub-Category
         count = 0;
-        while (count < this.subCategoryData[this.subCategoryData.length-1][0]) {
+        while (count < this.subCategoryData[this.subCategoryData.length - 1][0]) {
           //Default values for missing entries
           this.subCategory.push({
             subCategoryId: 0,
@@ -378,7 +388,7 @@ export default {
         // console.log(this.subCategory)
         //Products
         count = 0;
-        while (count < this.productData[this.productData.length-1][0]) {
+        while (count < this.productData[this.productData.length - 1][0]) {
           //Default values for missing entries
           this.products.push({
             productId: 0,
@@ -411,7 +421,7 @@ export default {
             productPurchasePrice: this.productData[count][3],
             productSellingPrice: this.productData[count][4],
             productImgUrl: this.productData[count][5],
-            productActive: active,//TODO - active to boolean? this.productData[count][6]
+            productActive: active, //TODO - active to boolean? this.productData[count][6]
             productDescription: this.productData[count][7],
             adminId: this.productData[count][8],
             productStamp: this.productData[count][9],
@@ -426,7 +436,7 @@ export default {
       // document.getElementById("editProductModal").close()
       // console.log(document.getElementById("editProductModal"))
     },
-    toggleActiveEdit(){
+    toggleActiveEdit() {
       // console.log(prod)
       const ActiveButton = document.getElementById("btnActiveEdit");
       this.selected.active = !this.selected.active;
@@ -440,7 +450,7 @@ export default {
         this.products[this.selected.productId].productActive = false;
       }
     },
-    toggleActiveAdd(){
+    toggleActiveAdd() {
       console.log('TODO - Toggle active for add new product');
     },
     submitProduct() {
@@ -464,7 +474,7 @@ export default {
       this.searched = searchByName(this.products, this.search);
     },
     onDelete(item) {
-      console.log('Delete Item:')//TODO
+      console.log('Delete Item:') //TODO
       console.log(item.productId);
       // delete this.products[item.productId]
       console.log(item.productId);
@@ -514,7 +524,7 @@ export default {
         var count = 0;
         var notFound = true;
         var selectedCategory = null;
-        while (count<this.category.length && notFound) {
+        while (count < this.category.length && notFound) {
           if (name === this.category[count][1]) {
             notFound = false;
             selectedCategory = this.category[count];
@@ -524,7 +534,7 @@ export default {
         count = 0;
         notFound = true;
         if (selectedCategory) {
-          while (count<this.subCategory.length && notFound) {
+          while (count < this.subCategory.length && notFound) {
             if (this.subCategory[count][3] === selectedCategory[0]) {
               this.subSubCategory.push(this.subCategory[count]);
             }
@@ -591,15 +601,15 @@ export default {
       const storageRef = firebase.storage().ref('/item/' + filename);
       const uploadTask = storageRef.put(this.image);
       uploadTask.on('state_changed', (snapshot) => {},
-      (error) => {
-        // console.log(error);
-      }, async () => {
-        const url = storageRef.getDownloadURL().then((url) => {
-          // document.getElementById("theImage").src = url
-          return url;
+        (error) => {
+          // console.log(error);
+        }, async () => {
+          const url = storageRef.getDownloadURL().then((url) => {
+            // document.getElementById("theImage").src = url
+            return url;
+          });
+          // console.log(url)
         });
-        // console.log(url)
-      });
     },
   },
   created() {
@@ -619,6 +629,20 @@ export default {
 </script>
 
 <style lang="css">
+
+  .tabs {
+    margin-bottom: 10px !important;
+  }
+
+  .tab-link {
+    color: #444 !important;
+  }
+
+  .tab-link:hover {
+    background: white !important;
+    text-decoration: none !important;
+  }
+
   .CBactiveToggle {
     background-color: green;
     width: 100%;

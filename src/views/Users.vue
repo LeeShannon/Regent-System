@@ -224,7 +224,6 @@ export default {
       console.log(this.usersData.data.admin.records);
       console.log(this.usersData.data.admin.records.length);
 
-
       let count =0;
       while (count < this.usersData.data.admin.records.length) {
 
