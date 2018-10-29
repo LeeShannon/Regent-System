@@ -21,13 +21,14 @@
           </md-field>
         </md-table-toolbar>
 
-        <md-table-empty-state md-label="No users found" :md-description="`No user found for this '${search}' query. Try a different search term or create a new user.`">
+        <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">{{errorData}}
         </md-table-empty-state>
 
         <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-          <md-table-cell md-label="Category" md-sort-by="name">{{ item.name }}</md-table-cell>
-          <md-table-cell md-label="Position" md-sort-by="email">{{ item.position }}</md-table-cell>
+          <md-table-cell md-label="ID" md-sort-by="categoryId" md-numeric>{{ item.categoryId }}</md-table-cell>
+          <md-table-cell md-label="Category" md-sort-by="categoryName">{{ item.categoryName }}</md-table-cell>
+          <md-table-cell md-label="Position" md-sort-by="categoryPosition">{{ item.categoryPosition }}</md-table-cell>
+          <md-table-cell md-label="Position" md-sort-by="adminId">{{ item.adminId }}</md-table-cell>
           <md-table-cell md-label="Actions">
             <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editCategoryModal">
               <i class="fas fa-pencil-alt"></i>
@@ -134,19 +135,14 @@
 </template>
 
 <script>
-import {
-  HTTP
-} from '../http-common'
-
+import {HTTP} from '../http-common'
 const toLower = text => {
   return text.toString().toLowerCase()
 }
-
 const searchByName = (items, term) => {
   if (term) {
     return items.filter(item => toLower(item.name).includes(toLower(term)))
   }
-
   return items
 }
 
@@ -156,16 +152,61 @@ export default {
     search: null,
     searched: [],
     selected: {},
-    categories: [{
-      id: '001',
-      name: 'Fruit',
-      position: '3',
-    }]
+    categoryData: [],
+    categories: [],
+    category: [],
+    errorData: '',
+    dataAccessSuccess: true
   }),
   methods: {
-    //  async populate() {
-    //
-    // },
+    async populate() {
+      this.categoryData = []
+      this.errorData = '';
+      try {
+        this.categoryData = await HTTP.get('/category');
+        this.categoryData = this.categoryData.data.category.records;
+      } catch (error) {
+        this.dataAccessSuccess = false;
+        this.errorData = 'The database connection is offline';
+      }
+      if (this.dataAccessSuccess) {
+        //Category
+        let count = 0;
+        while (count < this.categoryData[this.categoryData.length - 1][0]) {
+          //Default values for missing entries
+          this.category.push({
+            categoryId: 0,
+            categoryName: 'Not Found',
+            categoryPosition: 0,
+            adminId: 0,
+            visible: false
+          })
+          count++;
+        }
+        count = 0;
+        while (count < this.categoryData.length) {
+          this.category[this.categoryData[count][0]] = {
+            categoryId: this.categoryData[count][0],
+            categoryName: this.categoryData[count][1],
+            categoryPosition: this.categoryData[count][2],
+            adminId: this.categoryData[count][3],
+            visible: true
+          }
+          this.categoryData[count];
+          count++;
+        }
+        console.log(this.category)
+        // Place where I am probably gonna fuck this shit up
+        let counter = 0
+        while (counter < this.category.length) {
+          if ( this.category[counter].visible ) {
+            this.categories.push(this.category[counter])
+          }
+          counter++
+        }
+        console.log(this.categories);
+      }
+    },
     // async addCategory(){
     //
     //  },
@@ -187,7 +228,7 @@ export default {
     this.searched = this.categories
   },
   beforeMount() {
-    // this.populate()
+    this.populate()
   }
 }
 </script>

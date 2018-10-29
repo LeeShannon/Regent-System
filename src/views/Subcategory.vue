@@ -21,14 +21,15 @@
           </md-field>
         </md-table-toolbar>
 
-        <md-table-empty-state md-label="No users found" :md-description="`No user found for this '${search}' query. Try a different search term or create a new user.`">
+        <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">{{errorData}}
         </md-table-empty-state>
 
         <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-          <md-table-cell md-label="Subcategory" md-sort-by="name">{{ item.name }}</md-table-cell>
-          <md-table-cell md-label="Position" md-sort-by="name">{{ item.position }}</md-table-cell>
-          <md-table-cell md-label="Category" md-sort-by="name">{{ item.category }}</md-table-cell>
+          <md-table-cell md-label="ID" md-sort-by="subCategoryId" md-numeric>{{ item.subCategoryId }}</md-table-cell>
+          <md-table-cell md-label="Name" md-sort-by="subCategoryName">{{ item.subCategoryName }}</md-table-cell>
+          <md-table-cell md-label="Position" md-sort-by="subCategoryPosition">{{ item.subCategoryPosition }}</md-table-cell>
+          <md-table-cell md-label="Category ID" md-sort-by="categoryId">{{ item.categoryId }}</md-table-cell>
+          <md-table-cell md-label="Admin ID" md-sort-by="adminId">{{ item.adminId }}</md-table-cell>
           <md-table-cell md-label="Actions">
             <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editSubcategoryModal">
               <i class="fas fa-pencil-alt"></i>
@@ -155,19 +156,14 @@
 </template>
 
 <script>
-import {
-  HTTP
-} from '../http-common'
-
+import {HTTP} from '../http-common'
 const toLower = text => {
   return text.toString().toLowerCase()
 }
-
 const searchByName = (items, term) => {
   if (term) {
     return items.filter(item => toLower(item.name).includes(toLower(term)))
   }
-
   return items
 }
 
@@ -177,18 +173,64 @@ export default {
     search: null,
     searched: [],
     selected: {},
-    categories: [{
-      id: '23',
-      name: 'Berries',
-      position: '3',
-      category: 'Fruit'
-    }]
+    subCategoryData: [],
+    subCategories: [],
+    subCategory: [],
+    errorData: '',
+    dataAccessSuccess: true
   }),
   methods: {
-    //  async populate() {
-    //
-    // },
-    // async addSubcategory(){
+    async populate() {
+      this.subCategoryData = []
+      this.errorData = '';
+      try {
+        this.subCategoryData = await HTTP.get('/subcategory');
+        this.subCategoryData = this.subCategoryData.data.subcategory.records;
+      } catch (error) {
+        this.dataAccessSuccess = false;
+        this.errorData = 'The database connection is offline';
+      }
+      if (this.dataAccessSuccess) {
+        //Category
+        let count = 0;
+        while (count < this.subCategoryData[this.subCategoryData.length - 1][0]) {
+          //Default values for missing entries
+          this.subCategory.push({
+            subCategoryId: 0,
+            subCategoryName: 'Not Found',
+            subCategoryPosition: 0,
+            categoryId: 0,
+            adminId: 0,
+            visible: false
+          })
+          count++;
+        }
+        count = 0;
+        while (count < this.subCategoryData.length) {
+          this.subCategory[this.subCategoryData[count][0]] = {
+            subCategoryId: this.subCategoryData[count][0],
+            subCategoryName: this.subCategoryData[count][1],
+            subCategoryPosition: this.subCategoryData[count][2],
+            categoryId: this.subCategoryData[count][3],
+            adminId: this.subCategoryData[count][4],
+            visible: true
+          }
+          this.subCategoryData[count];
+          count++;
+        }
+        console.log(this.subCategory)
+        // Place where I am probably gonna fuck this shit up
+        let counter = 0
+        while (counter < this.subCategory.length) {
+          if ( this.subCategory[counter].visible ) {
+            this.subCategories.push(this.subCategory[counter])
+          }
+          counter++
+        }
+        console.log(this.subCategories);
+      }
+    },
+    // async addCategory(){
     //
     //  },
     //  async getSupplierInfo(id) {
@@ -196,7 +238,7 @@ export default {
     //
     //  },
     searchOnTable() {
-      this.searched = searchByName(this.categories, this.search)
+      this.searched = searchByName(this.subCategories, this.search)
     },
     onSelect(item) {
       this.selected = item
@@ -206,10 +248,10 @@ export default {
     }
   },
   created() {
-    this.searched = this.categories
+    this.searched = this.subCategories
   },
   beforeMount() {
-    // this.populate()
+    this.populate()
   }
 }
 </script>

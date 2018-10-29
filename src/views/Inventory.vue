@@ -27,7 +27,8 @@
 <!-- v-if="item != null" -->
 <!-- v-if="item.productName"  -->
 <!-- v-if="item.visible==true || item.visible==false" -->
-    <md-table-row slot="md-table-row" slot-scope="{ item }" v-if="item.visible==true">
+ <!-- v-if="item.visible==true" -->
+    <md-table-row slot="md-table-row" slot-scope="{ item }">
       <md-table-cell md-label="ProductId" md-sort-by="productId" md-numeric> {{ item.productId }} </md-table-cell>
       <md-table-cell md-label="Name" md-sort-by="productName" md-numeric> {{ item.productName }} </md-table-cell>
       <md-table-cell md-label="Sub-Category" md-sort-by="subCategory" md-numeric> {{ item.subCategory }} </md-table-cell>
@@ -87,7 +88,7 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Purchase Price</label>
-                  <md-input type="text" v-model="newProduct.productPurchasePrice" value="newProduct.productPurchasePrice" required></md-input>
+                  <md-input type="number" v-model="newProduct.productPurchasePrice" value="newProduct.productPurchasePrice" required></md-input>
                 </md-field>
               </div>
               <div class="col">
@@ -137,7 +138,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" @click="submitProduct()">Submit</button>
         </div>
       </div>
     </div>
@@ -293,6 +294,7 @@ export default {
   name: 'FileField',
   data: () => ({
     search: null,
+    imageUrl:null,
     searched: [],
     placeholder: null,
     invalidData: 'invalid Data',
@@ -325,6 +327,9 @@ export default {
   }),
   methods: {
     async populate() {
+      this.categoryData = []
+      this.subCategoryData = []
+      this.productData = []
       this.errorData = '';
       try {
         this.categoryData = await HTTP.get('/category');
@@ -343,12 +348,13 @@ export default {
         let count = 0;
         while (count < this.categoryData[this.categoryData.length - 1][0]) {
           //Default values for missing entries
-          this.category.push({
-            categoryId: 0,
-            categoryName: 'Not Found',
-            categoryPosition: 0,
-            adminId: 0,
-          })
+          // this.category.push({
+          //   categoryId: 0,
+          //   categoryName: 'Not Found',
+          //   categoryPosition: 0,
+          //   adminId: 0,
+          // })
+          this.category.push([0, 'Not Found', 0, 0,])
           count++;
         }
         count = 0;
@@ -360,13 +366,14 @@ export default {
         count = 0;
         while (count < this.subCategoryData[this.subCategoryData.length - 1][0]) {
           //Default values for missing entries
-          this.subCategory.push({
-            subCategoryId: 0,
-            subCategoryName: 'Not Found',
-            subCategoryPosition: 0,
-            categoryId: 0,
-            adminId: 0,
-          })
+          // this.subCategory.push({
+          //   subCategoryId: 0,
+          //   subCategoryName: 'Not Found',
+          //   subCategoryPosition: 0,
+          //   categoryId: 0,
+          //   adminId: 0
+          // })
+          this.subCategory.push([ 0, 'Not Found', 0, 0, 0])
           count++;
         }
         count = 0;
@@ -378,7 +385,8 @@ export default {
         count = 0;
         while (count < this.productData[this.productData.length - 1][0]) {
           //Default values for missing entries
-          this.products.push({
+          // TODO - products.push
+          this.product.push({
             productId: 0,
             subCategory: 'Not Found',
             category: 'Not Found',
@@ -401,21 +409,36 @@ export default {
           if (this.productData[count][6] === 1) {
             active = true;
           }
-          this.products[this.productData[count][0]] = {
-            productId: this.productData[count][0],
-            subCategory: this.subCategory[this.productData[count][1]][1],
-            category: this.category[this.subCategory[this.productData[count][1]][3]][1],
-            productName: this.productData[count][2],
-            productPurchasePrice: this.productData[count][3],
-            productSellingPrice: this.productData[count][4],
-            productImgUrl: this.productData[count][5],
-            productActive: active, //TODO - active to boolean? this.productData[count][6]
-            productDescription: this.productData[count][7],
-            adminId: this.productData[count][8],
-            productStamp: this.productData[count][9],
-            visible: true
+          if (this.productData[count][1] != 0) {
+            // products[
+            this.product[this.productData[count][0]] = {
+              productId: this.productData[count][0],
+              subCategory: this.subCategory[this.productData[count][1]][1],
+              category: this.category[this.subCategory[this.productData[count][1]][3]][1],
+              productName: this.productData[count][2],
+              productPurchasePrice: this.productData[count][3],
+              productSellingPrice: this.productData[count][4],
+              productImgUrl: this.productData[count][5],
+              productActive: active, //TODO - active to boolean? this.productData[count][6]
+              productDescription: this.productData[count][7],
+              adminId: this.productData[count][8],
+              productStamp: this.productData[count][9],
+              visible: true
+            }
+          } else {
+            console.log('This is a bad item')
+            console.log(this.productData[count])
           }
           count++;
+        }
+        console.log(this.product);
+        // Place where I am probably gonna fuck this shit up
+        let counter = 0
+        while (counter < this.product.length) {
+          if ( this.product[counter].visible ) {
+            this.products.push(this.product[counter])
+          }
+          counter++
         }
         console.log(this.products);
       }
@@ -442,22 +465,90 @@ export default {
     toggleActiveAdd() {
       console.log('TODO - Toggle active for add new product');
     },
-    submitProduct() {
-      console.log('submit product');
-      // var prod = {
-      //   subCategoryId:
-      //   productName:
-      //   productPurchasePrice:
-      //   productSellingPrice:
-      //   productImgUrl:
-      //   productActive:
-      //   productDescription:
-      //   adminId:
-      //   productStamp:
-      // }
-      // await HTTP.post('/product', {prod}).then((res) => {
-      //   console.log(res)
-      // })
+    // async submitOrder() {
+    //   await HTTP.post('/orders', {adminId: 2}).then((res) => {
+    //     console.log(res)
+    //   })
+    // },
+    validateSubmitProduct() {
+      let valid = true
+      if (!State.methods.getLoggedIn()) {
+        console.log('User needs to be logged in')
+        valid = false
+      }
+      if (this.newProduct.productName.length == 0) {
+        console.log('Product name invalid')
+        valid = false
+      }
+      if (this.newProduct.productPurchasePrice <= 0) {
+        console.log('Product purchase price invalid')
+        valid = false
+      }
+      if (this.newProduct.productSellingPrice <= 0) {
+        console.log('Product selling price invalid')
+        valid = false
+      }
+      if (this.newProduct.productImgUrl.length <= 0) {
+        console.log('Product image url invalid')
+        valid = false
+      }
+      if (this.newProduct.productDescription.length <= 0) {
+        console.log('Product description invalid')
+        valid = false
+      }
+      if (State.data.adminInfo.adminId <= 0) {
+        console.log('Invlaid User login Id')
+        valid = false
+      }
+      return valid
+    },
+    async submitProduct() {
+      if (this.validateSubmitProduct()) {
+        console.log('submit product');
+        let count = 0
+        let found = false
+        let cat = null
+        let sub = null
+        while (count<this.category.length && !found) {
+          if (this.category[count][1] == this.newProduct.category){
+            found = true
+            cat = this.category[count]
+          }
+          count++
+        }
+        if (found) {
+          count = 0
+          found = false
+          while (count<this.subCategory.length && !found) {
+            if (this.subCategory[count][1] == this.newProduct.subCategory && this.subCategory[count][3] == cat[0]){
+              sub = this.subCategory[count]
+              found = true
+            }
+            count++
+          }
+          found = true
+          console.log(this.imageUrl)
+          if (found) {
+            await HTTP.post('/product', {
+              subCategoryId: sub[0],
+              productName: this.newProduct.productName,
+              productPurchasePrice: this.newProduct.productPurchasePrice,
+              productSellingPrice: this.newProduct.productSellingPrice,
+              productImgUrl: this.imageUrl,
+              productActive: 'true',
+              productDescription: this.newProduct.productDescription,
+              adminId: State.data.adminInfo.adminId
+            }).then((res) => {
+              console.log(res)
+            })
+            this.populate()
+          } else {
+            console.log('TODO - Sub Category not found - Fucking duplicate names or subsubcategory not working')
+          }
+        } else {
+          console.log('TODO - category not found')
+        }
+      }
     },
     searchOnTable() {
       this.searched = searchByName(this.products, this.search);
@@ -549,22 +640,6 @@ export default {
       // console.log(this.image);
       this.upload();
     },
-    async addItem() {
-      let item = {
-        subCategoryId: 0,
-        productName: "Product Name",
-        productPurchasePrice: 0.0,
-        productSellingPrice: 0.0,
-        productImgUrl: "Loadable Image Hyperlink From Firebase",
-        productActive: "Why is this a varchar? - might need to be changed",
-        productDescription: "Description",
-        adminId: 0,
-        productStamp: "Timestamp"
-      }
-      await HTTP.post('/product', item).then((res) => {
-        console.log(res)
-      })
-    },
     async editItem() {
       const itemId = 0
       let item = {
@@ -589,7 +664,7 @@ export default {
       const fileName = this.image.name;
       const storageRef = firebase.storage().ref('/item/' + filename);
       const uploadTask = storageRef.put(this.image);
-      uploadTask.on('state_changed', (snapshot) => {},
+      this.imageUrl = uploadTask.on('state_changed', (snapshot) => {},
         (error) => {
           // console.log(error);
         }, async () => {
@@ -598,6 +673,7 @@ export default {
             return url;
           });
           // console.log(url)
+          return url;
         });
     },
   },

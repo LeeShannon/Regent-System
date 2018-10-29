@@ -76,7 +76,8 @@ export default {
               adminStamp: this.loginTable[count][9]
             }
             State.methods.setInformation(adminInfo);
-            router.push('welcome')
+            // router.push('welcome') TODO - need inventory for testing - still a bug with welcome
+            router.push('inventory')
             // console.log(adminInfo)
           } else {
             console.log('TODO - invalide password')
