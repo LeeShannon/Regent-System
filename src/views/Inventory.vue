@@ -559,7 +559,7 @@ export default {
       // delete this.products[item.productId]
       console.log(item.productId);
       this.products[item.productId] = null;
-      // HTTP.delete('/product/' + item.productId).then(function(url) { console.log('Item Deleted') })
+      // HTTP.delete('/product/' + item.productId).then((url) => { console.log('Item Deleted') })
     },
     cancelEdit() {
       console.log('Cancel Edit');

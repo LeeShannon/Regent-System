@@ -121,7 +121,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <h3 class="del-headers">Are you sure you wish to delete Category: <b>{{ selected.name }}</b> ?</h3>
+                  <h3 class="del-headers">Are you sure you wish to delete Category: <b>{{ selected.categoryName }}</b> ?</h3>
                   <br>
                 </div>
                   <div class="modal-footer">
@@ -207,6 +207,18 @@ export default {
         console.log(this.categories);
       }
     },
+    deleteCategory() {
+      if (this.selected != {}) {
+        console.log('Delete Category'+this.selected.categoryName)
+        HTTP.delete('/category/' + this.selected.categoryId).then((res) => {return res})
+        this.selected = {}
+        // this.populate()
+        // TODO - pop selected from array
+        // TODO - check if contains subcategory
+      } else {
+        console.log('No item selected')
+      }
+    },
     // async addCategory(){
     //
     //  },
@@ -219,6 +231,7 @@ export default {
     },
     onSelect(item) {
       this.selected = item
+      console.log(this.selected)
     },
     async updateSupplier(id) {
 
