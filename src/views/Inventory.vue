@@ -19,7 +19,8 @@
 <!-- v-if="item.productId != 0" -->
 <!-- v-if="item != null" -->
 <!-- v-if="item.productName"  -->
-    <md-table-row slot="md-table-row" slot-scope="{ item }">
+<!-- v-if="item.visible==true || item.visible==false" -->
+    <md-table-row slot="md-table-row" slot-scope="{ item }" v-if="item.visible==true">
       <md-table-cell md-label="ProductId" md-sort-by="productId" md-numeric> {{ item.productId }} </md-table-cell>
       <md-table-cell md-label="Name" md-sort-by="productName" md-numeric> {{ item.productName }} </md-table-cell>
       <md-table-cell md-label="Sub-Category" md-sort-by="subCategory" md-numeric> {{ item.subCategory }} </md-table-cell>
@@ -34,12 +35,16 @@
         <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-        <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteProductModal">
+        <button @click="onDelete(item)" type="button" class="my-btn-icon">
             <i class="fas fa-trash-alt"></i>
           </button>
       </md-table-cell>
     </md-table-row>
   </md-table>
+
+  Selected: {{ selected }}<br>
+  Searched: {{ search }}<br>
+  New Product: {{ newProduct }}<br>
   <!-- State: {{ State.data.loggedIn }} -->
 
   <!-- add product modal -->
@@ -58,6 +63,7 @@
               <div class="col">
                 <md-field class="modal-input">
                   <label>Name</label>
+                  <!-- <md-input type="text" v-model="newProduct.productName" value="newProduct.productName" required></md-input> -->
                   <md-input type="text" v-model="newProduct.productName" value="newProduct.productName" required></md-input>
                 </md-field>
               </div>
@@ -85,7 +91,7 @@
               </div>
             </div>
 
-            <div class="form-row" style="padding: 8px;">
+            <div class="form-row">
               <!-- <md-field :class="messageClass" id="textarea"> -->
               <md-field>
                 <label>Description</label>
@@ -122,10 +128,16 @@
 
             <div class="form-row">
               <div class="col">
-                  <input type="hidden" v-model="newProduct.adminId" value="newProduct.adminId" readonly></input>
+                <md-field class="modal-input">
+                  <label>Creator ID</label>
+                  <md-input type="text" v-model="newProduct.adminId" value="newProduct.adminId" readonly></md-input>
+                </md-field>
               </div>
               <div class="col">
-                  <input type="hidden" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></input>
+                <md-field class="modal-input">
+                  <label>Timestamp</label>
+                  <md-input type="text" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></md-input>
+                </md-field>
               </div>
             </div>
 
@@ -133,7 +145,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
@@ -242,41 +254,15 @@
       </div>
     </div>
   </div>
-
-  <!-- deleteProductModal -->
-  <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-        <div class="modal-body">
-            <h3 class="del-headers">Are you sure you wish to delete product: <b>{{ selected.productName }}</b> ?</h3>
-          <br>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
 </template>
 
 <script>
 /* tslint:disable */
-
 import State from "../store/state";
-
 import {HTTP} from '../http-common';
 import { POINT_CONVERSION_COMPRESSED } from 'constants';
 import * as firebase from 'firebase';
-
 const toLower = text => {
   return text.toString().toLowerCase();
 }
@@ -356,7 +342,6 @@ export default {
           this.category[this.categoryData[count][0]] = this.categoryData[count];
           count++;
         }
-        // console.log(this.category)
         //Sub-Category
         count = 0;
         while (count < this.subCategoryData[this.subCategoryData.length-1][0]) {
@@ -375,16 +360,15 @@ export default {
           this.subCategory[this.subCategoryData[count][0]] = this.subCategoryData[count];
           count++;
         }
-        // console.log(this.subCategory)
         //Products
         count = 0;
         while (count < this.productData[this.productData.length-1][0]) {
-          //Default values for missing entries
+          // Default values for missing entries
           this.products.push({
             productId: 0,
             subCategory: 'Not Found',
             category: 'Not Found',
-            productName: null,
+            productName: 'Not Found',
             productPurchasePrice: 'Not Found',
             productSellingPrice: 'Not Found',
             productImgUrl: 'Not Found',
@@ -392,8 +376,8 @@ export default {
             productDescription: 'Not Found',
             adminId: 'Not Found',
             productStamp: 'Not Found',
+            visible: false
           })
-          // this.products.push(null)
           count++;
         }
         count = 0;
@@ -415,6 +399,7 @@ export default {
             productDescription: this.productData[count][7],
             adminId: this.productData[count][8],
             productStamp: this.productData[count][9],
+            visible: true
           }
           count++;
         }
@@ -582,7 +567,7 @@ export default {
       await HTTP.put('/product/' + itemId, item)
     },
     removeItem(itemId) {
-      HTTP.delete('/product/' + itemId).then((url) => {
+      HTTP.delete('/product/' + itemId).then((url) => { 
         console.log(url)
       })
     },
@@ -609,10 +594,10 @@ export default {
     this.populate();
     console.log('State')
     console.log(State.data.loggedIn)
-    console.log(State.data.adminName)
-    console.log(State.data.adminSurname)
-    console.log(State.data.admindUsername)
-    console.log(State.data.adminName)
+    console.log(State.data.adminInfo.adminName)
+    console.log(State.data.adminInfo.adminSurname)
+    console.log(State.data.adminInfo.admindUsername)
+    console.log(State.data.adminInfo.adminName)
     // console.log(State.data.loggedIn)
   },
 };
