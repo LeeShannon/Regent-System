@@ -40,10 +40,6 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
-
-  Selected: {{ selected }}<br>
-  Searched: {{ search }}<br>
-  New Product: {{ newProduct }}<br>
   <!-- State: {{ State.data.loggedIn }} -->
 
   <!-- add product modal -->
@@ -126,16 +122,10 @@
 
             <div class="form-row">
               <div class="col">
-                <md-field class="modal-input">
-                  <label>Creator ID</label>
-                  <md-input type="hidden" v-model="newProduct.adminId" value="newProduct.adminId" readonly></md-input>
-                </md-field>
+                  <input type="hidden" v-model="newProduct.adminId" value="newProduct.adminId" readonly></input>
               </div>
               <div class="col">
-                <md-field class="modal-input">
-                  <label>Timestamp</label>
-                  <md-input type="hidden" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></md-input>
-                </md-field>
+                  <input type="hidden" v-model="newProduct.productStamp" value="newProduct.productStamp" readonly></input>
               </div>
             </div>
 
@@ -143,7 +133,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
         </div>
       </div>
     </div>

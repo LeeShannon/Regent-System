@@ -1,14 +1,16 @@
 <template lang="html">
   <div class="welcome-pg">
-      <h1 class="hi-there animated fadeIn"><span class="welc">Welcome  </span> <span class="im-blue">{{ user }}</span></h1>
+      <h1 class="hi-there animated fadeIn"><span class="welc">Welcome  </span> <span class="im-blue">{{ user}}</span></h1>
   </div>
 </template>
 
 <script>
+import State from "../store/state";
+
 export default {
   data() {
     return {
-      //user should be a prop passed from login?
+      //how to get the user's name from the store?
       user: 'User'
     }
   },

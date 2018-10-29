@@ -5,19 +5,29 @@
       <div class="login-form">
         <!-- need to prevent form from posting right away and redirect to welcome -->
         <form>
-          <input v-model="email" class="login-input" type="email" name="email" placeholder="E-mail">
-          <input v-model="password" class="login-input" type="password" name="password" placeholder="Password">
+          <input v-model="email" class="login-input" type="email" name="email" placeholder="E-mail" required>
+          <input v-model="password" class="login-input" type="password" name="password" placeholder="Password" required>
+
+        <!-- error message -->
+          <div v-show="error" class="error-message">
+            <span class="alert">Error!</span>
+            <br>
+            Invalid login details
+          </div>
+
           <div class="btn-container">
             <input @click="showProgress($event)" class="form-button" type="submit" name="login" value="Submit">
           </div>
         </form>
         <br>
-        <!-- <br>
+        <br>
         <div class="forgot">
           <router-link to="/changepassword" class="forgot">Forgot Password?</router-link>
-        </div> -->
+        </div>
       </div>
     </div>
+
+
   </div>
 </template>
 
@@ -30,7 +40,8 @@ export default {
     return{
       email: '',
       password: '',
-      loginTable: []
+      loginTable: [],
+      error: false
     };
   },
   methods: {
@@ -65,7 +76,7 @@ export default {
               adminStamp: this.loginTable[count][9]
             }
             State.methods.setInformation(adminInfo);
-            router.push('inventory')
+            router.push('welcome')
             // console.log(adminInfo)
           } else {
             console.log('TODO - invalide password')
@@ -76,6 +87,7 @@ export default {
         }
       } else {
         console.log('TODO - invalid username')
+        this.error = true;
         State.methods.revokeLogin();
       }
     },
@@ -148,6 +160,7 @@ export default {
   margin-bottom: 10%;
   width: 100%;
   font-size: 20px;
+  color: white;
 }
 
 .login-input::placeholder {
@@ -202,6 +215,25 @@ export default {
   font-size:0;
   border-left-color: #0886a2;
   animation: rotating 2s 0.25s linear infinite;
+}
+
+.error-message {
+  width: 100%;
+  border-radius: 5px;
+  background: linear-gradient(to bottom left, #EF8D9C 40%, #f97c8f 100%);
+  color: white;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+   box-shadow: 5px 5px 20px rgba(#303030, 10%);
+   z-index: 1;
+}
+
+.alert {
+  font-weight: 700;
+  letter-spacing: 5px;
+  font-size: 0.9em;
+  text-transform: uppercase;
 }
 .onclic:after {
     content:"";
