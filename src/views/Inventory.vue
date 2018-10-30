@@ -110,14 +110,14 @@
             <div class="form-row">
               <md-field>
                 <label>Upload New Image</label>
-                <md-file v-model="newProduct.productImgUrl" placeholder="Upload Image" required />
+                <md-file v-model="newProduct.productImgUrl" @change="onFilePicked" placeholder="Upload Image" required />
               </md-field>
             </div>
 
             <div class="form-row">
               <div class="form-group col">
                 <label for="exampleFormControlSelect1">Category</label>
-                <select class="form-control" id="exampleFormControlSelect1" v-model="newProduct.category" value="newProduct.category">
+                <select class="form-control" id="addProductForm" @input="selectCategory(false)" v-model="newProduct.category" value="newProduct.category">
                   <option v-for="cat in category" v-if="cat[1] != null" :key="cat.id">
                     {{ cat[1] }}
                   </option>
@@ -127,7 +127,7 @@
               <div class="form-group col">
                 <label for="exampleFormControlSelect1">Subcategory</label>
                 <select class="form-control" id="exampleFormControlSelect1" v-model="newProduct.subCategory" value="newProduct.subcategory">
-                <option v-for="sub in subCategory" v-if="sub[1] != null" :key="sub.id">
+                <option v-for="sub in subSubCategory" v-if="sub[1] != null" :key="sub.id">
                   {{ sub[1] }}
                 </option>
               </select>
@@ -206,7 +206,7 @@
             <div class="form-row">
               <div class="form-group col">
                 <label for="exampleFormControlSelect1">Category</label>
-                <select class="form-control" id="exampleFormControlSelect1" v-model="selected.category" value="selected.category">
+                <select class="form-control" id="editProductForm" @input="selectCategory(true)" v-model="selected.category" value="selected.category">
                   <option v-for="cat in category" v-if="cat[1] != null" :key="cat.id">
                     {{ cat[1] }}
                   </option>
@@ -216,7 +216,7 @@
               <div class="form-group col">
                 <label for="exampleFormControlSelect1">Subcategory</label>
                 <select class="form-control" id="exampleFormControlSelect1" v-model="selected.subCategory" value="selected.subcategory">
-                <option v-for="sub in subCategory" v-if="sub[1] != null" :key="sub.id">
+                <option v-for="sub in subSubCategory" v-if="sub[1] != null" :key="sub.id">
                   {{ sub[1] }}
                 </option>
               </select>
@@ -341,7 +341,7 @@ export default {
       } catch (error) {
         this.dataAccessSuccess = false;
         this.errorData = 'The database connection is offline';
-        console.log(this.dataAccessSuccess);
+        // console.log(this.dataAccessSuccess);
       }
       if (this.dataAccessSuccess) {
         //Category
@@ -431,7 +431,7 @@ export default {
           }
           count++;
         }
-        console.log(this.product);
+        // console.log(this.product);
         // Place where I am probably gonna fuck this shit up
         let counter = 0
         while (counter < this.product.length) {
@@ -440,7 +440,7 @@ export default {
           }
           counter++
         }
-        console.log(this.products);
+        // console.log(this.products);
       }
     },
     saveChanges() {
@@ -599,8 +599,11 @@ export default {
       } else {
         var e = document.getElementById("addProductForm");
       }
+      // console.log('Instance by e')
+      // console.log(e)
       if (e) {
         var name = e.options[e.selectedIndex].text;
+        console.log(name)
         var count = 0;
         var notFound = true;
         var selectedCategory = null;
@@ -611,6 +614,8 @@ export default {
           }
           count++;
         }
+        console.log('Category')
+        // console.log(selectedCategory)
         count = 0;
         notFound = true;
         if (selectedCategory) {
@@ -621,6 +626,7 @@ export default {
             count++;
           }
         }
+        console.log('SubCategory')
         // console.log(this.subSubCategory)
       } else {
         console.log('Select Category Input Error');
@@ -634,10 +640,8 @@ export default {
     //   // this.$refs.fileInput.click()
     // },
     onFilePicked(event) {
-      // console.log(event);
       const files = event.target.files;
       this.image = files[0];
-      // console.log(this.image);
       this.upload();
     },
     async editItem() {
@@ -661,9 +665,13 @@ export default {
       })
     },
     async upload() {
+      console.log('Upload Method being called')
       const fileName = this.image.name;
-      const storageRef = firebase.storage().ref('/item/' + filename);
+      console.log(fileName)
+      const storageRef = firebase.storage().ref('/item/' + fileName);
+      console.log(storageRef)
       const uploadTask = storageRef.put(this.image);
+      console.log(uploadTask)
       this.imageUrl = uploadTask.on('state_changed', (snapshot) => {},
         (error) => {
           // console.log(error);
@@ -675,6 +683,7 @@ export default {
           // console.log(url)
           return url;
         });
+      console.log(this.imageUrl)
     },
   },
   created() {
