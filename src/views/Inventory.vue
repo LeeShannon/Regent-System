@@ -53,6 +53,8 @@
   Selected: {{ selected }}<br>
   Searched: {{ search }}<br>
   New Product: {{ newProduct }}<br>
+  <!-- style="display: none;" -->
+  <img src="https://firebasestorage.googleapis.com/v0/b/regent-produce.appspot.com/o/item%2F56d31a8945bdb319cd60a34ba9f28e9c.jpg?alt=media&token=0651b00a-4979-48a6-ad54-42af69a2650d" id="imgUrl" >
   <!-- State: {{ State.data.loggedIn }} -->
 
   <!-- add product modal -->
@@ -76,11 +78,6 @@
                 </md-field>
               </div>
               <div class="col">
-                <md-field class="modal-input">
-                  <label>Active</label>
-                  <md-input type="checkbox" v-model="newProduct.productActive" value="newProduct.productActive" required></md-input>
-                  <!-- <button type="submit" class="btn btn-primary" @click="toggleActiveAdd()">{{activeText}}</button> -->
-                </md-field>
               </div>
             </div>
 
@@ -599,8 +596,6 @@ export default {
       } else {
         var e = document.getElementById("addProductForm");
       }
-      // console.log('Instance by e')
-      // console.log(e)
       if (e) {
         var name = e.options[e.selectedIndex].text;
         console.log(name)
@@ -615,7 +610,6 @@ export default {
           count++;
         }
         console.log('Category')
-        // console.log(selectedCategory)
         count = 0;
         notFound = true;
         if (selectedCategory) {
@@ -627,18 +621,10 @@ export default {
           }
         }
         console.log('SubCategory')
-        // console.log(this.subSubCategory)
       } else {
         console.log('Select Category Input Error');
       }
     },
-    test() {
-      console.log(this.image);
-    },
-    // onPickFile () {
-    //   console.log('Upload File')
-    //   // this.$refs.fileInput.click()
-    // },
     onFilePicked(event) {
       const files = event.target.files;
       this.image = files[0];
@@ -674,16 +660,15 @@ export default {
       console.log(uploadTask)
       this.imageUrl = uploadTask.on('state_changed', (snapshot) => {},
         (error) => {
-          // console.log(error);
+          console.log(error);
         }, async () => {
           const url = storageRef.getDownloadURL().then((url) => {
-            // document.getElementById("theImage").src = url
-            return url;
+            document.getElementById("imgUrl").src = url
+            console.log(url)
           });
-          // console.log(url)
-          return url;
         });
-      console.log(this.imageUrl)
+        this.imageUrl = document.getElementById("imgUrl").src
+        console.log(this.imageUrl)
     },
   },
   created() {
