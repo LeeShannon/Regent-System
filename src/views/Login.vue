@@ -26,8 +26,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 </template>
 
@@ -77,7 +75,7 @@ export default {
             }
             State.methods.setInformation(adminInfo);
             // router.push('welcome') TODO - need inventory for testing - still a bug with welcome
-            router.push('inventory')
+            router.push('welcome')
             // console.log(adminInfo)
           } else {
             console.log('TODO - invalide password')

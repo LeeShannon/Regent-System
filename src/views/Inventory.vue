@@ -49,10 +49,6 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
-
-  Selected: {{ selected }}<br>
-  Searched: {{ search }}<br>
-  New Product: {{ newProduct }}<br>
   <!-- State: {{ State.data.loggedIn }} -->
 
   <!-- add product modal -->
@@ -656,7 +652,7 @@ export default {
       await HTTP.put('/product/' + itemId, item)
     },
     removeItem(itemId) {
-      HTTP.delete('/product/' + itemId).then((url) => { 
+      HTTP.delete('/product/' + itemId).then((url) => {
         console.log(url)
       })
     },
