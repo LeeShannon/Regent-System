@@ -49,22 +49,7 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
-
-<!-- informationToEdit -->
-<!-- <div> -->
-  <!-- Selected: {{ selected }}<br> -->
-  <!-- Searched: {{ search }}<br> -->
-  <!-- New Product: {{ newProduct }}<br> -->
-  <!-- style="display: none;" -->
   
-  <!-- State: {{ State.data.loggedIn }} -->
-<!-- </div> -->
-
-<!-- imageUrl loader - DO NOT REMOVE - WILL CRASH ALL IMAGE UPLOADS -->
-<!-- style="display: none;" -->
-<!-- src="https://firebasestorage.googleapis.com/v0/b/regent-produce.appspot.com/o/item%2F56d31a8945bdb319cd60a34ba9f28e9c.jpg?alt=media&token=0651b00a-4979-48a6-ad54-42af69a2650d" -->
-<img src="Invalid Entry" id="imgUrl">
-
   <!-- add product modal -->
   <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -734,7 +719,7 @@ export default {
       this.upload();
     },
     removeItem(itemId) {
-      HTTP.delete('/product/' + itemId).then((url) => { 
+      HTTP.delete('/product/' + itemId).then((url) => {
         console.log(url)
       })
     },
