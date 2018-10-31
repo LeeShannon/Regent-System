@@ -66,6 +66,7 @@ export default {
             console.log('Correct')
             // Set the state data to the login data
             const adminInfo = {
+              adminId: this.loginTable[count][0],
               adminName: this.loginTable[count][1],
               adminSurname: this.loginTable[count][2],
               admindUsername: this.loginTable[count][3],
@@ -105,6 +106,7 @@ export default {
     // this.populate();
     console.log('State')
     console.log(State.data.loggedIn)
+    console.log(State.data.adminInfo.adminId)
     console.log(State.data.adminInfo.adminName)
     console.log(State.data.adminInfo.adminSurname)
     console.log(State.data.adminInfo.admindUsername)

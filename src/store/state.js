@@ -3,6 +3,7 @@ const State = {
   data: {
     loggedIn: false,
     adminInfo: {
+      adminId: null,
       adminName: null,
       adminSurname: null,
       admindUsername: null,
@@ -22,6 +23,7 @@ const State = {
         console.log('revoke login')
         State.data.loggedIn = false
         State.data.adminInfo = {
+          adminId: null,
           adminName: null,
           adminSurname: null,
           admindUsername: null,

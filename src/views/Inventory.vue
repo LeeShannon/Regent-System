@@ -50,12 +50,20 @@
     </md-table-row>
   </md-table>
 
-  Selected: {{ selected }}<br>
-  Searched: {{ search }}<br>
-  New Product: {{ newProduct }}<br>
+<!-- informationToEdit -->
+<!-- <div> -->
+  <!-- Selected: {{ selected }}<br> -->
+  <!-- Searched: {{ search }}<br> -->
+  <!-- New Product: {{ newProduct }}<br> -->
   <!-- style="display: none;" -->
-  <img src="https://firebasestorage.googleapis.com/v0/b/regent-produce.appspot.com/o/item%2F56d31a8945bdb319cd60a34ba9f28e9c.jpg?alt=media&token=0651b00a-4979-48a6-ad54-42af69a2650d" id="imgUrl" >
+  
   <!-- State: {{ State.data.loggedIn }} -->
+<!-- </div> -->
+
+<!-- imageUrl loader - DO NOT REMOVE - WILL CRASH ALL IMAGE UPLOADS -->
+<!-- style="display: none;" -->
+<!-- src="https://firebasestorage.googleapis.com/v0/b/regent-produce.appspot.com/o/item%2F56d31a8945bdb319cd60a34ba9f28e9c.jpg?alt=media&token=0651b00a-4979-48a6-ad54-42af69a2650d" -->
+<img src="Invalid Entry" id="imgUrl">
 
   <!-- add product modal -->
   <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
@@ -152,7 +160,8 @@
         </button>
         </div>
         <div class="modal-body">
-          <form class="" action="index.html" method="post">
+           <!-- action="index.html" method="post" Dont need this to post as HTTP request - causing issues -->
+          <form class="">
             <div class="form-row">
               <div class="col">
                 <md-field class="modal-input">
@@ -164,7 +173,8 @@
                 <!-- <md-field class="modal-input"> -->
                 <!-- <label>Active</label> -->
                 <!-- <md-input type="checkbox" v-model="selected.productActive" value="selected.productActive" required></md-input> -->
-                <button id="btnActiveEdit" class="btn CBactiveToggle" @click="toggleActiveEdit()">{{activeText}}</button>
+                <button id="btnActiveEdit" class="btn CBactiveToggle" @click="toggleActiveEdit()" style="background-color: lightgray;">{{activeText}}</button>
+                <!-- <button>Test</button> -->
                 <!-- </md-field> -->
               </div>
             </div>
@@ -196,7 +206,7 @@
               <md-field>
                 <label>Upload New Image</label>
                 <!-- <md-file v-model="selected.productImgUrl" placeholder="Upload Image" required/> -->
-                <md-file @change="onFilePicked" placeholder="Upload Image" accept="image/*" />
+                <md-file @change="onFilePicked" v-model="selected.productImgUrl" placeholder="Upload Image" accept="image/*" />
               </md-field>
             </div>
 
@@ -278,20 +288,18 @@ import * as firebase from 'firebase';
 const toLower = text => {
   return text.toString().toLowerCase();
 }
-
 const searchByName = (items, term) => {
   if (term) {
     return items.filter(item => toLower(item.productName).includes(toLower(term)));
   }
   return items;
 }
-
 export default {
   name: 'TableSearch',
   name: 'FileField',
   data: () => ({
     search: null,
-    imageUrl:null,
+    imageUrl: null,
     searched: [],
     placeholder: null,
     invalidData: 'invalid Data',
@@ -345,12 +353,6 @@ export default {
         let count = 0;
         while (count < this.categoryData[this.categoryData.length - 1][0]) {
           //Default values for missing entries
-          // this.category.push({
-          //   categoryId: 0,
-          //   categoryName: 'Not Found',
-          //   categoryPosition: 0,
-          //   adminId: 0,
-          // })
           this.category.push([0, 'Not Found', 0, 0,])
           count++;
         }
@@ -363,13 +365,6 @@ export default {
         count = 0;
         while (count < this.subCategoryData[this.subCategoryData.length - 1][0]) {
           //Default values for missing entries
-          // this.subCategory.push({
-          //   subCategoryId: 0,
-          //   subCategoryName: 'Not Found',
-          //   subCategoryPosition: 0,
-          //   categoryId: 0,
-          //   adminId: 0
-          // })
           this.subCategory.push([ 0, 'Not Found', 0, 0, 0])
           count++;
         }
@@ -391,7 +386,7 @@ export default {
             productPurchasePrice: 'Not Found',
             productSellingPrice: 'Not Found',
             productImgUrl: 'Not Found',
-            productActive: 'Not Found',
+            productActive: false,
             productDescription: 'Not Found',
             adminId: 'Not Found',
             productStamp: 'Not Found',
@@ -440,16 +435,97 @@ export default {
         // console.log(this.products);
       }
     },
-    saveChanges() {
-      console.log('Save Changes');
+    validateSaveChanges() {
+      let valid = true
+      // Logged In
+      if (!State.methods.getLoggedIn()) {
+        console.log('User needs to be logged in')
+        valid = false
+      }
+      // Product Name
+      if (this.selected.productName != null) {
+        if(this.selected.productName.length == 0) {
+          console.log('Product name invalid - too short')
+          valid = false
+        }
+      } else {
+        console.log('Product name invalid - null')
+        valid = false
+      }
+      // Product Purchase Price
+      if (this.selected.productPurchasePrice <= 0) {
+        console.log('Product purchase price invalid')
+        valid = false
+      }
+      // Product Selling Price
+      if (this.selected.productSellingPrice <= 0) {
+        console.log('Product selling price invalid')
+        valid = false
+      }
+      // Image Url
+      if (this.selected.productImgUrl != null) {
+        if (this.selected.productImgUrl.length <= 0) {
+          console.log('Product image url invalid - too short')
+          valid = false
+        }
+      } else {
+        console.log('Product image url invalid - null')
+        valid = false
+      }
+      // Description
+      if (this.selected.productDescription != null) {
+        if (this.selected.productDescription.length <= 0) {
+          console.log('Product description invalid - too short')
+          valid = false
+        }
+      } else {
+        console.log('Product description invalid - null')
+        valid = false
+      }
+      // Valid Login Id
+      if (State.data.adminInfo.adminId <= 0) {
+        console.log('Invlaid User login Id')
+        valid = false
+      }
+      console.log('valid create')
+      console.log(valid)
+      return valid
+    },
+    async saveChanges() {
+      console.log(this.imageUrl)
+      if(this.validateSaveChanges()) {
+        console.log('Save Changes - valid');
+        const itemId = this.selected.productId
+        let imageInput = null
+        console.log('Validate Image')
+        console.log(this.imageUrl)
+        if(this.imageUrl){
+          imageInput = this.imageUrl
+        } else {
+          imageInput = this.selected.productImgUrl
+        }
+        let prod = {
+          subCategoryId: this.selected.subCategoryId,
+          productName: this.selected.productName,
+          productPurchasePrice: this.selected.productPurchasePrice,
+          productSellingPrice: this.selected.productSellingPrice,
+          productImgUrl: imageInput,
+          productActive: this.selected.productActive,
+          productDescription: this.selected.productDescription
+        }
+        console.log(prod)
+        await HTTP.put('/product/' + itemId, prod)
+      } else {
+        console.log('Save Changes - invalid');
+      }
       // document.getElementById("editProductModal").close()
       // console.log(document.getElementById("editProductModal"))
     },
     toggleActiveEdit() {
-      // console.log(prod)
       const ActiveButton = document.getElementById("btnActiveEdit");
-      this.selected.active = !this.selected.active;
-      if (this.selected.active) {
+      this.selected.productActive = !this.selected.productActive;
+      console.log(this.selected.productActive)
+      if (this.selected.productActive) {
         ActiveButton.style.backgroundColor = "green";
         this.activeText = 'Active';
         this.products[this.selected.productId].productActive = true;
@@ -459,44 +535,60 @@ export default {
         this.products[this.selected.productId].productActive = false;
       }
     },
-    toggleActiveAdd() {
-      console.log('TODO - Toggle active for add new product');
-    },
-    // async submitOrder() {
-    //   await HTTP.post('/orders', {adminId: 2}).then((res) => {
-    //     console.log(res)
-    //   })
-    // },
     validateSubmitProduct() {
       let valid = true
+      // Logged In
       if (!State.methods.getLoggedIn()) {
         console.log('User needs to be logged in')
         valid = false
       }
-      if (this.newProduct.productName.length == 0) {
-        console.log('Product name invalid')
+      // Product Name
+      if (this.newProduct.productName != null) {
+        if(this.newProduct.productName.length == 0) {
+          console.log('Product name invalid - too short')
+          valid = false
+        }
+      } else {
+        console.log('Product name invalid - null')
         valid = false
       }
+      // Product Purchase Price
       if (this.newProduct.productPurchasePrice <= 0) {
         console.log('Product purchase price invalid')
         valid = false
       }
+      // Product Selling Price
       if (this.newProduct.productSellingPrice <= 0) {
         console.log('Product selling price invalid')
         valid = false
       }
-      if (this.newProduct.productImgUrl.length <= 0) {
-        console.log('Product image url invalid')
+      // Image Url
+      if (this.newProduct.productImgUrl != null) {
+        if (this.newProduct.productImgUrl.length <= 0) {
+          console.log('Product image url invalid - too short')
+          valid = false
+        }
+      } else {
+        console.log('Product image url invalid - null')
         valid = false
       }
-      if (this.newProduct.productDescription.length <= 0) {
-        console.log('Product description invalid')
+      // Description
+      if (this.newProduct.productDescription != null) {
+        if (this.newProduct.productDescription.length <= 0) {
+          console.log('Product description invalid - too short')
+          valid = false
+        }
+      } else {
+        console.log('Product description invalid - null')
         valid = false
       }
+      // Valid Login Id
       if (State.data.adminInfo.adminId <= 0) {
         console.log('Invlaid User login Id')
         valid = false
       }
+      console.log('valid create')
+      console.log(valid)
       return valid
     },
     async submitProduct() {
@@ -524,7 +616,9 @@ export default {
             count++
           }
           found = true
-          console.log(this.imageUrl)
+          // console.log(this.imageUrl)
+          // console.log('Admin Id')
+          // console.log(State.data.adminInfo.adminId)
           if (found) {
             await HTTP.post('/product', {
               subCategoryId: sub[0],
@@ -546,17 +640,33 @@ export default {
           console.log('TODO - category not found')
         }
       }
+      this.imageUrl = null
     },
     searchOnTable() {
       this.searched = searchByName(this.products, this.search);
     },
     onDelete(item) {
-      console.log('Delete Item:') //TODO
-      console.log(item.productId);
-      // delete this.products[item.productId]
-      console.log(item.productId);
-      this.products[item.productId] = null;
-      // HTTP.delete('/product/' + item.productId).then((url) => { console.log('Item Deleted') })
+      if (State.data.loggedIn) {
+        console.log('Delete Item:') //TODO
+        console.log(item.productId);
+        // delete this.products[item.productId]
+        console.log(item.productId);
+        // this.products[item.productId] = null;
+        HTTP.delete('/product/' + item.productId).then((url) => { console.log('Item Deleted') })
+        let found = false
+        let counter = 0
+        while (counter<this.searched.length && !found) {
+          if (this.searched[counter].productId == item.productId) {
+            console.log('Product to remove from the list')
+            console.log(this.searched[counter])
+            // TODO - Deal with delete
+            this.searched.splice(counter, 1)
+          }
+          counter++
+        }
+      } else {
+        console.log(`Can't delete items if not logged in`)
+      }
     },
     cancelEdit() {
       console.log('Cancel Edit');
@@ -575,18 +685,11 @@ export default {
     onSelect(item) {
       this.selected = item;
       this.restoreSelected = item;
-      // var count = 0
-      // var notFound = true
-      // console.log(this.selected.productName)
-      // while (count<this.category.length || notFound) {
-      //   console.log(this.category[count][1])
-      //   if (this.category[count][1]===this.selected.productName) {
-      //     console.log(this.category[count])
-      //     notFound = false
-      //   }
-      //   count++
-      // }
-      // this.subSubCategory.
+      if (this.selected.productActive) {
+        this.activeText = "Active"
+      } else {
+        this.activeText = "Not Active"
+      }
     },
     selectCategory(input) {
       var e = null;
@@ -630,45 +733,32 @@ export default {
       this.image = files[0];
       this.upload();
     },
-    async editItem() {
-      const itemId = 0
-      let item = {
-        subCategoryId: 0,
-        productName: "Product Name",
-        productPurchasePrice: 0.0,
-        productSellingPrice: 0.0,
-        productImgUrl: "Loadable Image Hyperlink From Firebase",
-        productActive: "Why is this a varchar? - might need to be changed",
-        productDescription: "Description",
-        adminId: 0,
-        productStamp: "Timestamp"
-      }
-      await HTTP.put('/product/' + itemId, item)
-    },
     removeItem(itemId) {
       HTTP.delete('/product/' + itemId).then((url) => { 
         console.log(url)
       })
     },
     async upload() {
-      console.log('Upload Method being called')
       const fileName = this.image.name;
-      console.log(fileName)
       const storageRef = firebase.storage().ref('/item/' + fileName);
-      console.log(storageRef)
       const uploadTask = storageRef.put(this.image);
-      console.log(uploadTask)
-      this.imageUrl = uploadTask.on('state_changed', (snapshot) => {},
+      var results = null
+      uploadTask.on('state_changed', (snapshot) => {},
         (error) => {
-          console.log(error);
         }, async () => {
           const url = storageRef.getDownloadURL().then((url) => {
-            document.getElementById("imgUrl").src = url
+            // document.getElementById("imgUrl").src = url
             console.log(url)
+            results = url
+            this.imageUrl = url
           });
         });
-        this.imageUrl = document.getElementById("imgUrl").src
-        console.log(this.imageUrl)
+        if (results) {
+          console.log(results)
+        } else {
+          console.log('results is null')
+        }
+        // console.log(this.imageUrl)
     },
   },
   created() {
@@ -676,13 +766,8 @@ export default {
   },
   beforeMount() {
     this.populate();
-    console.log('State')
+    console.log('User Logged in')
     console.log(State.data.loggedIn)
-    console.log(State.data.adminInfo.adminName)
-    console.log(State.data.adminInfo.adminSurname)
-    console.log(State.data.adminInfo.admindUsername)
-    console.log(State.data.adminInfo.adminName)
-    // console.log(State.data.loggedIn)
   },
 };
 </script>
@@ -703,7 +788,7 @@ export default {
   }
 
   .CBactiveToggle {
-    background-color: green;
+    background-color: lightgray;
     width: 100%;
   }
 

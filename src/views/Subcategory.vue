@@ -162,7 +162,7 @@ const toLower = text => {
 }
 const searchByName = (items, term) => {
   if (term) {
-    return items.filter(item => toLower(item.name).includes(toLower(term)))
+    return items.filter(item => toLower(item.subCategoryName).includes(toLower(term)))
   }
   return items
 }
