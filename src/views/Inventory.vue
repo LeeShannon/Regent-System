@@ -49,7 +49,7 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
-  
+
   <!-- add product modal -->
   <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -289,7 +289,7 @@ export default {
     placeholder: null,
     invalidData: 'invalid Data',
     selected: {},
-    restoreSelected: {},
+    restoreSelected: [],
     tableData: [],
     newProduct: {
       subCategory: null,
@@ -655,21 +655,48 @@ export default {
     },
     cancelEdit() {
       console.log('Cancel Edit');
-      this.products[this.restoreSelected.productId] = this.restoreSelected;
-      console.log('TODO - Get restore selected to actually work');
+      // this.products[this.restoreSelected.productId] = this.restoreSelected;
+      // console.log('TODO - Get restore selected to actually work');
       console.log(this.restoreSelected);
-      // this.products[this.restoreSelected.productId].subCategory = this.restoreSelected.subCategory
-      // this.products[this.restoreSelected.productId].category = this.restoreSelected.category
-      // this.products[this.restoreSelected.productId].productName = this.restoreSelected.productName
-      // this.products[this.restoreSelected.productId].productPurchasePrice = this.restoreSelected.productPurchasePrice
-      // this.products[this.restoreSelected.productId].productSellingPrice = this.restoreSelected.productSellingPrice
-      // this.products[this.restoreSelected.productId].productImgUrl = this.restoreSelected.productImgUrl
-      // this.products[this.restoreSelected.productId].productActive = this.restoreSelected.productActive
-      // this.products[this.restoreSelected.productId].productDescription = this.restoreSelected.productDescription
+      // this.searched[this.restoreSelected.productId].subCategory = this.restoreSelected.subCategory
+      let counter = 0
+      let found = false
+      const rest = this.restoreSelected
+      while (counter<this.searched.length && !found) {
+        // console.log('-----------------------------------------')
+        // console.log(this.searched[counter].productId == this.restoreSelected[0])
+        // console.log(this.searched[counter].productId + ' - ' + this.restoreSelected[0])
+        // console.log('-----------------------------------------')
+        if (this.searched[counter].productId == this.restoreSelected[0]) {
+          // this.searched[counter].productName = "Edit cancelled"
+          this.searched[counter].productName = ""+rest[1]+""
+          this.searched[counter].category = rest[2]
+          this.searched[counter].productPurchasePrice = rest[3]
+          this.searched[counter].productSellingPrice = rest[4]
+          this.searched[counter].productImgUrl = rest[5]
+          this.searched[counter].productActive = rest[6]
+          this.searched[counter].productDescription = rest[7]
+          // console.log('Restore Selected')
+          // console.log(rest[1])
+          // this.searched[counter] = this.product[this.searched[counter].productId]
+          // console.log(this.searched[counter].productId)
+          // console.log(this.productData[this.searched[counter].productId])
+        }
+        counter++
+      }
     },
     onSelect(item) {
       this.selected = item;
-      this.restoreSelected = item;
+      this.restoreSelected = [
+        item.productId,
+        item.productName,
+        item.category,
+        item.productPurchasePrice,
+        item.productSellingPrice,
+        item.productImgUrl,
+        item.productActive,
+        item.productDescription
+        ];
       if (this.selected.productActive) {
         this.activeText = "Active"
       } else {
@@ -717,11 +744,6 @@ export default {
       const files = event.target.files;
       this.image = files[0];
       this.upload();
-    },
-    removeItem(itemId) {
-      HTTP.delete('/product/' + itemId).then((url) => {
-        console.log(url)
-      })
     },
     async upload() {
       const fileName = this.image.name;
