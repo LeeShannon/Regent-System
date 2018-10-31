@@ -142,7 +142,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <h3 class="del-headers">Are you sure you wish to delete Subcategory: <b>{{ selected.name }}</b> ?</h3>
+                  <h3 class="del-headers">Are you sure you wish to delete Subcategory: <b>{{ selected.subCategoryName }}</b> ?</h3>
                   <br>
                 </div>
                   <div class="modal-footer">
@@ -237,11 +237,24 @@ export default {
     //    console.log(id);
     //
     //  },
+    deleteSubcategory() {
+      if (this.selected != {}) {
+        console.log('Delete Sub Category'+this.selected.subCategoryName)
+        HTTP.delete('/subcategory/' + this.selected.subCategoryId).then((res) => {return res})
+        this.selected = {}
+        // this.populate()
+        // TODO - pop selected from array
+        // TODO - check if contains product
+      } else {
+        console.log('No item selected')
+      }
+    },
     searchOnTable() {
       this.searched = searchByName(this.subCategories, this.search)
     },
     onSelect(item) {
       this.selected = item
+      console.log(this.selected)
     },
     async updateSupplier(id) {
 
