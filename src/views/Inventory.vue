@@ -7,7 +7,7 @@
     <li class="nav-item"><router-link to="/subcategory" class="nav-link tab-link">Subcategory</router-link></li>
   </ul>
 
-  <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+  <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
         <h1 class="md-title page-headers">Inventory</h1>
@@ -22,6 +22,7 @@
     </md-table-toolbar>
 
     <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">{{errorData}}
+      <div class="loader"></div>
     </md-table-empty-state>
 <!-- v-if="item.productId != 0" -->
 <!-- v-if="item != null" -->
@@ -127,8 +128,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" @click="submitProduct()">Submit</button>
+          <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary submit-btn" @click="submitProduct()" data-dismiss="modal">Submit</button>
         </div>
       </div>
     </div>
@@ -158,7 +159,7 @@
                 <!-- <md-field class="modal-input"> -->
                 <!-- <label>Active</label> -->
                 <!-- <md-input type="checkbox" v-model="selected.productActive" value="selected.productActive" required></md-input> -->
-                <button id="btnActiveEdit" class="btn CBactiveToggle" @click="toggleActiveEdit()" style="background-color: lightgray;">{{activeText}}</button>
+                <button id="btnActiveEdit" class="btn CBactiveToggle submit-btn" @click="toggleActiveEdit()" style="background-color: lightgray;">{{activeText}}</button>
                 <!-- <button>Test</button> -->
                 <!-- </md-field> -->
               </div>
@@ -233,8 +234,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-info" @click="cancelEdit()" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="saveChanges()" data-dismiss="modal">Save changes</button>
+          <button type="button" class="btn cancel-btn" @click="cancelEdit()" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary submit-btn" @click="saveChanges()" data-dismiss="modal">Save changes</button>
         </div>
       </div>
     </div>
@@ -255,8 +256,8 @@
           <br>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-            <button @click="deleteUser()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+            <button type="button" class="btn cancel-btn" data-dismiss="modal">Cancel</button>
+            <button @click="deleteUser()" type="btn btn-primary submit-btn" class="btn btn-primary" data-dismiss="modal">Confirm</button>
           </div>
         </div>
       </div>
@@ -511,11 +512,11 @@ export default {
       this.selected.productActive = !this.selected.productActive;
       console.log(this.selected.productActive)
       if (this.selected.productActive) {
-        ActiveButton.style.backgroundColor = "green";
+        ActiveButton.style.backgroundColor = "#26b745";
         this.activeText = 'Active';
         this.products[this.selected.productId].productActive = true;
       } else {
-        ActiveButton.style.backgroundColor = "red";
+        ActiveButton.style.backgroundColor = "#c42f2f";
         this.activeText = 'Not Active';
         this.products[this.selected.productId].productActive = false;
       }

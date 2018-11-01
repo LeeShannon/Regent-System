@@ -7,7 +7,7 @@
     <li class="nav-item"><router-link to="/subcategory" class="nav-link tab-link">Subcategory</router-link></li>
   </ul>
 
-      <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+      <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg">
         <md-table-toolbar class="table-header">
           <div class=" md-toolbar-section-start">
             <h1 class="md-title page-headers">Category</h1>
@@ -21,7 +21,8 @@
           </md-field>
         </md-table-toolbar>
 
-        <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">{{errorData}}
+        <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">
+          <div class="loader"></div>
         </md-table-empty-state>
 
         <md-table-row slot="md-table-row" slot-scope="{ item }">
@@ -68,8 +69,8 @@
               <br>
             </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" @click="addCategory()" data-dismiss="modal">Submit</button>
+                <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary submit-btn" @click="addCategory()" data-dismiss="modal">Submit</button>
               </div>
             </div>
           </div>
@@ -103,8 +104,8 @@
                 <br>
               </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-                  <button @click="updateUser(userDetails.adminId)" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                  <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+                  <button @click="updateUser(userDetails.adminId)" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Save changes</button>
                 </div>
               </div>
             </div>
@@ -125,8 +126,8 @@
                   <br>
                 </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-                    <button @click="deleteCategory()" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn cancel-btn" data-dismiss="modal">Cancel</button>
+                    <button @click="deleteCategory()" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Confirm</button>
                   </div>
                 </div>
               </div>
