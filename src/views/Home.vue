@@ -79,7 +79,6 @@ body {
   /* background-color: #3a4a63; */
   background: linear-gradient(to right, #37ace3, #3482ba);
   padding-top: 10px;
-  scroll: none;
   position: fixed;
 }
 

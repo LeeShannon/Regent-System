@@ -13,7 +13,7 @@
               <th scope="col">Order Status</th>
             </tr>
           </thead>
-          <tbody v-for="client in clients">
+          <tbody v-for="client in clients" :key="client.id">
             <tr>
               <td>{{client.name}}</td>
               <td>{{client.status}}</td>
@@ -30,33 +30,31 @@
         <h3 class="home-headers">Currency Conversion</h3>
 
         <select class="form-control" @change="updateInputs" v-model="selected" style="width: 350px">
-          <option v-for="country in countries">{{country.name}}</option>
+          <option v-for="country in countries"  :key="country.id">{{country.name}}</option>
         </select>
 
         <div class="currency-wrapper">
           <div class="zar">
             <h2  class="home-headers">South Africa</h2>
             <p>Rate: 1 ZAR</p>
-            <input id="currencyInput" class="currency-input form-control input-field" @keyup="calcInput_1" :value="calc2">
+            <input id="currencyInputZAR" class="currency-input form-control input-field" @keyup="calcInput_1" :value="calc2">
             <span>Rand</span>
           </div>
 
           <div class="foreign">
-            <template v-for="country in countries">
-              <template v-if="selected === country.name" v-model="countryRate">
-                <h2  class="home-headers" >{{country.name}}</h2>
-                <p class="">Rate: {{country.rate}} ZAR</p>
-                <input class="currency-input form-control input-field" @keyup="calcInput_2" :value="calc1">
-                <span >{{country.money}}</span>
+            <template v-for="(country, index) in countries">
+              <template v-if="selected === country.name" :value="countryRate">
+                <h2  class="home-headers" :key="index">{{country.name}}</h2>
+                <p class="" :key="index">Rate: {{country.rate}} ZAR</p>
+                <input id="currencyInputForeign" class="currency-input form-control input-field" @keyup="calcInput_2" :value="calc1" :key="index">
+                <span :key="index">{{country.money}}</span>
               </template>
             </template>
           </div>
         </div>
 
-
       </div>
     </div>
-
 
 <!-- tasks -->
       <div class="col-lg-4">
@@ -81,7 +79,6 @@
       </div>
     </div>
 
-
     <div class="col-lg-4">
 
       <div class="stats-wrapper">
@@ -95,23 +92,22 @@
             </div>
         </div>
 
-      <div class="orders-stat" style="margin-bottom: 1.8rem;">
-        <div class="" align="center" style="text-align: center">
-          <h3 class="home-headers">Orders</h3>
-          <h1>{{orders}}</h1>
-          <br>
-          <p class="stats-color">Since last month</p>
+        <div class="orders-stat" style="margin-bottom: 1.8rem;">
+          <div class="" align="center" style="text-align: center">
+            <h3 class="home-headers">Orders</h3>
+            <h1>{{orders}}</h1>
+            <br>
+            <p class="stats-color">Since last month</p>
+          </div>
         </div>
-      </div>
 
       </div>
 
     </div>
 
-    </div>
   </div>
-
 </div>
+
 </template>
 
 <script lang="ts">
@@ -147,7 +143,6 @@ export default {
 		calc1: "",
 		calc2: "",
 		firstInputSelected: true,
-		input: document.getElementById("currencyInput"),
 		countries: [
 			{
 				name: "Brazil",
@@ -187,24 +182,25 @@ export default {
 		]
   }),
   methods: {
-    calcInput_1: function(e, rate){
+    calcInput_1(e: any){
       this.firstInputSelected = true;
-      this.calculate(e, rate);
+      this.calculate(e);
     },
-    calcInput_2: function(e, rate){
+    calcInput_2(e: any){
       this.firstInputSelected = false;
-      this.calculate(e, rate);
+      this.calculate(e);
     },
-    updateInputs: function(){
-      var selected;
-      for(i = 0; i < this.countries.length; i++){
+    updateInputs(){
+      let selected = 0;
+      for(let i = 0; i < this.countries.length; i++){
         if(this.selected == this.countries[i].name){
-          selected = this.countries[i];
+          selected = this.countries[i].rate;
         }
       }
-      this.countryRate = selected.rate;
+      this.countryRate = selected;
 
-      var input2 = parseFloat(document.getElementById("currencyInput").value);
+      var input2 = parseFloat(this.calc2);
+      // var input2 = parseFloat(document.getElementById("currencyInput").value);
       if(isNaN(input2)){
         this.calc2 = "";
         this.calc1 = "";
@@ -212,7 +208,7 @@ export default {
       }
       this.calc1 = (input2 * this.countryRate).toFixed(2);
     },
-    calculate: function(e, value){
+    calculate(e: any){
       var value = parseFloat(e.target.value);
       if(isNaN(value)){
         this.calc2 = "";
@@ -221,10 +217,10 @@ export default {
       }
 
       if(this.firstInputSelected){
-        this.calc2 = value;
+        this.calc2 = value+"";
         this.calc1 = (value * this.countryRate).toFixed(2);
       } else {
-        this.calc1 = value;
+        this.calc1 = value+"";
         this.calc2 = (value / this.countryRate).toFixed(2);
       }
     }

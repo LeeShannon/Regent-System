@@ -138,7 +138,7 @@
 
 
             <!-- product rows for additional products -->
-            <div v-for="(row, index) in inputRows">
+            <div v-for="row in inputRows"  :key="row.id">
               <div class="form-row">
                 <div class="col">
                   <md-field class="modal-input">
@@ -161,7 +161,7 @@
                   </md-field>
                 </div>
               </div>
-              <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(index)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
+              <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(rwo.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
             </div>
 
             <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
@@ -179,7 +179,7 @@
 
                 <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
 
-                  <option v-for="option in shipOption" v-bind:value="option.shipId">{{option.shipName}}</option>
+                  <option v-for="option in shipOption" v-bind:value="option.shipId"  :key="option.id">{{option.shipName}}</option>
 
 
                 </select>
@@ -191,7 +191,6 @@
                 <md-field class="modal-input">
                   <label>Departure</label>
                   <md-input type="date" placeholder="departure" required v-model="newOrder.departure">
-                    </>
                   </md-input>
                 </md-field>
               </div>
@@ -227,7 +226,7 @@
 
           <form class="" action="index.html" method="post">
             <!-- product rows for additional products -->
-            <div v-for="(row, index) in inputRows">
+            <div v-for="row in inputRows" :key="row.id">
               <div class="form-row">
                 <div class="col">
                   <md-field class="modal-input">
@@ -250,7 +249,7 @@
                   </md-field>
                 </div>
               </div>
-              <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(index)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
+              <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(row.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
             </div>
 
             <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
@@ -268,7 +267,7 @@
 
                 <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
 
-                  <option v-for="option in shipOption" v-bind:value="option.shipId">{{option.shipName}}</option>
+                  <option v-for="option in shipOption" v-bind:value="option.shipId" :key="option.id">{{option.shipName}}</option>
 
 
                 </select>
@@ -332,7 +331,7 @@
                 <select class="form-control" id="exampleFormControlSelect1" v-model="incomingUpdateContent[0].shipmentId">
 
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
-              <option v-for="option in incomingUpdateContent[0].shipTable" v-bind:value="option.shipmentId">{{option.companyName}}</option>
+              <option v-for="option in incomingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
               </div>
               <div class="col">
@@ -386,7 +385,7 @@
                 <select class="form-control" id="exampleFormControlSelect1" v-model="outgoingUpdateContent[0].shipmentId">
 
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
-              <option v-for="option in outgoingUpdateContent[0].shipTable" v-bind:value="option.shipmentId">{{option.companyName}}</option>
+              <option v-for="option in outgoingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
               </div>
               <div class="col">
@@ -431,7 +430,7 @@
                   <th scope="col">Price</th>
                 </tr>
               </thead>
-              <tbody v-for="p in incomingProductOrderData">
+              <tbody v-for="p in incomingProductOrderData" :key="p.id">
                 <tr>
                   <td>{{p.productName}}</td>
                   <td>{{p.productQuantity}}</td>
@@ -445,11 +444,11 @@
             <div class="row">
               <div class="col" style="padding-left: 5%">
                 <label class="home-headers">Supplier:</label>
-                <p style="font-weight: 300;" v-model="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
+                <p style="font-weight: 300;" value:="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
               </div>
               <div class="col">
                 <label class="home-headers">Created Date:</label>
-                <p style="font-weight: 300" v-model="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
+                <p style="font-weight: 300" value:="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
               </div>
             </div>
 
@@ -457,11 +456,11 @@
             <div class="row">
               <div class="col" style="padding-left: 5%">
                 <label class="home-headers">Departure:</label>
-                <p  style="font-weight: 300"v-model="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
+                <p  style="font-weight: 300" value:="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
               </div>
               <div class="col">
                 <label class="home-headers">Arrival:</label>
-                <p  style="font-weight: 300" v-model="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
+                <p  style="font-weight: 300" value:="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
               </div>
             </div>
             <hr>
@@ -471,9 +470,9 @@
                 <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
                   <tbody>
                     <tr>
-                      <td><p v-model="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p></td>
-                      <td><p v-model="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p></td>
-                      <td><p v-model="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p></td>
+                      <td><p value:="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p></td>
+                      <td><p value:="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p></td>
+                      <td><p value:="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p></td>
                     </tr>
                   </tbody>
                 </table>
@@ -511,7 +510,7 @@
                       <th scope="col">Price</th>
                     </tr>
                   </thead>
-                  <tbody v-for="p in outgoingProductOrderData">
+                  <tbody v-for="p in outgoingProductOrderData" :key="p.id">
                     <tr>
                       <td>{{p.productName}}</td>
                       <td>{{p.productQuantity}}</td>
@@ -525,22 +524,22 @@
             <div class="row">
               <div class="col" style="padding-left: 5%">
                 <label class="home-headers">Client:</label>
-                <p style="font-weight: 300" v-model="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
+                <p style="font-weight: 300" value:="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
               </div>
               <div class="col">
                 <label class="home-headers">Created Date:</label>
-                <p style="font-weight: 300" v-model="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
+                <p style="font-weight: 300" value:="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
               </div>
             </div>
             <hr>
             <div class="row">
-              <div class="form-group col" v-model="incomingProductShipDate" style="padding-left: 5%">
+              <div class="form-group col" value:="incomingProductShipDate" style="padding-left: 5%">
                 <label class="home-headers">Departure:</label>
-                <p  style="font-weight: 300" v-model="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
+                <p  style="font-weight: 300" value:="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
               </div>
               <div class="form-group col">
                 <label class="home-headers">Arrival:</label>
-                <p style="font-weight: 300" v-model="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
+                <p style="font-weight: 300" value:="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
               </div>
             </div>
             <hr>
@@ -550,9 +549,9 @@
                 <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
                   <tbody>
                     <tr>
-                      <td><p v-model="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p></td>
-                      <td><p v-model="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p></td>
-                      <td><p v-model="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p></td>
+                      <td><p value:="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p></td>
+                      <td><p value:="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p></td>
+                      <td><p value:="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p></td>
                     </tr>
                   </tbody>
                 </table>
