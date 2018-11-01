@@ -454,10 +454,10 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers" v-model="selectedRow.supplierId" >Are you sure you wish to delete supplier: <b>{{ selectedRow.supplierName }}</b> ?</h3>
+            <h3 class="del-headers" value:="selectedRow.supplierId" >Are you sure you wish to delete supplier: <b>{{ selectedRow.supplierName }}</b> ?</h3>
           <br>
         </div>
-        <div class="modal-footer" v-model="selectedRow.supplierId">
+        <div class="modal-footer" value:="selectedRow.supplierId">
           <button type="button" class="btn cancel-btn" data-dismiss="modal">Cancel</button>
           <button @click="deleteSupplier(selectedRow.supplierId)" type="button" class="btn btn-primary submit-btn" data-dismiss="modal" >Confirm</button>
         </div>
@@ -476,7 +476,7 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers" v-model="selectedRowClient.clientId" >Are you sure you wish to delete supplier: <b>{{ selectedRowClient.clientName }}</b> ?</h3>
+            <h3 class="del-headers" value:="selectedRowClient.clientId" >Are you sure you wish to delete supplier: <b>{{ selectedRowClient.clientName }}</b> ?</h3>
           <br>
         </div>
         <div class="modal-footer" >
@@ -498,7 +498,7 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers" v-model="selectedRowShip.shipmentId" >Are you sure you wish to delete supplier: <b>{{ selectedRowShip.companyName }}</b> ?</h3>
+            <h3 class="del-headers" value:="selectedRowShip.shipmentId" >Are you sure you wish to delete supplier: <b>{{ selectedRowShip.companyName }}</b> ?</h3>
           <br>
         </div>
         <div class="modal-footer" >

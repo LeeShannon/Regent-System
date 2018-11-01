@@ -120,18 +120,16 @@ export default {
   font-weight: normal;
   cursor: pointer;
   transition: all 0.25s ease;
-
-  .form-button:hover {
-    color:white;
-    background: #96DFE2;
-  }
-  .form-button:active {
-    //letter-spacing: 2px;
-    letter-spacing: 2px ;
-  }
-  .form-button:after {
-    content:"SUBMIT";
-  }
+}
+.form-button:hover {
+  color:white;
+  background: #96DFE2;
+}
+.form-button:active {
+  letter-spacing: 2px;
+}
+.form-button:after {
+  content:"SUBMIT";
 }
 .onclic {
   width: 40px;
@@ -140,12 +138,10 @@ export default {
   font-size:0;
   border-left-color: #0886a2;
   animation: rotating 2s 0.25s linear infinite;
-
-  .onclic:after {
-    content:"";
-  }
 }
-
+.onclic:after {
+  content:"";
+}
 @keyframes rotating {
   from {
     transform: rotate(0deg);
