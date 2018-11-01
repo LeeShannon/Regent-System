@@ -22,6 +22,7 @@
     </md-table-toolbar>
 
     <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">{{errorData}}
+      <div class="loader"></div>
     </md-table-empty-state>
 <!-- v-if="item.productId != 0" -->
 <!-- v-if="item != null" -->

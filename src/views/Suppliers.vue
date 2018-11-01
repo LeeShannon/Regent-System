@@ -16,7 +16,8 @@
       </md-field>
     </md-table-toolbar>
 
-    <md-table-empty-state md-label="No users found" :md-description="`No user found for this '${search}' query. Try a different search term or create a new user.`">
+    <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">
+      <div class="loader"></div>
     </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
@@ -52,7 +53,8 @@
       </md-field>
     </md-table-toolbar>
 
-    <md-table-empty-state md-label="No users found" :md-description="`No user found for this '${search}' query. Try a different search term or create a new user.`">
+    <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">
+      <div class="loader"></div>
     </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
@@ -88,7 +90,8 @@
       </md-field>
     </md-table-toolbar>
 
-    <md-table-empty-state md-label="No users found" :md-description="`No user found for this '${search}' query. Try a different search term or create a new user.`">
+    <md-table-empty-state md-label="Loading..." :md-description="`If this takes more than 10 seconds please hit the reload button`">
+      <div class="loader"></div>
     </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
