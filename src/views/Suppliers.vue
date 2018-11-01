@@ -2,7 +2,7 @@
 <div class="space-top ">
 
   <!--  supplier table-->
-  <md-table v-model="allSupliers" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%">
+  <md-table v-model="allSupliers" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%; background-color: white">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
         <h1 class="md-title page-headers">Suppliers</h1>
@@ -39,7 +39,7 @@
   </md-table>
 
   <!--  client table-->
-  <md-table v-model="allClients" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%">
+  <md-table v-model="allClients" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%; background-color: white">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
         <h1 class="md-title page-headers">Clients</h1>
@@ -76,7 +76,7 @@
   </md-table>
 
   <!--  Shipment table-->
-  <md-table v-model="allShips" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%">
+  <md-table v-model="allShips" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%; background-color:white;">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
         <h1 class="md-title page-headers">Shipment Partners</h1>
