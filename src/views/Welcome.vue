@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       //how to get the user's name from the store?
-      user: 'User'
+      user: State.data.adminInfo.adminName
     }
   },
   mounted() {

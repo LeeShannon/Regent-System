@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 31, 2018 at 11:19 AM
+-- Generation Time: Nov 01, 2018 at 07:58 AM
 -- Server version: 5.7.18
 -- PHP Version: 7.1.16
 
@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `about`
 --
+
 
 CREATE TABLE `about` (
   `aboutId` int(11) NOT NULL,
@@ -239,12 +240,14 @@ INSERT INTO `category` (`categoryId`, `categoryName`, `categoryPosition`, `admin
 CREATE TABLE `client` (
   `clientId` int(11) NOT NULL,
   `clientName` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `clientEmail` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `clientPhoneNumber` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `clientCity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `clientCountry` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `clientSurname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `clientNickname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `clientPhoneNumber` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `clientPassphrase` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `clientAddress` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `clientEmail` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `clientStamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `clientCreditCardCompany` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `clientCreditCardNumber` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -252,6 +255,14 @@ CREATE TABLE `client` (
   `clientCVV` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `adminId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `client`
+--
+
+INSERT INTO `client` (`clientId`, `clientName`, `clientEmail`, `clientPhoneNumber`, `clientCity`, `clientCountry`, `clientSurname`, `clientNickname`, `clientPassphrase`, `clientAddress`, `clientStamp`, `clientCreditCardCompany`, `clientCreditCardNumber`, `clientExpirey`, `clientCVV`, `adminId`) VALUES
+(1, 'Regis', 'regisray@gmail.com', '0739956224', 'Cape Town', 'South Africa', '', '', '', '', '2018-10-31 12:30:41', '', '', '', '', 16),
+(2, 'Serge', 'sramos20@gmail.com', '06384027530', 'Pretoria', 'South Africa', '', '', '', '', '2018-10-31 13:40:26', '', '', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -551,17 +562,19 @@ CREATE TABLE `offeredOrder` (
   `orderId` int(11) NOT NULL,
   `supplierName` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `adminId` int(11) NOT NULL,
-  `offeredOrderStamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `offeredOrderStamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `total` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `offeredOrder`
 --
 
-INSERT INTO `offeredOrder` (`offeredOrderId`, `orderId`, `supplierName`, `adminId`, `offeredOrderStamp`) VALUES
-(5, 9, 'Gbc', 16, '2018-10-29 13:00:29'),
-(6, 10, 'Region State', 16, '2018-10-29 17:45:46'),
-(8, 13, 'Fruit and Veg', 16, '2018-10-30 18:00:01');
+INSERT INTO `offeredOrder` (`offeredOrderId`, `orderId`, `supplierName`, `adminId`, `offeredOrderStamp`, `total`) VALUES
+(5, 9, 'Gbc', 16, '2018-10-29 13:00:29', 2448),
+(6, 10, 'Region State', 16, '2018-10-29 17:45:46', 15686),
+(8, 13, 'Fruit and Veg', 16, '2018-10-30 18:00:01', 22500),
+(9, 14, 'Orizon', 16, '2018-10-31 21:19:22', 2640);
 
 -- --------------------------------------------------------
 
@@ -583,7 +596,8 @@ INSERT INTO `orders` (`orderId`, `adminId`) VALUES
 (6, 16),
 (9, 16),
 (10, 16),
-(13, 16);
+(13, 16),
+(14, 16);
 
 -- --------------------------------------------------------
 
@@ -851,7 +865,10 @@ INSERT INTO `productOrder` (`productOrderId`, `shipmentOrderId`, `orderId`, `pro
 (18, 5, 10, 'Grapes', 245, 34),
 (19, 5, 10, 'Oranges', 223, 33),
 (23, 3, 13, 'Oranges', 75, 20),
-(24, 3, 13, 'Grapes', 1000, 21);
+(24, 3, 13, 'Grapes', 1000, 21),
+(25, 4, 14, 'Potatoes', 60, 34),
+(26, 4, 14, 'Cabbage', 15, 20),
+(27, 4, 14, 'Sweet Potatoes', 15, 20);
 
 -- --------------------------------------------------------
 
@@ -895,9 +912,9 @@ CREATE TABLE `shipment` (
 --
 
 INSERT INTO `shipment` (`shipmentId`, `companyName`, `companyPhone`, `companyAddress`, `companyEmail`, `adminId`) VALUES
-(3, 'Maersk', '0759275024', '123 Adderley Street, Century City', 'maersksa@m.co.za', 16),
+(3, 'Maersks', '0959275024', '23 Adderley Street, Century City', 'maersksa@region.co.za', 16),
 (4, 'Turners Shipping', '021 506 6200', 'Off Upper Camp Unit 9, M5 Business Park, Eastman Rd, Maitland, Cape Town, 7785', 'tshipping@shipsa.com', 96),
-(5, 'Trade Ocean', '021 417 3050', '18 Foregate Square, Heerengracht Street, Cape Town, 8000', 'oceansway@traceoce.co.za', 16);
+(5, 'Trade Ocean', '021 417 3050', '18 Foregate Square, Heerengracht Street, Cape Town, 8000', 'oceansways@traceoce.co.za', 16);
 
 -- --------------------------------------------------------
 
@@ -923,7 +940,8 @@ INSERT INTO `shipmentOrder` (`shipmentOrderId`, `shipmentId`, `adminId`, `depart
 (2, 3, 16, '2018-10-25', '2018-11-29', 10),
 (3, 5, 16, '2018-10-04', '2017-10-04', 5),
 (4, 5, 16, '2018-10-01', '2018-12-21', 6),
-(7, 3, 16, '2019-02-22', '2019-03-05', 13);
+(7, 3, 16, '2019-02-22', '2019-03-05', 13),
+(8, 4, 16, '2018-10-09', '1997-10-24', 14);
 
 -- --------------------------------------------------------
 
@@ -1045,6 +1063,31 @@ INSERT INTO `subcategory` (`subCategoryId`, `subCategoryName`, `subCategoryPosit
 (99, 'minima', 4, 7, 9),
 (100, 'molestiae', 0, 7, 4);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplier`
+--
+
+CREATE TABLE `supplier` (
+  `supplierId` int(11) NOT NULL,
+  `supplierName` varchar(255) NOT NULL,
+  `supplierEmail` varchar(255) NOT NULL,
+  `supplierPhone` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `country` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `supplier`
+--
+
+INSERT INTO `supplier` (`supplierId`, `supplierName`, `supplierEmail`, `supplierPhone`, `city`, `country`) VALUES
+(1, 'Fruit & Veg', 'arnaudgauthier@fruitAndVeg.com', '0294637529', 'Cape Town', 'South Africa'),
+(2, 'All Organic', 'mart@allorganic.co.za', '084592538', 'Pretoria', 'Cape Town'),
+(3, 'CEGADAC', 'cegadac-admin@cgd.com', '(250)04268252', 'Senegal', 'Dakar'),
+(4, 'Archez', 'archez@gmail.com', '(971)5778435', 'Abu Dhabi', 'Dubai');
+
 --
 -- Indexes for dumped tables
 --
@@ -1141,6 +1184,12 @@ ALTER TABLE `subcategory`
   ADD PRIMARY KEY (`subCategoryId`);
 
 --
+-- Indexes for table `supplier`
+--
+ALTER TABLE `supplier`
+  ADD PRIMARY KEY (`supplierId`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1154,7 +1203,7 @@ ALTER TABLE `about`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `adminId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `adminId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -1166,7 +1215,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `client`
 --
 ALTER TABLE `client`
-  MODIFY `clientId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `clientId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `displayCategory`
@@ -1190,13 +1239,13 @@ ALTER TABLE `displaySubcategory`
 -- AUTO_INCREMENT for table `offeredOrder`
 --
 ALTER TABLE `offeredOrder`
-  MODIFY `offeredOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `offeredOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -1208,7 +1257,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `productOrder`
 --
 ALTER TABLE `productOrder`
-  MODIFY `productOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `productOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `requestedOrder`
@@ -1220,19 +1269,25 @@ ALTER TABLE `requestedOrder`
 -- AUTO_INCREMENT for table `shipment`
 --
 ALTER TABLE `shipment`
-  MODIFY `shipmentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `shipmentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `shipmentOrder`
 --
 ALTER TABLE `shipmentOrder`
-  MODIFY `shipmentOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `shipmentOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
 --
 ALTER TABLE `subcategory`
   MODIFY `subCategoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+
+--
+-- AUTO_INCREMENT for table `supplier`
+--
+ALTER TABLE `supplier`
+  MODIFY `supplierId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
