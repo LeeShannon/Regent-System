@@ -27,8 +27,8 @@
         <md-table-row slot="md-table-row" slot-scope="{ item }">
           <md-table-cell md-label="ID" md-sort-by="subCategoryId" md-numeric>{{ item.subCategoryId }}</md-table-cell>
           <md-table-cell md-label="Name" md-sort-by="subCategoryName">{{ item.subCategoryName }}</md-table-cell>
+          <md-table-cell md-label="Category" md-sort-by="category">{{ item.category }}</md-table-cell>
           <md-table-cell md-label="Position" md-sort-by="subCategoryPosition">{{ item.subCategoryPosition }}</md-table-cell>
-          <md-table-cell md-label="Category ID" md-sort-by="categoryId">{{ item.categoryId }}</md-table-cell>
           <md-table-cell md-label="Admin ID" md-sort-by="adminId">{{ item.adminId }}</md-table-cell>
           <md-table-cell md-label="Actions">
             <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editSubcategoryModal">
@@ -177,13 +177,17 @@ export default {
     subCategories: [],
     subCategory: [],
     errorData: '',
-    dataAccessSuccess: true
+    dataAccessSuccess: true,
+    categoryData: [],
+    category: []
   }),
   methods: {
     async populate() {
       this.subCategoryData = []
       this.errorData = '';
       try {
+        this.categoryData = await HTTP.get('/category');
+        this.categoryData = this.categoryData.data.category.records;
         this.subCategoryData = await HTTP.get('/subcategory');
         this.subCategoryData = this.subCategoryData.data.subcategory.records;
       } catch (error) {
@@ -193,13 +197,25 @@ export default {
       if (this.dataAccessSuccess) {
         //Category
         let count = 0;
+        while (count < this.categoryData[this.categoryData.length - 1][0]) {
+          //Default values for missing entries
+          this.category.push([0, 'Not Found', 0, 0,])
+          count++;
+        }
+        count = 0;
+        while (count < this.categoryData.length) {
+          this.category[this.categoryData[count][0]] = this.categoryData[count];
+          count++;
+        }
+        //SubCategory
+        count = 0;
         while (count < this.subCategoryData[this.subCategoryData.length - 1][0]) {
           //Default values for missing entries
           this.subCategory.push({
             subCategoryId: 0,
             subCategoryName: 'Not Found',
             subCategoryPosition: 0,
-            categoryId: 0,
+            category: 'Not Found',
             adminId: 0,
             visible: false
           })
@@ -211,7 +227,7 @@ export default {
             subCategoryId: this.subCategoryData[count][0],
             subCategoryName: this.subCategoryData[count][1],
             subCategoryPosition: this.subCategoryData[count][2],
-            categoryId: this.subCategoryData[count][3],
+            category: this.category[this.subCategoryData[count][3]][1],
             adminId: this.subCategoryData[count][4],
             visible: true
           }
