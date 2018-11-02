@@ -78,7 +78,7 @@
     </md-table-row>
   </md-table>
 
-  <!-- delete incomming Modal doesnt work-->
+  <!-- delete incomming Modal-->
   <div class="modal fade" id="deleteIncModal" tabindex="-1" role="dialog" aria-labelledby="deleteIncModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -100,7 +100,7 @@
     </div>
   </div>
 
-  <!-- delete outgoing Modal doesnt work-->
+  <!-- delete outgoing Modal-->
   <div class="modal fade" id="deleteOutModal" tabindex="-1" role="dialog" aria-labelledby="deleteOutModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -190,14 +190,14 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="departure" required v-model="newOrder.departure">
+                  <md-input  type="date" id="dateField" placeholder="departure" required v-model="newOrder.departure">
                   </md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" placeholder="arrival" required v-model="newOrder.arrival">/>
+                  <md-input type="date" id="dateField2" placeholder="arrival" required v-model="newOrder.arrival">/>
                   </md-input>
                 </md-field>
               </div>
@@ -277,13 +277,13 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="departure" required v-model="newOrder.departure"> /></md-input>
+                  <md-input type="date" id="dateField3" placeholder="departure" required v-model="newOrder.departure"> /></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" placeholder="arrival" required v-model="newOrder.arrival"> /></md-input>
+                  <md-input type="date" id="dateField4" placeholder="arrival" required v-model="newOrder.arrival"> /></md-input>
                 </md-field>
               </div>
             </div>
@@ -315,13 +315,13 @@
                 <md-field class="modal-input">
                   <label>Departure</label>
                   <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
-                  <md-input type="date" v-model="incomingUpdateContent[0].departure" value="incomingUpdateContent[0].departure"></md-input>
+                  <md-input type="date" id="dateField5" v-model="incomingUpdateContent[0].departure" value="incomingUpdateContent[0].departure"></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" v-model="incomingUpdateContent[0].arrival" value="incomingUpdateContent[0].arrival"></md-input>
+                  <md-input type="date" id="dateField6" v-model="incomingUpdateContent[0].arrival" value="incomingUpdateContent[0].arrival"></md-input>
                 </md-field>
               </div>
             </div>
@@ -368,13 +368,13 @@
                 <md-field class="modal-input">
                   <label>Departure</label>
                   <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
-                  <md-input type="date" v-model="outgoingUpdateContent[0].departure" value="outgoingUpdateContent[0].departure"></md-input>
+                  <md-input type="date"  id="dateField7" v-model="outgoingUpdateContent[0].departure" value="outgoingUpdateContent[0].departure"></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" v-model="outgoingUpdateContent[0].arrival" value="outgoingUpdateContent[0].arrival"></md-input>
+                  <md-input type="date"  id="dateField8" v-model="outgoingUpdateContent[0].arrival" value="outgoingUpdateContent[0].arrival"></md-input>
                 </md-field>
               </div>
             </div>
@@ -1516,10 +1516,53 @@ export default {
     },
     removeRow(index) {
       this.inputRows.splice(index, 1);
+    },
+    onLoad() {
+    //I know its stupid but, selecting elements by name doesnt work so.... yea
+    //we have 8 different IDs to get this validation to work for each input 
+      var input = document.getElementById("dateField");
+      var input2 = document.getElementById("dateField2");
+      var input3 = document.getElementById("dateField3");
+      var input4 = document.getElementById("dateField4");
+      var input5 = document.getElementById("dateField5");
+      var input6 = document.getElementById("dateField6");
+      var input7 = document.getElementById("dateField7");
+      var input8 = document.getElementById("dateField8");
+
+      var today = new Date();
+      // Set month and day to string to add leading 0
+      var day = new String(today.getDate());
+      var mon = new String(today.getMonth()+1); //January is 0!
+      var yr = today.getFullYear();
+
+      if(day.length < 2) { day = "0" + day; }
+      if(mon.length < 2) { mon = "0" + mon; }
+
+      var date = new String( yr + '-' + mon + '-' + day );
+
+      input.disabled = false;
+      input.setAttribute('min', date);
+      input2.disabled = false;
+      input2.setAttribute('min', date);
+      input3.disabled = false;
+      input3.setAttribute('min', date);
+      input4.disabled = false;
+      input4.setAttribute('min', date);
+      input5.disabled = false;
+      input5.setAttribute('min', date);
+      input6.disabled = false;
+      input6.setAttribute('min', date);
+      input7.disabled = false;
+      input7.setAttribute('min', date);
+      input8.disabled = false;
+      input8.setAttribute('min', date);
     }
   },
   created() {
     this.searched = this.orders
+  },
+  mounted(){
+    this.onLoad()
   },
   beforeMount() {
     this.populate()
