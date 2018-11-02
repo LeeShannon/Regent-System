@@ -33,7 +33,7 @@
         <button @click="incomingEditProduct(item.orderid)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editIncomingProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-        <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteIncModal">
+        <button @click="passIncomingInfo(item.orderid)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteIncModal">
             <i class="fas fa-trash-alt"></i>
           </button>
       </md-table-cell>
@@ -71,7 +71,7 @@
         <button @click="outgoingEditProduct(item.orderid)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editOutgoingProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-        <button  @click="onSelect(item)" type="button" class="my-btn-icon"  data-toggle="modal" data-target="#deleteOutModal">
+        <button  @click="passOutgoingInfo(item.orderid)" type="button" class="my-btn-icon"  data-toggle="modal" data-target="#deleteOutModal">
             <i class="fas fa-trash-alt"></i>
           </button>
       </md-table-cell>
@@ -89,12 +89,12 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers">Are you sure you wish to delete Order ID: <b>{{ selected.orderId }}</b> ?</h3>
+            <h3 class="del-headers" v-model="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
           <br>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" value:="selectedIncomingRow.orderId">
           <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteIncomingRecord(item.orderid)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <button @click="deleteIncomingRecord(selectedIncomingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
@@ -111,12 +111,12 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers">Are you sure you wish to delete Order ID: <b>{{ selected.orderId }}</b> ?</h3>
+            <h3 class="del-headers" v-model="selectedOutgoingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedOutgoingRow.orderId }}</b> ?</h3>
           <br>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteOutgoingRecord(item.orderid)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <button @click="deleteOutgoingRecord(selectedOutgoingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
@@ -437,10 +437,13 @@
                   <td>R {{p.productPrice}}</td>
                 </tr>
               </tbody>
+              <tfoot>
+                <td></td>
+                <td style="font-weight: 400">Total:</td>
+                <td style="font-weight: 400"><p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p></td>
+              </tfoot>
             </table>
-
             <hr>
-
             <div class="row">
               <div class="col" style="padding-left: 5%">
                 <label class="home-headers">Supplier:</label>
@@ -517,6 +520,11 @@
                       <td>R {{p.productPrice}}</td>
                     </tr>
                   </tbody>
+                  <tfoot>
+                    <td></td>
+                    <td style="font-weight: 400">Total:</td>
+                    <td style="font-weight: 400"><p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p></td>
+                  </tfoot>
                 </table>
               </div>
             </div>
@@ -657,6 +665,8 @@ export default {
     incomingProductOrderToDeleteIds: [],
     outgoingProductOrderToDelete: [],
     outgoingProductOrderToDeleteIds: [],
+    selectedIncomingRow:[],
+    selectedOutgoingRow: [],
     orders: []
   }),
   methods: {
@@ -1115,6 +1125,13 @@ export default {
         console.log("i guess it worked twice. With love, God");
       })
 
+    }, async passIncomingInfo(id){
+      let incomindOrderid = id;
+      await HTTP.get("/orders/" + incomindOrderid).then((res)=>{
+        // console.log(res.data);
+        this.selectedIncomingRow = res.data;
+      })
+
     },
     async deleteIncomingRecord(id) {
 
@@ -1197,6 +1214,15 @@ export default {
         })
         count3++;
       }
+
+    }, async passOutgoingInfo(id){
+      let outgoingOrderid = id;
+      await HTTP.get("/orders/" + outgoingOrderid).then((res)=>{
+        // console.log(res.data);
+        this.selectedOutgoingRow = res.data;
+      })
+
+
 
     },
     async deleteOutgoingRecord(id) {
@@ -1321,6 +1347,15 @@ export default {
         count++
 
       }
+      let iterate=0;
+      let totalAmount=0;
+      while(iterate<this.order.length){
+
+        totalAmount+= this.order[iterate].quantity * this.order[iterate].price;
+
+        iterate++;
+      }
+      console.log(this.order);
 
       let item = this.orderTable;
       var orderId;
@@ -1336,7 +1371,8 @@ export default {
       this.offeredOrderTable.push({
         orderId: orderId,
         supplierName: this.newOrder.supplier,
-        adminId: this.orderTable.adminId
+        adminId: this.orderTable.adminId,
+        total: totalAmount
       })
 
       let item2 = this.offeredOrderTable;
@@ -1411,6 +1447,17 @@ export default {
 
       }
 
+            let iterate=0;
+            let totalAmount=0;
+            while(iterate<this.requestOrder.length){
+
+              totalAmount+= this.requestOrder[iterate].quantity * this.requestOrder[iterate].price;
+
+              iterate++;
+            }
+            console.log(this.requestOrder);
+
+
       var orderId;
       var adminNo;
       await HTTP.post('/orders', this.orderTable).then((res) => {
@@ -1423,7 +1470,8 @@ export default {
       this.requestedOrderTable.push({
         orderId: orderId,
         clientName: this.newOrder.supplier,
-        adminId: this.orderTable.adminId
+        adminId: this.orderTable.adminId,
+        total: totalAmount
       })
 
 
@@ -1457,7 +1505,8 @@ export default {
         shipmentId: this.newOrder.shipCo,
         adminId: this.orderTable.adminId,
         departure: this.newOrder.departure,
-        arrival: this.newOrder.arrival
+        arrival: this.newOrder.arrival,
+        orderId: orderId
       })
 
       await HTTP.post('/shipmentOrder', this.shipmentOrderTable).then((res) => {

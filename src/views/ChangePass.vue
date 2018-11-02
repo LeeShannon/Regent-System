@@ -121,20 +121,7 @@ export default {
   cursor: pointer;
   transition: all 0.25s ease;
 }
-<<<<<<< HEAD
-  .form-button:hover {
-    color:white;
-    background: #96DFE2;
-  }
-  .form-button:active {
-    //letter-spacing: 2px;
-    letter-spacing: 2px ;
-  }
-  .form-button:after {
-    content:"SUBMIT";
-  }
 
-=======
 .form-button:hover {
   color:white;
   background: #96DFE2;
@@ -145,7 +132,7 @@ export default {
 .form-button:after {
   content:"SUBMIT";
 }
->>>>>>> 9b9bcfeea832f96cafd855c886d749c45d3d36b1
+
 .onclic {
   width: 40px;
   border-color: white;
