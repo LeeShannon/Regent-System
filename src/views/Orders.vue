@@ -257,7 +257,7 @@
             <div class="form-row">
               <div class="col">
                 <md-field class="modal-input">
-                  <label>Supplier</label>
+                  <label>Client</label>
                   <md-input type="text" required v-model="newOrder.supplier"></md-input>
                 </md-field>
               </div>
@@ -334,12 +334,6 @@
               <option v-for="option in incomingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
               </div>
-              <div class="col">
-                <md-field class="modal-input">
-                  <label>Status</label>
-                  <md-input type="text" v-model="selected.status" value="selected.status"></md-input>
-                </md-field>
-              </div>
             </div>
           </form>
         </div>
@@ -387,12 +381,6 @@
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
               <option v-for="option in outgoingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
-              </div>
-              <div class="col">
-                <md-field class="modal-input">
-                  <label>Status</label>
-                  <md-input type="text" v-model="selected.status" value="selected.status"></md-input>
-                </md-field>
               </div>
             </div>
           </form>

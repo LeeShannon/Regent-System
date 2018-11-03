@@ -113,6 +113,8 @@
 <script lang="ts">
 import LineExample from '../components/revenue-graph.js'
 import TodoList from '../components/todo-list.vue'
+import { HTTP } from '../http-common'
+
 export default {
   name: 'app',
   data: () => ({
