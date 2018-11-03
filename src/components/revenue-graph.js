@@ -38,12 +38,12 @@ export default {
 
       await HTTP.get("/expensessummary").then((res) => {
         console.log(res.data.expensessummary.records);
-        this.expenses = res.data.expensessummary.records;
+        this.sales = res.data.expensessummary.records;
       })
 
       await HTTP.get("/salessummary").then((res) => {
         console.log(res);
-        this.sales = res.data.salessummary.records;
+        this.expenses = res.data.salessummary.records;
       })
 
       let count = 0;
