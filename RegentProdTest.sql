@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 01, 2018 at 07:58 AM
+-- Generation Time: Nov 02, 2018 at 05:44 PM
 -- Server version: 5.7.18
 -- PHP Version: 7.1.16
 
@@ -28,6 +28,9 @@ SET time_zone = "+00:00";
 -- Table structure for table `about`
 --
 
+drop database RegentProdTest;
+create database RegentProdTest;
+use RegentProdTest;
 
 CREATE TABLE `about` (
   `aboutId` int(11) NOT NULL,
@@ -554,6 +557,17 @@ INSERT INTO `displaySubcategory` (`displaySubCategoryId`, `displaySubCategoryNam
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `expensessummary`
+-- (See below for the actual view)
+--
+CREATE TABLE `expensessummary` (
+`month` varchar(9)
+,`totalExpenses` double
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `offeredOrder`
 --
 
@@ -571,10 +585,15 @@ CREATE TABLE `offeredOrder` (
 --
 
 INSERT INTO `offeredOrder` (`offeredOrderId`, `orderId`, `supplierName`, `adminId`, `offeredOrderStamp`, `total`) VALUES
-(5, 9, 'Gbc', 16, '2018-10-29 13:00:29', 2448),
-(6, 10, 'Region State', 16, '2018-10-29 17:45:46', 15686),
+(5, 9, 'Gbc', 16, '2018-08-08 13:00:29', 2448),
+(6, 10, 'Region State', 16, '2018-09-18 17:45:46', 15686),
 (8, 13, 'Fruit and Veg', 16, '2018-10-30 18:00:01', 22500),
-(9, 14, 'Orizon', 16, '2018-10-31 21:19:22', 2640);
+(9, 14, 'Orizon', 16, '2018-10-31 21:19:22', 2640),
+(12, 22, 'Fruit and Veg', 16, '2018-01-02 17:03:47', 3252.5),
+(13, 23, 'Desmond', 16, '2018-02-08 17:08:42', 1988.45),
+(14, 24, 'Reunion', 16, '2018-07-02 17:14:54', 8684),
+(15, 25, 'Azur', 16, '2018-07-11 17:16:26', 989),
+(16, 27, 'Organic World', 16, '2018-10-16 17:24:17', 1350);
 
 -- --------------------------------------------------------
 
@@ -597,7 +616,17 @@ INSERT INTO `orders` (`orderId`, `adminId`) VALUES
 (9, 16),
 (10, 16),
 (13, 16),
-(14, 16);
+(14, 16),
+(18, 16),
+(19, 16),
+(20, 16),
+(21, 16),
+(22, 16),
+(23, 16),
+(24, 16),
+(25, 16),
+(26, 16),
+(27, 16);
 
 -- --------------------------------------------------------
 
@@ -868,7 +897,33 @@ INSERT INTO `productOrder` (`productOrderId`, `shipmentOrderId`, `orderId`, `pro
 (24, 3, 13, 'Grapes', 1000, 21),
 (25, 4, 14, 'Potatoes', 60, 34),
 (26, 4, 14, 'Cabbage', 15, 20),
-(27, 4, 14, 'Sweet Potatoes', 15, 20);
+(27, 4, 14, 'Sweet Potatoes', 15, 20),
+(33, 5, 18, 'Kiwi', 24, 18),
+(34, 5, 18, 'Apricot', 23, 22),
+(35, 4, 19, 'Asparagus', 30, 10),
+(36, 4, 19, 'Banana', 23, 30),
+(37, 3, 20, 'Black Eye Bean', 15, 11),
+(38, 3, 20, 'Broccoli', 23, 22),
+(39, 3, 20, 'Clementine', 7, 27),
+(40, 4, 21, 'Fennel', 20, 22),
+(41, 4, 21, 'Fig', 5, 40),
+(42, 5, 22, 'Garlic', 50, 34),
+(43, 5, 22, 'Green Bean', 23, 30),
+(44, 5, 22, 'Haricot Bean', 23, 37.5),
+(45, 4, 23, 'Iceberg Lettuce', 30, 23.54),
+(46, 4, 23, 'Courgette', 23, 55.75),
+(47, 5, 24, 'Date', 65, 44),
+(48, 5, 24, 'Iceberg Lettuce', 44, 21),
+(49, 5, 24, 'Garlic', 30, 40),
+(50, 5, 24, 'Fig', 30, 50),
+(51, 5, 24, 'Clementine', 44, 50),
+(52, 4, 25, 'Orange', 43, 23),
+(53, 4, 26, 'Clementine', 24, 45),
+(54, 4, 26, 'Courgette', 30, 35),
+(55, 4, 26, 'Clementine', 24, 45),
+(56, 4, 26, 'Courgette', 30, 35),
+(57, 5, 27, 'Clementine', 24, 25),
+(58, 5, 27, 'Endive', 30, 25);
 
 -- --------------------------------------------------------
 
@@ -881,16 +936,33 @@ CREATE TABLE `requestedOrder` (
   `orderId` int(11) NOT NULL,
   `clientName` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `adminId` int(11) NOT NULL,
-  `requestedOrderStamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `requestedOrderStamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `total` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `requestedOrder`
 --
 
-INSERT INTO `requestedOrder` (`requestedOrderId`, `orderId`, `clientName`, `adminId`, `requestedOrderStamp`) VALUES
-(1, 5, 'Casius', 16, '2018-10-29 09:07:53'),
-(2, 6, 'Pick n Pay', 16, '2018-10-29 09:17:27');
+INSERT INTO `requestedOrder` (`requestedOrderId`, `orderId`, `clientName`, `adminId`, `requestedOrderStamp`, `total`) VALUES
+(1, 5, 'Casius', 16, '2018-04-09 09:07:53', 1648),
+(2, 6, 'Pick n Pay', 16, '2018-06-13 09:17:27', 22661),
+(5, 18, 'Jean Luc', 16, '2018-01-17 16:50:39', 938),
+(6, 19, 'Pick n Pay', 16, '2018-01-15 16:52:11', 990),
+(7, 20, 'Arnaud', 16, '2018-03-14 16:54:07', 860),
+(8, 21, 'Sarah', 16, '2018-04-12 16:59:19', 640),
+(9, 26, 'Spur', 16, '2018-01-17 17:23:18', 2130);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `salessummary`
+-- (See below for the actual view)
+--
+CREATE TABLE `salessummary` (
+`month` varchar(9)
+,`totalSales` double
+);
 
 -- --------------------------------------------------------
 
@@ -941,7 +1013,18 @@ INSERT INTO `shipmentOrder` (`shipmentOrderId`, `shipmentId`, `adminId`, `depart
 (3, 5, 16, '2018-10-04', '2017-10-04', 5),
 (4, 5, 16, '2018-10-01', '2018-12-21', 6),
 (7, 3, 16, '2019-02-22', '2019-03-05', 13),
-(8, 4, 16, '2018-10-09', '1997-10-24', 14);
+(8, 4, 16, '2018-10-09', '1997-10-24', 14),
+(12, 5, 16, '2018-11-08', '2018-11-29', 18),
+(13, 4, 16, '2019-01-09', '2019-02-16', 19),
+(14, 3, 16, '2018-12-13', '2019-02-01', 20),
+(15, 4, 16, '2018-11-23', '2019-01-16', 21),
+(16, 5, 16, '2018-11-08', '2018-11-23', 22),
+(17, 4, 16, '2018-11-10', '2018-11-20', 23),
+(18, 5, 16, '2018-11-15', '2018-12-06', 24),
+(19, 4, 16, '2018-11-14', '2018-11-30', 25),
+(20, 4, 16, '2018-11-09', '2018-11-15', 26),
+(21, 4, 16, '2018-11-09', '2018-11-15', 26),
+(22, 5, 16, '2018-11-09', '2018-11-15', 27);
 
 -- --------------------------------------------------------
 
@@ -1087,6 +1170,64 @@ INSERT INTO `supplier` (`supplierId`, `supplierName`, `supplierEmail`, `supplier
 (2, 'All Organic', 'mart@allorganic.co.za', '084592538', 'Pretoria', 'Cape Town'),
 (3, 'CEGADAC', 'cegadac-admin@cgd.com', '(250)04268252', 'Senegal', 'Dakar'),
 (4, 'Archez', 'archez@gmail.com', '(971)5778435', 'Abu Dhabi', 'Dubai');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `totalincomingorders`
+-- (See below for the actual view)
+--
+CREATE TABLE `totalincomingorders` (
+`month` varchar(9)
+,`TotalIncomingOrders` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `totaloutgoingorders`
+-- (See below for the actual view)
+--
+CREATE TABLE `totaloutgoingorders` (
+`month` varchar(9)
+,`totaloutgoinggorders` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `expensessummary`
+--
+DROP TABLE IF EXISTS `expensessummary`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `regentprodtest`.`expensessummary`  AS  select `m`.`MONTH` AS `month`,sum(`p`.`total`) AS `totalExpenses` from (((select 'January' AS `MONTH`) union select 'February' AS `MONTH` union select 'March' AS `MONTH` union select 'April' AS `MONTH` union select 'May' AS `MONTH` union select 'June' AS `MONTH` union select 'July' AS `MONTH` union select 'August' AS `MONTH` union select 'September' AS `MONTH` union select 'October' AS `MONTH` union select 'November' AS `MONTH` union select 'December' AS `MONTH`) `m` left join `regentprodtest`.`offeredorder` `p` on((`m`.`MONTH` = date_format(`p`.`offeredOrderStamp`,'%M')))) group by `m`.`MONTH` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `salessummary`
+--
+DROP TABLE IF EXISTS `salessummary`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `regentprodtest`.`salessummary`  AS  select `m`.`MONTH` AS `month`,sum(`p`.`total`) AS `totalSales` from (((select 'January' AS `MONTH`) union select 'February' AS `MONTH` union select 'March' AS `MONTH` union select 'April' AS `MONTH` union select 'May' AS `MONTH` union select 'June' AS `MONTH` union select 'July' AS `MONTH` union select 'August' AS `MONTH` union select 'September' AS `MONTH` union select 'October' AS `MONTH` union select 'November' AS `MONTH` union select 'December' AS `MONTH`) `m` left join `regentprodtest`.`requestedorder` `p` on((`m`.`MONTH` = date_format(`p`.`requestedOrderStamp`,'%M')))) group by `m`.`MONTH` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `totalincomingorders`
+--
+DROP TABLE IF EXISTS `totalincomingorders`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `regentprodtest`.`totalincomingorders`  AS  select `m`.`MONTH` AS `month`,count(date_format(`p`.`offeredOrderStamp`,'%M')) AS `TotalIncomingOrders` from (((select 'January' AS `MONTH`) union select 'February' AS `MONTH` union select 'March' AS `MONTH` union select 'April' AS `MONTH` union select 'May' AS `MONTH` union select 'June' AS `MONTH` union select 'July' AS `MONTH` union select 'August' AS `MONTH` union select 'September' AS `MONTH` union select 'October' AS `MONTH` union select 'November' AS `MONTH` union select 'December' AS `MONTH`) `m` left join `regentprodtest`.`offeredorder` `p` on((`m`.`MONTH` = date_format(`p`.`offeredOrderStamp`,'%M')))) group by `m`.`MONTH` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `totaloutgoingorders`
+--
+DROP TABLE IF EXISTS `totaloutgoingorders`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `regentprodtest`.`totaloutgoingorders`  AS  select `m`.`MONTH` AS `month`,count(date_format(`p`.`requestedOrderStamp`,'%M')) AS `totaloutgoinggorders` from (((select 'January' AS `MONTH`) union select 'February' AS `MONTH` union select 'March' AS `MONTH` union select 'April' AS `MONTH` union select 'May' AS `MONTH` union select 'June' AS `MONTH` union select 'July' AS `MONTH` union select 'August' AS `MONTH` union select 'September' AS `MONTH` union select 'October' AS `MONTH` union select 'November' AS `MONTH` union select 'December' AS `MONTH`) `m` left join `regentprodtest`.`requestedorder` `p` on((`m`.`MONTH` = date_format(`p`.`requestedOrderStamp`,'%M')))) group by `m`.`MONTH` ;
 
 --
 -- Indexes for dumped tables
@@ -1239,13 +1380,13 @@ ALTER TABLE `displaySubcategory`
 -- AUTO_INCREMENT for table `offeredOrder`
 --
 ALTER TABLE `offeredOrder`
-  MODIFY `offeredOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `offeredOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -1257,13 +1398,13 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `productOrder`
 --
 ALTER TABLE `productOrder`
-  MODIFY `productOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `productOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `requestedOrder`
 --
 ALTER TABLE `requestedOrder`
-  MODIFY `requestedOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `requestedOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `shipment`
@@ -1275,7 +1416,7 @@ ALTER TABLE `shipment`
 -- AUTO_INCREMENT for table `shipmentOrder`
 --
 ALTER TABLE `shipmentOrder`
-  MODIFY `shipmentOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `shipmentOrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `subcategory`

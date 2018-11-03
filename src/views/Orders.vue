@@ -41,7 +41,7 @@
   </md-table>
 
   <!-- Outgoing TABLE -->
-  <md-table v-model="allOutgoingOrdersDisplay" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg">
+  <md-table v-model="allOutgoingOrdersDisplay" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg" style="margin-bottom: 5%">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
         <h1 class="md-title page-headers"> Outgoing Orders</h1>
@@ -1519,7 +1519,7 @@ export default {
     },
     onLoad() {
     //I know its stupid but, selecting elements by name doesnt work so.... yea
-    //we have 8 different IDs to get this validation to work for each input 
+    //we have 8 different IDs to get this validation to work for each input
       var input = document.getElementById("dateField");
       var input2 = document.getElementById("dateField2");
       var input3 = document.getElementById("dateField3");
