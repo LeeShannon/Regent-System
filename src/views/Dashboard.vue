@@ -114,11 +114,13 @@
 import LineExample from '../components/revenue-graph.js'
 import TodoList from '../components/todo-list.vue'
 import {HTTP} from '../http-common'
+import State from "../store/state"
 export default {
   name: 'app',
   data: () => ({
     revenue: 60235,
     orders: '',
+    errorData: '',
     //thinking if the clients update with each new entry we can keep track of the time since the last entry
     // if the mins >= 60 then time is updated to "hours" and clientsUpdated is reset to 1
     clientsUpdated: 1,
@@ -186,113 +188,85 @@ export default {
     allOfferedOrder: [],
     allRequestedOrder: [],
     shippingstatuts: [],
-    profitMade: ''
+    profitMade: 0
   }),
   methods: {
     async populate() {
-
       await HTTP.get("/orders").then((res)=> {
-
         this.totalOrders = res.data.orders.records;
         this.orders = res.data.orders.records.length;
       })
-
-      let count = this.totalOrders.length;
-      let count1=0
-
-      while(count1 < 3){
-        this.lastOrderIds.push({
-          orderId: this.totalOrders[count-1][0]
-        })
-        count1++;
-        count--;
+      let count = this.totalOrders.length-4;
+      while(count < this.totalOrders.length-1){
+        this.lastOrderIds.push(
+          this.totalOrders[count]
+        )
+        count++;
       }
-
-
       await HTTP.get("/offeredorder").then((res) => {
         this.allOfferedOrder = res.data.offeredorder.records;
       })
       await HTTP.get("/requestedorder").then((res) => {
         this.allRequestedOrder = res.data.requestedorder.records;
       })
-
-
-      let count3=0;
-
-      while(count3<this.lastOrderIds.length){
-
+      count = 0;
+      while(count<this.lastOrderIds.length){
         let iterate =0;
         while(iterate<this.allOfferedOrder.length){
-
-          if(this.lastOrderIds[count3].orderId == this.allOfferedOrder[iterate][1]){
-            this.shippingstatuts.push({
+          if(this.lastOrderIds[count][0] == this.allOfferedOrder[iterate][1]){
+            let obj = {
               name: this.allOfferedOrder[iterate][2],
               status: 'Incoming'
-            })
+            }
+            this.shippingstatuts.push(obj)
           }
           iterate++;
         }
-        count3++;
+        count++;
       }
-
-
-            let count4=0;
-
-            while(count4<this.lastOrderIds.length){
-
-              let iterate2 =0;
-              while(iterate2<this.allRequestedOrder.length){
-
-                if(this.lastOrderIds[count4].orderId == this.allRequestedOrder[iterate2][1]){
-                  console.log(this.allRequestedOrder[iterate2]);
-                  this.shippingstatuts.push({
-                    name: this.allRequestedOrder[iterate2][2],
-                    status: 'Outgoing'
-                  })
-                }
-                iterate2++;
-              }
-              count4++;
+      count = 0;
+      while(count<this.lastOrderIds.length){
+        let iterate = 0;
+        while(iterate<this.allRequestedOrder.length){
+          if(this.lastOrderIds[count][0] == this.allRequestedOrder[iterate][1]){
+            console.log(this.allRequestedOrder[iterate]);
+            let obj = {
+              name: this.allRequestedOrder[iterate][2],
+              status: 'Outgoing'
             }
-
-            console.log(this.totalOrders);
-
-            let count5=0;
-            let amountSales =0;
-
-            while(count5<this.totalOrders.length){
-
-              let iterate3 =0;
-              while(iterate3<this.allRequestedOrder.length){
-
-                if(this.totalOrders[count5][0] == this.allRequestedOrder[iterate3][1]){
-                  amountSales += this.allRequestedOrder[iterate3][5]
-                }
-                iterate3++;
-              }
-              count5++;
-            }
-
-            let count6=0;
-            let amountExpenses =0;
-
-            while(count6<this.totalOrders.length){
-
-              let iterate4 =0;
-              while(iterate4<this.allOfferedOrder.length){
-
-                if(this.totalOrders[count6][0] == this.allOfferedOrder[iterate4][1]){
-                  amountExpenses += this.allOfferedOrder[iterate4][5]
-                }
-                iterate4++;
-              }
-              count6++;
-            }
-
-            this.profitMade = Number((amountSales - amountExpenses).toFixed(2))+"";
-
-            console.log(Number(this.profitMade.toFixed(2)));
-
+            this.shippingstatuts.push(obj)
+          }
+          iterate++;
+        }
+        count++;
+      }
+      console.log(this.totalOrders);
+      count = 0;
+      let amountSales = 0;
+      while(count<this.totalOrders.length){
+        let iterate = 0;
+        while(iterate<this.allRequestedOrder.length){
+          if(this.totalOrders[count][0] == this.allRequestedOrder[iterate][1]){
+            amountSales += this.allRequestedOrder[iterate][5]
+          }
+          iterate++;
+        }
+        count++;
+      }
+      count = 0;
+      let amountExpenses =0;
+      while(count<this.totalOrders.length){
+        let iterate = 0;
+        while(iterate<this.allOfferedOrder.length){
+          if(this.totalOrders[count][0] == this.allOfferedOrder[iterate][1]){
+            amountExpenses += this.allOfferedOrder[iterate][5]
+          }
+          iterate++;
+        }
+        count++;
+      }
+      this.profitMade = Number((amountSales - amountExpenses).toFixed(2));
+      console.log(Number(this.profitMade.toFixed(2)));
 },
     calcInput_1(e: any){
       this.firstInputSelected = true;
@@ -310,7 +284,6 @@ export default {
         }
       }
       this.countryRate = selected;
-
       var input2 = parseFloat(this.calc2);
       // var input2 = parseFloat(document.getElementById("currencyInput").value);
       if(isNaN(input2)){
@@ -327,7 +300,6 @@ export default {
         this.calc1 = "";
         return;
       }
-
       if(this.firstInputSelected){
         this.calc2 = value+"";
         this.calc1 = (value * this.countryRate).toFixed(2);
@@ -342,10 +314,15 @@ export default {
     TodoList
   },
   beforeMount () {
-    this.populate()
+    console.log(State.data.loggedIn)
+    if (State.data.loggedIn) {
+      this.populate();
+    } else {
+      this.errorData = 'You need to be logged in to make a view data';
+      console.log('You need to be logged in to make a view data')
+    }
   }
 }
-
 </script>
 
 <style media="screen">

@@ -636,6 +636,7 @@
 
 <script>
 import {HTTP} from '../http-common'
+import State from "../store/state"
 const toLower = text => {
   return text.toString().toLowerCase()
 }
@@ -732,7 +733,7 @@ export default {
     orders: []
   }),
   methods: {
-    async populate() {
+    async populate2() {
       await HTTP.get('/orders').then((res) => {
           this.requestedOrderData = res;
       })
@@ -857,7 +858,7 @@ export default {
       // console.log('order - processed')
       // console.log(this.order)
     },
-    async populate2() {
+    async populate() {
       this.shipData = await HTTP.get('/shipment')
       let count = 0;
       while (count < this.shipData.data.shipment.records.length) {
@@ -1642,7 +1643,11 @@ export default {
     this.onLoad()
   },
   beforeMount() {
-    this.populate2()
+    if (State.data.loggedIn) {
+      this.populate();
+    } else {
+      this.errorData = 'You need to be logged in to make a view data';
+    }
   }
 }
 </script>

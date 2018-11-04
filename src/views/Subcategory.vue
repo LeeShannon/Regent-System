@@ -182,7 +182,8 @@
 </template>
 
 <script>
-import {HTTP} from '../http-common'
+import {HTTP} from '../http-common';
+import State from "../store/state";
 const toLower = text => {
   return text.toString().toLowerCase()
 }
@@ -312,7 +313,11 @@ export default {
     this.searched = this.subCategories
   },
   beforeMount() {
-    this.populate()
+    if (State.data.loggedIn) {
+      this.populate();
+    } else {
+      this.errorData = 'You need to be logged in to make a view data';
+    }
   }
 }
 </script>

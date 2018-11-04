@@ -8,7 +8,7 @@
 
 <script>
 import State from "../store/state";
-
+import router from '../router';
 export default {
   data() {
     return {
@@ -17,9 +17,12 @@ export default {
     }
   },
   mounted() {
-    window.onload(setTimeout(function(){
-        window.location.href="http://localhost:8081/#/home"
+    window.onload(setTimeout(() => {
+        router.push("home")
       },3500))
+    // window.onload(setTimeout(function(){
+    //     window.location.href="http://localhost:8081/#/home"
+    //   },3500))
   }
 }
 </script>

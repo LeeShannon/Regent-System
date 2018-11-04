@@ -818,7 +818,11 @@ export default {
     this.searched = this.products;
   },
   beforeMount() {
-    this.populate();
+    if (State.data.loggedIn) {
+      this.populate();
+    } else {
+      this.errorData = 'You need to be logged in to make a view data';
+    }
     console.log('User Logged in')
     console.log(State.data.loggedIn)
   },

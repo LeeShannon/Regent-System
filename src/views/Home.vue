@@ -39,9 +39,7 @@
           <a href="#" id="menu-toggle" @click="showMenu = !showMenu" style="margin-left: 15px" class="menu-btn">
             <i class="fas fa-bars bar"></i>
           </a>
-
         </div>
-
         <div class="row">
           <div class="col-lg-12">
             <router-view/>
