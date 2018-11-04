@@ -7,6 +7,32 @@
     <li class="nav-item"><router-link to="/subcategory" class="nav-link tab-link">Subcategory</router-link></li>
   </ul>
 
+  <!-- alerts -->
+  <div class="info-msg" v-show="alertBlue">
+    <i class="fa fa-info-circle"></i>
+    Product has been successfully <strong>updated</strong>
+    <i style="float: right; cursor: pointer" @click="alertBlue = !alertBlue" class="fas fa-times"></i>
+  </div>
+
+  <div class="success-msg" v-show="alertGreen">
+    <i class="fa fa-check"></i>
+    Product has been successfully <strong>added</strong>
+    <i style="float: right; cursor: pointer" @click="alertGreen = !alertGreen" class="fas fa-times"></i>
+  </div>
+
+  <div class="warning-msg" v-show="alertOrange">
+    <i class="fa fa-warning"></i>
+    Product has been successfully <strong>deleted</strong>
+    <i style="float: right; cursor: pointer" @click="alertOrange = !alertOrange" class="fas fa-times"></i>
+  </div>
+
+  <div class="error-msg" v-show="alertRed">
+    <i class="fa fa-times-circle"></i>
+    <strong>Error</strong> something went wrong
+    <i style="float: right; cursor: pointer" @click="alertRed = !alertRed" class="fas fa-times"></i>
+  </div>
+
+
   <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
@@ -285,6 +311,10 @@ export default {
   name: 'FileField',
   data: () => ({
     search: null,
+    alertBlue: false,
+    alertGreen: false,
+    alertOrange: false,
+    alertRed: false,
     imageUrl: null,
     searched: [],
     placeholder: null,
@@ -480,6 +510,7 @@ export default {
     async saveChanges() {
       console.log(this.imageUrl)
       if(this.validateSaveChanges()) {
+        this.alertBlue = true;
         console.log('Save Changes - valid');
         const itemId = this.selected.productId
         let imageInput = null
@@ -502,6 +533,7 @@ export default {
         console.log(prod)
         await HTTP.put('/product/' + itemId, prod)
       } else {
+        this.alertRed = true;
         console.log('Save Changes - invalid');
       }
       // document.getElementById("editProductModal").close()
@@ -616,13 +648,16 @@ export default {
               productDescription: this.newProduct.productDescription,
               adminId: State.data.adminInfo.adminId
             }).then((res) => {
+              this.alertGreen = true
               console.log(res)
             })
             this.populate()
           } else {
+            this.alertRed = true
             console.log('TODO - Sub Category not found - Fucking duplicate names or subsubcategory not working')
           }
         } else {
+          this.alertRed = true
           console.log('TODO - category not found')
         }
       }
@@ -638,7 +673,10 @@ export default {
         // delete this.products[item.productId]
         console.log(item.productId);
         // this.products[item.productId] = null;
-        HTTP.delete('/product/' + item.productId).then((url) => { console.log('Item Deleted') })
+        HTTP.delete('/product/' + item.productId).then((url) => {
+          console.log('Item Deleted')
+          this.alertOrange = true;
+        })
         let found = false
         let counter = 0
         while (counter<this.searched.length && !found) {
@@ -651,6 +689,7 @@ export default {
           counter++
         }
       } else {
+        this.alertRed = true;
         console.log(`Can't delete items if not logged in`)
       }
     },

@@ -1,6 +1,31 @@
 <template>
 <div class="space-top ">
 
+  <!-- alerts -->
+  <div class="info-msg" v-show="alertBlue1">
+    <i class="fa fa-info-circle"></i>
+    User has been successfully <strong>updated</strong>
+    <i style="float: right; cursor: pointer" @click="alertBlue = !alertBlue" class="fas fa-times"></i>
+  </div>
+
+  <div class="success-msg" v-show="alertGreen1">
+    <i class="fa fa-check"></i>
+    User has been successfully <strong>added</strong>
+    <i style="float: right; cursor: pointer" @click="alertGreen = !alertGreen" class="fas fa-times"></i>
+  </div>
+
+  <div class="warning-msg" v-show="alertOrange1">
+    <i class="fa fa-warning"></i>
+    User has been successfully <strong>deleted</strong>
+    <i style="float: right; cursor: pointer" @click="alertOrange = !alertOrange" class="fas fa-times"></i>
+  </div>
+
+  <div class="error-msg" v-show="alertRed1">
+    <i class="fa fa-times-circle"></i>
+    <strong>Error</strong> something went wrong
+    <i style="float: right; cursor: pointer" @click="alertRed = !alertRed" class="fas fa-times"></i>
+  </div>
+
   <!--  supplier table-->
   <md-table v-model="allSupliers" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%; background-color: white">
     <md-table-toolbar class="table-header">
@@ -38,6 +63,31 @@
       </md-table-row>
   </md-table>
 
+  <!-- alerts -->
+  <div class="info-msg" v-show="alertBlue2">
+    <i class="fa fa-info-circle"></i>
+    User has been successfully <strong>updated</strong>
+    <i style="float: right; cursor: pointer" @click="alertBlue = !alertBlue" class="fas fa-times"></i>
+  </div>
+
+  <div class="success-msg" v-show="alertGreen2">
+    <i class="fa fa-check"></i>
+    User has been successfully <strong>added</strong>
+    <i style="float: right; cursor: pointer" @click="alertGreen = !alertGreen" class="fas fa-times"></i>
+  </div>
+
+  <div class="warning-msg" v-show="alertOrange2">
+    <i class="fa fa-warning"></i>
+    User has been successfully <strong>deleted</strong>
+    <i style="float: right; cursor: pointer" @click="alertOrange = !alertOrange" class="fas fa-times"></i>
+  </div>
+
+  <div class="error-msg" v-show="alertRed2">
+    <i class="fa fa-times-circle"></i>
+    <strong>Error</strong> something went wrong
+    <i style="float: right; cursor: pointer" @click="alertRed = !alertRed" class="fas fa-times"></i>
+  </div>
+
   <!--  client table-->
   <md-table v-model="allClients" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%; background-color: white">
     <md-table-toolbar class="table-header">
@@ -74,6 +124,31 @@
         </md-table-cell>
       </md-table-row>
   </md-table>
+
+  <!-- alerts -->
+  <div class="info-msg" v-show="alertBlue3">
+    <i class="fa fa-info-circle"></i>
+    User has been successfully <strong>updated</strong>
+    <i style="float: right; cursor: pointer" @click="alertBlue = !alertBlue" class="fas fa-times"></i>
+  </div>
+
+  <div class="success-msg" v-show="alertGreen3">
+    <i class="fa fa-check"></i>
+    User has been successfully <strong>added</strong>
+    <i style="float: right; cursor: pointer" @click="alertGreen = !alertGreen" class="fas fa-times"></i>
+  </div>
+
+  <div class="warning-msg" v-show="alertOrange3">
+    <i class="fa fa-warning"></i>
+    User has been successfully <strong>deleted</strong>
+    <i style="float: right; cursor: pointer" @click="alertOrange = !alertOrange" class="fas fa-times"></i>
+  </div>
+
+  <div class="error-msg" v-show="alertRed3">
+    <i class="fa fa-times-circle"></i>
+    <strong>Error</strong> something went wrong
+    <i style="float: right; cursor: pointer" @click="alertRed = !alertRed" class="fas fa-times"></i>
+  </div>
 
   <!--  Shipment table-->
   <md-table v-model="allShips" md-sort="name" md-sort-order="asc" md-card md-fixed-header style="margin-bottom: 3%; background-color:white;">
@@ -532,6 +607,18 @@ export default {
   name: 'TableSearch',
   data: () => ({
     search: null,
+    alertBlue1: false,
+    alertGreen1: false,
+    alertOrange1: false,
+    alertRed1: false,
+    alertBlue2: false,
+    alertGreen2: false,
+    alertOrange2: false,
+    alertRed2: false,
+    alertBlue3: false,
+    alertGreen3: false,
+    alertOrange3: false,
+    alertRed3: false,
     searched: [],
     selected: {},
     newSupplier: {
@@ -594,6 +681,7 @@ export default {
    async addSupplier(){
      let item = this.newSupplier;
      await HTTP.post('/supplier', item).then((res) => {
+       this.alertGreen1 = true;
        console.log(res)
        console.log("success adding");
      })
@@ -601,6 +689,7 @@ export default {
     async addClient(){
       let item = this.newClient;
       await HTTP.post('/client', item).then((res) => {
+        this.alertGreen2 = true;
         console.log(res)
         console.log("success adding");
       })
@@ -608,6 +697,7 @@ export default {
     async addShip(){
       let item = this.newShip;
       await HTTP.post('/shipment', item).then((res) => {
+        this.alertGreen3 = true;
         console.log(res)
         console.log("success adding");
       })
@@ -616,7 +706,6 @@ export default {
       console.log(id);
 
       await HTTP.get('/supplier/' + id).then((res) => {
-
         this.editedSuppliers = res.data;
       })
 
@@ -629,14 +718,15 @@ export default {
       let item = this.editedSuppliers;
       let supId = id;
 
-      await HTTP.put('/supplier/' + supId, item)
+      await HTTP.put('/supplier/' + supId, item).then((res) => {
+        this.alertBlue1 = true;
+      })
 
 },
     async editClientInfo(id){
       console.log(id);
 
       await HTTP.get('/client/' + id).then((res) => {
-
         this.editedClient = res.data;
       })
 
@@ -649,7 +739,9 @@ export default {
       let item = this.editedClient;
       let clientUpdateId = id;
 
-      await HTTP.put('/client/' + clientUpdateId, item)
+      await HTTP.put('/client/' + clientUpdateId, item).then((res) => {
+        this.alertBlue2 = true
+      })
 
 },
     async editShipInfo(id){
@@ -669,7 +761,9 @@ export default {
       let item = this.editedShip;
       let shipUpdateId = id;
 
-      await HTTP.put('/shipment/' + shipUpdateId, item)
+      await HTTP.put('/shipment/' + shipUpdateId, item).then((res)=> {
+        this.alertBlue3 = true;
+      })
 
 },
  async passSupplierInfo(id){
@@ -685,7 +779,7 @@ export default {
 
     let suppId= id;
     await HTTP.delete('/supplier/' + suppId).then((res) =>{
-
+      this.alertOrange1 = true;
       console.log("Supplier in Supplier tables has been deleted");
 
     })
@@ -701,7 +795,9 @@ export default {
   async deleteClient(id){
 
     let clientId= id;
-    await HTTP.delete('/client/' + clientId)
+    await HTTP.delete('/client/' + clientId).then((res) => {
+      this.alertOrange2 = true
+    })
 },
   async passShipInfo(id){
   let shipid = id;
@@ -716,7 +812,7 @@ export default {
     console.log(id);
     let shipId = id;
     await HTTP.delete('/shipment/' + shipId).then((res) =>{
-
+      this.alertOrange3 = true;
       console.log("Supplier in Supplier tables has been deleted");
 
     })

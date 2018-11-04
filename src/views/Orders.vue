@@ -1,6 +1,31 @@
 <template>
 <div class="space-top">
 
+  <!-- alerts -->
+  <div class="info-msg" v-show="alertBlue1">
+    <i class="fa fa-info-circle"></i>
+    Incomming Order has been successfully <strong>updated</strong>
+    <i style="float: right; cursor: pointer" @click="alertBlue1 = !alertBlue1" class="fas fa-times"></i>
+  </div>
+
+  <div class="success-msg" v-show="alertGreen1">
+    <i class="fa fa-check"></i>
+    Incomming Order  has been successfully <strong>added</strong>
+    <i style="float: right; cursor: pointer" @click="alertGreen1 = !alertGreen1" class="fas fa-times"></i>
+  </div>
+
+  <div class="warning-msg" v-show="alertOrange1">
+    <i class="fa fa-warning"></i>
+    Incomming Order  has been successfully <strong>deleted</strong>
+    <i style="float: right; cursor: pointer" @click="alertOrange1 = !alertOrange1" class="fas fa-times"></i>
+  </div>
+
+  <div class="error-msg" v-show="alertRed1">
+    <i class="fa fa-times-circle"></i>
+    <strong>Error</strong> something went wrong
+    <i style="float: right; cursor: pointer" @click="alertRed1 = !alertRed1" class="fas fa-times"></i>
+  </div>
+
   <!-- Incoming TABLE -->
   <md-table v-model="allIncomingOrdersDisplay" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg" style="margin-bottom: 5%">
     <md-table-toolbar class="table-header">
@@ -39,6 +64,31 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
+
+  <!-- alerts -->
+  <div class="info-msg" v-show="alertBlue2">
+    <i class="fa fa-info-circle"></i>
+    Outgoing order has been successfully <strong>updated</strong>
+    <i style="float: right; cursor: pointer" @click="alertBlue = !alertBlue" class="fas fa-times"></i>
+  </div>
+
+  <div class="success-msg" v-show="alertGreen2">
+    <i class="fa fa-check"></i>
+    Outgoing order has been successfully <strong>added</strong>
+    <i style="float: right; cursor: pointer" @click="alertGreen = !alertGreen" class="fas fa-times"></i>
+  </div>
+
+  <div class="warning-msg" v-show="alertOrange2">
+    <i class="fa fa-warning"></i>
+    Outgoing order has been successfully <strong>deleted</strong>
+    <i style="float: right; cursor: pointer" @click="alertOrange = !alertOrange" class="fas fa-times"></i>
+  </div>
+
+  <div class="error-msg" v-show="alertRed2">
+    <i class="fa fa-times-circle"></i>
+    <strong>Error</strong> something went wrong
+    <i style="float: right; cursor: pointer" @click="alertRed = !alertRed" class="fas fa-times"></i>
+  </div>
 
   <!-- Outgoing TABLE -->
   <md-table v-model="allOutgoingOrdersDisplay" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg" style="margin-bottom: 5%">
@@ -89,410 +139,327 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers" v-model="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
+          <h3 class="del-headers" v-model="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
           <br>
         </div>
-        <div class="modal-footer" value:="selectedIncomingRow.orderId">
-          <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteIncomingRecord(selectedIncomingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <div class="modal-footer" value:="selectedIncomingRow.orderId">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+            <button @click="deleteIncomingRecord(selectedIncomingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- delete outgoing Modal-->
-  <div class="modal fade" id="deleteOutModal" tabindex="-1" role="dialog" aria-labelledby="deleteOutModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteOutModalLabel">Delete Outgoing Order</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <!-- delete outgoing Modal-->
+    <div class="modal fade" id="deleteOutModal" tabindex="-1" role="dialog" aria-labelledby="deleteOutModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteOutModalLabel">Delete Outgoing Order</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-        <div class="modal-body">
+          </div>
+          <div class="modal-body">
             <h3 class="del-headers" v-model="selectedOutgoingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedOutgoingRow.orderId }}</b> ?</h3>
-          <br>
+            <br>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteOutgoingRecord(selectedOutgoingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+              <button @click="deleteOutgoingRecord(selectedOutgoingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ADD Incoming orders modal -->
-  <div class="modal fade" id="addIncomingOrder" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">Add Incoming Order</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <!-- ADD Incoming orders modal -->
+      <div class="modal fade" id="addIncomingOrder" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addUserModalLabel">Add Incoming Order</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-        <div class="modal-body">
-
-          <form class="" action="index.html" method="post">
-
-
-            <!-- product rows for additional products -->
-            <div v-for="row in inputRows"  :key="row.id">
-              <div class="form-row">
-                <div class="col">
-                  <md-field class="modal-input">
-                    <label>Product</label>
-                    <md-input type="text" v-model="row.productN" required></md-input>
-                  </md-field>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col">
-                  <md-field class="modal-input">
-                    <label>Quantity</label>
-                    <md-input type="number" v-model="row.quantity" required></md-input>
-                  </md-field>
-                </div>
-                <div class="col">
-                  <md-field class="modal-input">
-                    <label>Price</label>
-                    <md-input type="number" v-model="row.price" required></md-input>
-                  </md-field>
-                </div>
-              </div>
-              <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(rwo.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
             </div>
+            <div class="modal-body">
 
-            <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
-            <!-- the rest of the fields -->
-            <div class="form-row">
-              <div class="col">
-                <md-field class="modal-input">
-                  <label>Supplier</label>
-                  <md-input type="text" required v-model="newOrder.supplier"></md-input>
-                </md-field>
-              </div>
-              <div class="col">
+              <form class="" action="index.html" method="post">
 
-                <label>Shipment</label>
 
-                <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
+                <!-- product rows for additional products -->
+                <div v-for="row in inputRows" :key="row.id">
+                  <div class="form-row">
+                    <div class="col">
+                      <md-field class="modal-input">
+                        <label>Product</label>
+                        <md-input type="text" v-model="row.productN" required></md-input>
+                      </md-field>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col">
+                      <md-field class="modal-input">
+                        <label>Quantity</label>
+                        <md-input type="number" v-model="row.quantity" required></md-input>
+                      </md-field>
+                    </div>
+                    <div class="col">
+                      <md-field class="modal-input">
+                        <label>Price</label>
+                        <md-input type="number" v-model="row.price" required></md-input>
+                      </md-field>
+                    </div>
+                  </div>
+                  <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(rwo.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
+                </div>
+
+                <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
+                <!-- the rest of the fields -->
+                <div class="form-row">
+                  <div class="col">
+                    <md-field class="modal-input">
+                      <label>Supplier</label>
+                      <md-input type="text" required v-model="newOrder.supplier"></md-input>
+                    </md-field>
+                  </div>
+                  <div class="col">
+
+                    <label>Shipment</label>
+
+                    <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
 
                   <option v-for="option in shipOption" v-bind:value="option.shipId"  :key="option.id">{{option.shipName}}</option>
 
 
                 </select>
 
-              </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Departure</label>
+                      <md-input type="date" id="dateField" placeholder="departure" required v-model="newOrder.departure">
+                      </md-input>
+                    </md-field>
+                  </div>
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Arrival</label>
+                      <md-input type="date" id="dateField2" placeholder="arrival" required v-model="newOrder.arrival">/>
+                      </md-input>
+                    </md-field>
+                  </div>
+                </div>
+              </form>
             </div>
-            <div class="form-row">
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Departure</label>
-                  <md-input  type="date" id="dateField" placeholder="departure" required v-model="newOrder.departure">
-                  </md-input>
-                </md-field>
-              </div>
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Arrival</label>
-                  <md-input type="date" id="dateField2" placeholder="arrival" required v-model="newOrder.arrival">/>
-                  </md-input>
-                </md-field>
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn cancel-btn" data-dismiss="modal" style="background-color: #3fc7cc">Close</button>
+              <button type="submit" class="btn btn-primary submit-btn" @click="addOrderIn()" data-dismiss="modal" >Submit</button>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel-btn" data-dismiss="modal" style="background-color: #3fc7cc">Close</button>
-          <button type="submit" class="btn btn-primary submit-btn" @click="addOrderIn()" data-dismiss="modal" >Submit</button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ADD Outgoing orders modal -->
-  <div class="modal fade" id="addOutgoingOrder" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">Add Outgoing Order</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <!-- ADD Outgoing orders modal -->
+      <div class="modal fade" id="addOutgoingOrder" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addUserModalLabel">Add Outgoing Order</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-        </div>
-        <div class="modal-body">
-
-          <form class="" action="index.html" method="post">
-            <!-- product rows for additional products -->
-            <div v-for="row in inputRows" :key="row.id">
-              <div class="form-row">
-                <div class="col">
-                  <md-field class="modal-input">
-                    <label>Product</label>
-                    <md-input type="text" v-model="row.productN" required></md-input>
-                  </md-field>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col">
-                  <md-field class="modal-input">
-                    <label>Quantity</label>
-                    <md-input type="number" v-model="row.quantity" required></md-input>
-                  </md-field>
-                </div>
-                <div class="col">
-                  <md-field class="modal-input">
-                    <label>Price</label>
-                    <md-input type="number" v-model="row.price" required></md-input>
-                  </md-field>
-                </div>
-              </div>
-              <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(row.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
             </div>
+            <div class="modal-body">
 
-            <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
-            <!-- the rest of the fields -->
-            <div class="form-row">
-              <div class="col">
-                <md-field class="modal-input">
-                  <label>Client</label>
-                  <md-input type="text" required v-model="newOrder.supplier"></md-input>
-                </md-field>
-              </div>
-              <div class="col">
+              <form class="" action="index.html" method="post">
+                <!-- product rows for additional products -->
+                <div v-for="row in inputRows" :key="row.id">
+                  <div class="form-row">
+                    <div class="col">
+                      <md-field class="modal-input">
+                        <label>Product</label>
+                        <md-input type="text" v-model="row.productN" required></md-input>
+                      </md-field>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col">
+                      <md-field class="modal-input">
+                        <label>Quantity</label>
+                        <md-input type="number" v-model="row.quantity" required></md-input>
+                      </md-field>
+                    </div>
+                    <div class="col">
+                      <md-field class="modal-input">
+                        <label>Price</label>
+                        <md-input type="number" v-model="row.price" required></md-input>
+                      </md-field>
+                    </div>
+                  </div>
+                  <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(row.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
+                </div>
 
-                <label>Shipment</label>
+                <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
+                <!-- the rest of the fields -->
+                <div class="form-row">
+                  <div class="col">
+                    <md-field class="modal-input">
+                      <label>Client</label>
+                      <md-input type="text" required v-model="newOrder.supplier"></md-input>
+                    </md-field>
+                  </div>
+                  <div class="col">
 
-                <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
+                    <label>Shipment</label>
+
+                    <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
 
                   <option v-for="option in shipOption" v-bind:value="option.shipId" :key="option.id">{{option.shipName}}</option>
 
 
                 </select>
-              </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Departure</label>
+                      <md-input type="date" id="dateField3" placeholder="departure" required v-model="newOrder.departure"> /></md-input>
+                    </md-field>
+                  </div>
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Arrival</label>
+                      <md-input type="date" id="dateField4" placeholder="arrival" required v-model="newOrder.arrival"> /></md-input>
+                    </md-field>
+                  </div>
+                </div>
+              </form>
             </div>
-            <div class="form-row">
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Departure</label>
-                  <md-input type="date" id="dateField3" placeholder="departure" required v-model="newOrder.departure"> /></md-input>
-                </md-field>
-              </div>
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Arrival</label>
-                  <md-input type="date" id="dateField4" placeholder="arrival" required v-model="newOrder.arrival"> /></md-input>
-                </md-field>
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary submit-btn" @click="addOrderOut()" data-dismiss="modal">Submit</button>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary submit-btn" @click="addOrderOut()" data-dismiss="modal">Submit</button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- edit Incoming modal -->
-  <div class="modal fade" id="editIncomingProductModal" tabindex="-1" role="dialog" aria-labelledby="editIncomingProductModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">Edit Incoming Order Details</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <!-- edit Incoming modal -->
+      <div class="modal fade" id="editIncomingProductModal" tabindex="-1" role="dialog" aria-labelledby="editIncomingProductModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addUserModalLabel">Edit Incoming Order Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-        </div>
-        <div class="modal-body">
-
-          <form class="" action="index.html" method="post">
-            <div class="form-row">
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Departure</label>
-                  <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
-                  <md-input type="date" id="dateField5" v-model="incomingUpdateContent[0].departure" value="incomingUpdateContent[0].departure"></md-input>
-                </md-field>
-              </div>
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Arrival</label>
-                  <md-input type="date" id="dateField6" v-model="incomingUpdateContent[0].arrival" value="incomingUpdateContent[0].arrival"></md-input>
-                </md-field>
-              </div>
             </div>
-            <div class="form-row">
-              <div class="col">
-              <label>Shipment</label>
-                <select class="form-control" id="exampleFormControlSelect1" v-model="incomingUpdateContent[0].shipmentId">
+            <div class="modal-body">
+
+              <form class="" action="index.html" method="post">
+                <div class="form-row">
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Departure</label>
+                      <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
+                      <md-input type="date" id="dateField5" v-model="incomingUpdateContent[0].departure" value="incomingUpdateContent[0].departure"></md-input>
+                    </md-field>
+                  </div>
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Arrival</label>
+                      <md-input type="date" id="dateField6" v-model="incomingUpdateContent[0].arrival" value="incomingUpdateContent[0].arrival"></md-input>
+                    </md-field>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <label>Shipment</label>
+                    <select class="form-control" id="exampleFormControlSelect1" v-model="incomingUpdateContent[0].shipmentId">
 
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
               <option v-for="option in incomingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
-              </div>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal" @click="saveEditedIncomingOrder()">Save</button>
+            <div class="modal-footer">
+              <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal" @click="saveEditedIncomingOrder()">Save</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- edit Outgoing modal -->
-  <div class="modal fade" id="editOutgoingProductModal" tabindex="-1" role="dialog" aria-labelledby="editOutgoingProductModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">Edit Outgoing Order Details</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <!-- edit Outgoing modal -->
+      <div class="modal fade" id="editOutgoingProductModal" tabindex="-1" role="dialog" aria-labelledby="editOutgoingProductModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addUserModalLabel">Edit Outgoing Order Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-        </div>
-        <div class="modal-body">
-          <form class="" action="index.html" method="post">
-            <div class="form-row">
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Departure</label>
-                  <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
-                  <md-input type="date"  id="dateField7" v-model="outgoingUpdateContent[0].departure" value="outgoingUpdateContent[0].departure"></md-input>
-                </md-field>
-              </div>
-              <div class="form-group col">
-                <md-field class="modal-input">
-                  <label>Arrival</label>
-                  <md-input type="date"  id="dateField8" v-model="outgoingUpdateContent[0].arrival" value="outgoingUpdateContent[0].arrival"></md-input>
-                </md-field>
-              </div>
             </div>
+            <div class="modal-body">
+              <form class="" action="index.html" method="post">
+                <div class="form-row">
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Departure</label>
+                      <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
+                      <md-input type="date" id="dateField7" v-model="outgoingUpdateContent[0].departure" value="outgoingUpdateContent[0].departure"></md-input>
+                    </md-field>
+                  </div>
+                  <div class="form-group col">
+                    <md-field class="modal-input">
+                      <label>Arrival</label>
+                      <md-input type="date" id="dateField8" v-model="outgoingUpdateContent[0].arrival" value="outgoingUpdateContent[0].arrival"></md-input>
+                    </md-field>
+                  </div>
+                </div>
 
-            <div class="form-row">
-              <div class="col">
-                <label>Shipment</label>
-                <select class="form-control" id="exampleFormControlSelect1" v-model="outgoingUpdateContent[0].shipmentId">
+                <div class="form-row">
+                  <div class="col">
+                    <label>Shipment</label>
+                    <select class="form-control" id="exampleFormControlSelect1" v-model="outgoingUpdateContent[0].shipmentId">
 
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
               <option v-for="option in outgoingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
-              </div>
-            </div>
-          </form>
+                  </div>
+                </div>
+              </form>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal" @click="saveEditedOutgoingOrder()">Save</button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal" @click="saveEditedOutgoingOrder()">Save</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
 
 
 
-  <!-- View Incoming modal -->
-  <div class="modal fade" id="viewIncomingProductModal" tabindex="-1" role="dialog" aria-labelledby="viewIncomingProductModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">View Incoming Order</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <!-- View Incoming modal -->
+      <div class="modal fade" id="viewIncomingProductModal" tabindex="-1" role="dialog" aria-labelledby="viewIncomingProductModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addUserModalLabel">View Incoming Order</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-        </div>
-        <div class="modal-body">
-          <form class="" action="index.html" method="post">
-
-            <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
-              <thead class="table-header">
-                <tr>
-                  <th scope="col">Product</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Price</th>
-                </tr>
-              </thead>
-              <tbody v-for="p in incomingProductOrderData" :key="p.id">
-                <tr>
-                  <td>{{p.productName}}</td>
-                  <td>{{p.productQuantity}}</td>
-                  <td>R {{p.productPrice}}</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <td></td>
-                <td style="font-weight: 400">Total:</td>
-                <td style="font-weight: 400"><p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p></td>
-              </tfoot>
-            </table>
-            <hr>
-            <div class="row">
-              <div class="col" style="padding-left: 5%">
-                <label class="home-headers">Supplier:</label>
-                <p style="font-weight: 300;" value:="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
-              </div>
-              <div class="col">
-                <label class="home-headers">Created Date:</label>
-                <p style="font-weight: 300" value:="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
-              </div>
             </div>
+            <div class="modal-body">
+              <form class="" action="index.html" method="post">
 
-            <hr>
-            <div class="row">
-              <div class="col" style="padding-left: 5%">
-                <label class="home-headers">Departure:</label>
-                <p  style="font-weight: 300" value:="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
-              </div>
-              <div class="col">
-                <label class="home-headers">Arrival:</label>
-                <p  style="font-weight: 300" value:="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col" style="padding-left: 5%">
-                <label class="home-headers">Shipment Info:</label>
-                <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
-                  <tbody>
-                    <tr>
-                      <td><p value:="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p></td>
-                      <td><p value:="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p></td>
-                      <td><p value:="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- View Outgoing modal -->
-  <div class="modal fade" id="viewOutgoingProductModal" tabindex="-1" role="dialog" aria-labelledby="viewOutgoingProductModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addUserModalLabel">View Outgoing Order</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-        </div>
-        <div class="modal-body">
-
-          <form class="" action="index.html" method="post">
-            <div class="row">
-              <div class="col">
                 <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
                   <thead class="table-header">
                     <tr>
@@ -501,7 +468,7 @@
                       <th scope="col">Price</th>
                     </tr>
                   </thead>
-                  <tbody v-for="p in outgoingProductOrderData" :key="p.id">
+                  <tbody v-for="p in incomingProductOrderData" :key="p.id">
                     <tr>
                       <td>{{p.productName}}</td>
                       <td>{{p.productQuantity}}</td>
@@ -511,59 +478,158 @@
                   <tfoot>
                     <td></td>
                     <td style="font-weight: 400">Total:</td>
-                    <td style="font-weight: 400"><p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p></td>
+                    <td style="font-weight: 400">
+                      <p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p>
+                    </td>
                   </tfoot>
                 </table>
-              </div>
+                <hr>
+                <div class="row">
+                  <div class="col" style="padding-left: 5%">
+                    <label class="home-headers">Supplier:</label>
+                    <p style="font-weight: 300;" value:="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
+                  </div>
+                  <div class="col">
+                    <label class="home-headers">Created Date:</label>
+                    <p style="font-weight: 300" value:="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
+                  </div>
+                </div>
+
+                <hr>
+                <div class="row">
+                  <div class="col" style="padding-left: 5%">
+                    <label class="home-headers">Departure:</label>
+                    <p style="font-weight: 300" value:="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
+                  </div>
+                  <div class="col">
+                    <label class="home-headers">Arrival:</label>
+                    <p style="font-weight: 300" value:="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col" style="padding-left: 5%">
+                    <label class="home-headers">Shipment Info:</label>
+                    <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <p value:="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p>
+                          </td>
+                          <td>
+                            <p value:="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p>
+                          </td>
+                          <td>
+                            <p value:="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </form>
             </div>
-            <hr>
-            <div class="row">
-              <div class="col" style="padding-left: 5%">
-                <label class="home-headers">Client:</label>
-                <p style="font-weight: 300" value:="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
-              </div>
-              <div class="col">
-                <label class="home-headers">Created Date:</label>
-                <p style="font-weight: 300" value:="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
             </div>
-            <hr>
-            <div class="row">
-              <div class="form-group col" value:="incomingProductShipDate" style="padding-left: 5%">
-                <label class="home-headers">Departure:</label>
-                <p  style="font-weight: 300" value:="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
-              </div>
-              <div class="form-group col">
-                <label class="home-headers">Arrival:</label>
-                <p style="font-weight: 300" value:="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col" style="padding-left: 5%">
-                <label class="home-headers">Shipment Info:</label>
-                <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
-                  <tbody>
-                    <tr>
-                      <td><p value:="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p></td>
-                      <td><p value:="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p></td>
-                      <td><p value:="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
+
+      <!-- View Outgoing modal -->
+      <div class="modal fade" id="viewOutgoingProductModal" tabindex="-1" role="dialog" aria-labelledby="viewOutgoingProductModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addUserModalLabel">View Outgoing Order</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+            </div>
+            <div class="modal-body">
+
+              <form class="" action="index.html" method="post">
+                <div class="row">
+                  <div class="col">
+                    <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
+                      <thead class="table-header">
+                        <tr>
+                          <th scope="col">Product</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody v-for="p in outgoingProductOrderData" :key="p.id">
+                        <tr>
+                          <td>{{p.productName}}</td>
+                          <td>{{p.productQuantity}}</td>
+                          <td>R {{p.productPrice}}</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <td></td>
+                        <td style="font-weight: 400">Total:</td>
+                        <td style="font-weight: 400">
+                          <p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p>
+                        </td>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col" style="padding-left: 5%">
+                    <label class="home-headers">Client:</label>
+                    <p style="font-weight: 300" value:="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
+                  </div>
+                  <div class="col">
+                    <label class="home-headers">Created Date:</label>
+                    <p style="font-weight: 300" value:="incomingOfferedOrderData[4]">{{ incomingOfferedOrderData[4] }}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="form-group col" value:="incomingProductShipDate" style="padding-left: 5%">
+                    <label class="home-headers">Departure:</label>
+                    <p style="font-weight: 300" value:="incomingProductShipDate[3]" value="incomingProductShipDate[3]">{{incomingProductShipDate[3]}}</p>
+                  </div>
+                  <div class="form-group col">
+                    <label class="home-headers">Arrival:</label>
+                    <p style="font-weight: 300" value:="incomingProductShipDate[4]" value="incomingProductShipDate[4]">{{incomingProductShipDate[4]}}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col" style="padding-left: 5%">
+                    <label class="home-headers">Shipment Info:</label>
+                    <table class="table table-responsive-lg table-borderless table-status" style="margin-bottom: 2%;">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <p value:="incomingProductShipInfoData[1]">{{incomingProductShipInfoData[1]}}</p>
+                          </td>
+                          <td>
+                            <p value:="incomingProductShipInfoData[2]">{{incomingProductShipInfoData[2]}}</p>
+                          </td>
+                          <td>
+                            <p value:="incomingProductShipInfoData[4]">{{incomingProductShipInfoData[4]}}</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
-  </div>
-
-
-</div>
 </template>
 
 <script>
@@ -584,6 +650,14 @@ export default {
   name: 'TableSearch',
   data: () => ({
     search: null,
+    alertBlue1: false,
+    alertGreen1: false,
+    alertOrange1: false,
+    alertRed1: false,
+    alertBlue2: false,
+    alertGreen2: false,
+    alertOrange2: false,
+    alertRed2: false,
     searched: [],
     selected: {},
     selectedShip: '',
@@ -653,7 +727,7 @@ export default {
     incomingProductOrderToDeleteIds: [],
     outgoingProductOrderToDelete: [],
     outgoingProductOrderToDeleteIds: [],
-    selectedIncomingRow:[],
+    selectedIncomingRow: [],
     selectedOutgoingRow: [],
     orders: []
   }),
@@ -1053,6 +1127,7 @@ export default {
       let id = this.incomingUpdateContent[0].shipmentkeyId;
 
       await HTTP.put('/shipmentOrder/' + id, item).then((res) => {
+        this.alertBlue1 = true;
         console.log("i guess you can sleep. With love, God");
       })
 
@@ -1063,7 +1138,7 @@ export default {
         this.outgoingUpdateContentShip = []
 
       HTTP.get("/shipment").then((res) => {
-
+        this.alertBlue2 = true;
         let count = 0;
         while (count < res.data.shipment.records.length) {
           this.outgoingUpdateContentShip.push({
@@ -1113,9 +1188,10 @@ export default {
         console.log("i guess it worked twice. With love, God");
       })
 
-    }, async passIncomingInfo(id){
+    },
+    async passIncomingInfo(id) {
       let incomindOrderid = id;
-      await HTTP.get("/orders/" + incomindOrderid).then((res)=>{
+      await HTTP.get("/orders/" + incomindOrderid).then((res) => {
         // console.log(res.data);
         this.selectedIncomingRow = res.data;
       })
@@ -1186,7 +1262,7 @@ export default {
       })
 
       await HTTP.delete('/shipmentOrder/' + ShipmentOrderTableId).then((res) => {
-
+        this.alertOrange1 = true;
         console.log("Item in ShipmentOrder tables has been deleted");
 
       })
@@ -1203,9 +1279,10 @@ export default {
         count3++;
       }
 
-    }, async passOutgoingInfo(id){
+    },
+    async passOutgoingInfo(id) {
       let outgoingOrderid = id;
-      await HTTP.get("/orders/" + outgoingOrderid).then((res)=>{
+      await HTTP.get("/orders/" + outgoingOrderid).then((res) => {
         // console.log(res.data);
         this.selectedOutgoingRow = res.data;
       })
@@ -1222,8 +1299,6 @@ export default {
       let count = 0;
       let requestedOrderTableId = 0;
 
-
-
       while (count < this.requestedOrderData.length) {
         if (id == this.requestedOrderData[count][1]) {
           console.log(this.requestedOrderData[count]);
@@ -1231,7 +1306,6 @@ export default {
         }
         count++;
       }
-
       // get id of product order table to be deleted
 
       await HTTP.get('/productOrder').then((res) => {
@@ -1281,7 +1355,7 @@ export default {
       })
 
       await HTTP.delete('/shipmentOrder/' + ShipmentOrderTableId).then((res) => {
-
+        this.alertOrange2 = true;
         console.log("Item in ShipmentOrder tables has been deleted");
 
       })
@@ -1335,11 +1409,11 @@ export default {
         count++
 
       }
-      let iterate=0;
-      let totalAmount=0;
-      while(iterate<this.order.length){
+      let iterate = 0;
+      let totalAmount = 0;
+      while (iterate < this.order.length) {
 
-        totalAmount+= this.order[iterate].quantity * this.order[iterate].price;
+        totalAmount += this.order[iterate].quantity * this.order[iterate].price;
 
         iterate++;
       }
@@ -1380,17 +1454,12 @@ export default {
           productQuantity: this.inputRows[count2].quantity,
           productPrice: this.inputRows[count2].price
         })
-
-
-
         count2++;
       }
       await HTTP.post('/productOrder', this.productOrderTable).then((res) => {
         console.log(res)
         console.log("success P adding");
       })
-
-
 
       console.log(this.newOrder.supplier);
       console.log(this.inputRows[0].productN);
@@ -1404,14 +1473,14 @@ export default {
       })
 
       await HTTP.post('/shipmentOrder', this.shipmentOrderTable).then((res) => {
+        this.alertGreen1 = true;
         console.log(res)
         console.log("success S adding");
       })
 
-
-
     },
     async addOrderOut() {
+      this.alertGreen2 = true;
       console.log(this.newOrder.supplier);
       console.log(this.inputRows[0].productN);
 
@@ -1430,20 +1499,18 @@ export default {
           quantity: this.inputRows[count].quantity,
           price: this.inputRows[count].price
         })
-
         count++
-
       }
 
-            let iterate=0;
-            let totalAmount=0;
-            while(iterate<this.requestOrder.length){
+      let iterate = 0;
+      let totalAmount = 0;
+      while (iterate < this.requestOrder.length) {
 
-              totalAmount+= this.requestOrder[iterate].quantity * this.requestOrder[iterate].price;
+        totalAmount += this.requestOrder[iterate].quantity * this.requestOrder[iterate].price;
 
-              iterate++;
-            }
-            console.log(this.requestOrder);
+        iterate++;
+      }
+      console.log(this.requestOrder);
 
 
       var orderId;
@@ -1479,9 +1546,6 @@ export default {
           productQuantity: this.inputRows[count3].quantity,
           productPrice: this.inputRows[count3].price
         })
-
-
-
         count3++;
       }
       await HTTP.post('/productOrder', this.productOrderTable).then((res) => {
@@ -1506,8 +1570,8 @@ export default {
       this.inputRows.splice(index, 1);
     },
     onLoad() {
-    //I know its stupid but, selecting elements by name doesnt work so.... yea
-    //we have 8 different IDs to get this validation to work for each input
+      //I know its stupid but, selecting elements by name doesnt work so.... yea
+      //we have 8 different IDs to get this validation to work for each input
       var input = document.getElementById("dateField");
       var input2 = document.getElementById("dateField2");
       var input3 = document.getElementById("dateField3");
@@ -1520,13 +1584,17 @@ export default {
       var today = new Date();
       // Set month and day to string to add leading 0
       var day = new String(today.getDate());
-      var mon = new String(today.getMonth()+1); //January is 0!
+      var mon = new String(today.getMonth() + 1); //January is 0!
       var yr = today.getFullYear();
 
-      if(day.length < 2) { day = "0" + day; }
-      if(mon.length < 2) { mon = "0" + mon; }
+      if (day.length < 2) {
+        day = "0" + day;
+      }
+      if (mon.length < 2) {
+        mon = "0" + mon;
+      }
 
-      var date = new String( yr + '-' + mon + '-' + day );
+      var date = new String(yr + '-' + mon + '-' + day);
 
       input.disabled = false;
       input.setAttribute('min', date);
@@ -1549,7 +1617,7 @@ export default {
   created() {
     this.searched = this.orders
   },
-  mounted(){
+  mounted() {
     this.onLoad()
   },
   beforeMount() {
