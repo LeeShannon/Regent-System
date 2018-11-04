@@ -7,6 +7,31 @@
     <li class="nav-item"><router-link to="/subcategory" class="nav-link tab-link">Subcategory</router-link></li>
   </ul>
 
+  <!-- alerts -->
+  <div class="info-msg" v-show="alertBlue">
+    <i class="fa fa-info-circle"></i>
+    Category has been successfully <strong>updated</strong>
+    <i style="float: right; cursor: pointer" @click="alertBlue = !alertBlue" class="fas fa-times"></i>
+  </div>
+
+  <div class="success-msg" v-show="alertGreen">
+    <i class="fa fa-check"></i>
+    Category has been successfully <strong>added</strong>
+    <i style="float: right; cursor: pointer" @click="alertGreen = !alertGreen" class="fas fa-times"></i>
+  </div>
+
+  <div class="warning-msg" v-show="alertOrange">
+    <i class="fa fa-warning"></i>
+    Category has been successfully <strong>deleted</strong>
+    <i style="float: right; cursor: pointer" @click="alertOrange = !alertOrange" class="fas fa-times"></i>
+  </div>
+
+  <div class="error-msg" v-show="alertRed">
+    <i class="fa fa-times-circle"></i>
+    <strong>Error</strong> something went wrong
+    <i style="float: right; cursor: pointer" @click="alertRed = !alertRed" class="fas fa-times"></i>
+  </div>
+
       <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg">
         <md-table-toolbar class="table-header">
           <div class=" md-toolbar-section-start">
@@ -151,6 +176,10 @@ export default {
   name: 'TableSearch',
   data: () => ({
     search: null,
+    alertBlue: false,
+    alertGreen: false,
+    alertOrange: false,
+    alertRed: false,
     searched: [],
     selected: {},
     categoryData: [],
@@ -217,7 +246,7 @@ export default {
     deleteCategory() {
       if (this.selected != {}) {
         console.log('Delete Category'+this.selected.categoryName)
-        HTTP.delete('/category/' + this.selected.categoryId).then((res) => {return res})
+        HTTP.delete('/category/' + this.selected.categoryId).then((res) => {this.alertOrange == true})
         this.selected = {}
         // this.populate()
         // TODO - pop selected from array

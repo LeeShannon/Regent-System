@@ -22,7 +22,7 @@
         <br>
         <br>
         <div class="forgot">
-          <router-link to="/changepassword" class="forgot">Forgot Password?</router-link>
+          <a class="forgot" >Forgot Password?</a>
         </div>
       </div>
     </div>
@@ -80,13 +80,13 @@ export default {
             // console.log(adminInfo)
           } else {
             console.log('TODO - invalide password')
+            this.error = true;
             // Set the invalid state data
             State.methods.revokeLogin();
           }
           count++;
         }
       } else {
-        console.log('TODO - invalid username')
         this.error = true;
         State.methods.revokeLogin();
       }
