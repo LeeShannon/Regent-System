@@ -222,13 +222,9 @@ export default {
   methods: {
     async populate() {
       this.usersData = await HTTP.get('/admin')
-      // console.log(this.usersData.data.admin.records);
-      // console.log(this.usersData.data.admin.records.length);
 
       let count =0;
       while (count < this.usersData.data.admin.records.length) {
-
-       // console.log(this.usersData.data.admin.records[count][2]);
 
        this.users.push({
           id: this.usersData.data.admin.records[count][0],
@@ -244,9 +240,20 @@ export default {
    },
    async addUser(){
       let item = this.newUser;
+      console.log('item is ', item);
       await HTTP.post('/admin', item).then((res) => {
         console.log(res)
         console.log("success adding");
+          this.users.push({
+            id: 0,
+            name: this.newUser.adminName,
+            surname: this.newUser.adminSurname,
+            email: this.newUser.adminEmail,
+            phone: this.newUser.adminPhoneNumber,
+            title: this.newUser.adminType,
+            surname: this.newUser.surname
+          }
+        )
       })
     },
     async getUserInfo(id) {
@@ -276,6 +283,9 @@ export default {
 
       await HTTP.delete('/admin/' + userID).then((res) =>{
         console.log("user has been deleted");
+
+        // this.users.splice
+
       })
     }
   },
