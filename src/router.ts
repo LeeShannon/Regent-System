@@ -13,7 +13,7 @@ import Suppliers from './views/Suppliers.vue';
 import Statistics from './views/Statistics.vue';
 import Category from './views/Category.vue';
 import Subcategory from './views/Subcategory.vue';
-
+// import State from 'store/state';
 Vue.use(Router);
 
 export default new Router({

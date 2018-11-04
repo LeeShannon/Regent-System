@@ -194,10 +194,10 @@ export default {
       await HTTP.get("/orders").then((res)=> {
 
         this.totalOrders = res.data.orders.records;
-        this.orders =res.data.orders.records.length;
+        this.orders = res.data.orders.records.length;
       })
 
-      let count=this.totalOrders.length;
+      let count = this.totalOrders.length;
       let count1=0
 
       while(count1 < 3){
@@ -209,11 +209,11 @@ export default {
       }
 
 
-      await HTTP.get("/offeredOrder").then((res) => {
-        this.allOfferedOrder = res.data.offeredOrder.records;
+      await HTTP.get("/offeredorder").then((res) => {
+        this.allOfferedOrder = res.data.offeredorder.records;
       })
-      await HTTP.get("/requestedOrder").then((res) => {
-        this.allRequestedOrder = res.data.requestedOrder.records;
+      await HTTP.get("/requestedorder").then((res) => {
+        this.allRequestedOrder = res.data.requestedorder.records;
       })
 
 

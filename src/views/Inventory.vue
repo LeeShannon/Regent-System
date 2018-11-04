@@ -41,6 +41,7 @@
       <md-table-cell md-label="AdminId" md-sort-by="adminId" md-numeric> {{ item.adminId }} </md-table-cell>
       <md-table-cell md-label="Timestamp" md-sort-by="productStamp" md-numeric> {{ item.productStamp }} </md-table-cell>
       <md-table-cell md-label="Actions">
+         <!-- v-if="State.data.adminInfo.adminType" -->
         <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
@@ -335,6 +336,10 @@ export default {
         // console.log(this.dataAccessSuccess);
       }
       if (this.dataAccessSuccess) {
+        console.log('PLACE DATA')
+        console.log(this.categoryData)
+        console.log(this.subCategoryData)
+        console.log(this.productData)
         //Category
         let count = 0;
         while (count < this.categoryData[this.categoryData.length - 1][0]) {
@@ -404,8 +409,9 @@ export default {
               visible: true
             }
           } else {
-            console.log('This is a bad item')
-            console.log(this.productData[count])
+            // TODO - remove the comment out 
+            // console.log('This is a bad item')
+            // console.log(this.productData[count])
           }
           count++;
         }

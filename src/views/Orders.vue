@@ -652,29 +652,49 @@ export default {
     orders: []
   }),
   methods: {
-    async populate2() {
+    async populate() {
+      await HTTP.get('/orders').then((res) => {
+          this.requestedOrderData = res;
+      })
+
       let count = 0;
       // Calls
-      await HTTP.get('/offeredorder').then((res) => {
-          this.offeredOrderData = res.data.offeredorder.records;
-          this.allincomingOfferedOrderDetails = res.data.offeredorder.records;
-      })
-      await HTTP.get('/requestedorder').then((res) => {
-          this.requestedOrderData = res.data.requestedorder.records;
-      })
+      // await HTTP.get('/offeredorder').then((res) => {
+      //     this.offeredOrderData = res;
+      //     // this.offeredOrderData = res.data.offeredorder.records;
+      //     this.allincomingOfferedOrderDetails = res;
+      //     // this.allincomingOfferedOrderDetails = res.data.offeredorder.records;
+      // })
+      // await HTTP.get('/requestedorder').then((res) => {
+      //     this.requestedOrderData = res;
+      //     // this.requestedOrderData = res.data.requestedorder.records;
+      // })
       await HTTP.get('/shipment').then((res) => {
+          // this.shipData = res;
           this.shipData = res.data.shipment.records;
       })
-      await HTTP.get('/shipmentorder').then((res) => {
-          this.totShipOrders = res.data.shipmentorder.records;
-          this.totIncomingShipOrder = res.data.shipmentorder.records;
+      // await HTTP.get('/shipmentorder').then((res) => {
+      //     this.totShipOrders = res;
+      //     // this.totShipOrders = res.data.shipmentorder.records;
+      //     this.totIncomingShipOrder = res;
+      //     // this.totIncomingShipOrder = res.data.shipmentorder.records;
+      // })
+      // await HTTP.get('/productorder').then((res) => {
+      //     this.totproductOrder = res;
+      //     // this.totproductOrder = res.data.productorder.records;
+      // })
+      await HTTP.get('/orders').then((res) => {
+          // this.orderData = res;
+          this.orderData = res.data.orders.records;
       })
-      await HTTP.get('/productorder').then((res) => {
-          this.totproductOrder = res.data.productorder.records;
-      })
-      await HTTP.get('/order').then((res) => {
-          this.orderData = res.data.order.records;
-      })
+      // console.log(this.offeredOrderData)
+      // console.log(this.allincomingOfferedOrderDetails)
+      console.log(this.requestedOrderData)
+      console.log(this.shipData)
+      // console.log(this.totShipOrders)
+      // console.log(this.totIncomingShipOrder)
+      // console.log(this.totproductOrder)
+      console.log(this.orderData)
 
       // Setting Request Hierarchy
       //OrderData
@@ -684,44 +704,45 @@ export default {
         this.order.push([0, 0])
         count++;
       }
-      count = 0;
-      // while (count < this.orderData[this.orderData.length - 1][0]) { // - same as this
-      while (count < this.order.length) {
-        //Default values for missing entries
-        this.order[count] = [this.orderData[count][0], this.orderData[count][1]]
-        count++;
-      }
-      
-      // Processing Returned Data
-      count = 0;
-      while (count < this.shipData.length) {
-          this.shipOption.push({
-              shipId: this.shipData[count][0],
-              shipName: this.shipData[count][1],
-              shipPhone: this.shipData[count][2],
-              shipAddress: this.shipData[count][3],
-              shipEmail: this.shipData[count][4]
-          })
-          count++
-      }
-      console.log('offeredorder')
-      console.log(this.offeredOrderData)
-      console.log(this.allincomingOfferedOrderDetails)
-      console.log('requestedorder')
-      console.log(this.requestedOrderData)
-      console.log('shipment')
-      console.log(this.shipData)
-      console.log('shipmentorder')
-      console.log(this.totShipOrders)
-      console.log(this.totIncomingShipOrder)
-      console.log('productorder')
-      console.log(this.totproductOrder)
-      console.log('order - unprocessed')
-      console.log(this.orderData)
-      console.log('order - processed')
       console.log(this.order)
+      // count = 0;
+      // // while (count < this.orderData[this.orderData.length - 1][0]) { // - same as this
+      // while (count < this.order.length) {
+      //   //Default values for missing entries
+      //   this.order[count] = [this.orderData[count][0], this.orderData[count][1]]
+      //   count++;
+      // }
+      
+      // // Processing Returned Data
+      // count = 0;
+      // while (count < this.shipData.length) {
+      //     this.shipOption.push({
+      //         shipId: this.shipData[count][0],
+      //         shipName: this.shipData[count][1],
+      //         shipPhone: this.shipData[count][2],
+      //         shipAddress: this.shipData[count][3],
+      //         shipEmail: this.shipData[count][4]
+      //     })
+      //     count++
+      // }
+      // console.log('offeredorder')
+      // console.log(this.offeredOrderData)
+      // console.log(this.allincomingOfferedOrderDetails)
+      // console.log('requestedorder')
+      // console.log(this.requestedOrderData)
+      // console.log('shipment')
+      // console.log(this.shipData)
+      // console.log('shipmentorder')
+      // console.log(this.totShipOrders)
+      // console.log(this.totIncomingShipOrder)
+      // console.log('productorder')
+      // console.log(this.totproductOrder)
+      // console.log('order - unprocessed')
+      // console.log(this.orderData)
+      // console.log('order - processed')
+      // console.log(this.order)
     },
-    async populate() {
+    async populate2() {
       this.shipData = await HTTP.get('/shipment')
       let count = 0;
       while (count < this.shipData.data.shipment.records.length) {
@@ -736,10 +757,10 @@ export default {
       }
       await HTTP.get('/offeredorder').then((res) => {
         let count = 0;
-        this.offeredOrderData = res.data.offeredOrder.records;
+        this.offeredOrderData = res.data.offeredorder.records;
       })
       await HTTP.get('/requestedorder').then((res) => {
-        this.requestedOrderData = res.data.requestedOrder.records;
+        this.requestedOrderData = res.data.requestedorder.records;
       })
       let count2 = 0;
       while (count2 < this.offeredOrderData.length) {
@@ -766,7 +787,7 @@ export default {
       console.log("REQUESTED/OUTGOING ORDER IDs");
       console.log(this.orderTableDataOut);
       await HTTP.get('/shipmentorder').then((res) => {
-        this.totShipOrders = res.data.shipmentOrder.records;
+        this.totShipOrders = res.data.shipmentorder.records;
       })
       console.log("SHIPMENT ORDER TABLE");
       console.log(this.totShipOrders);
@@ -850,7 +871,7 @@ export default {
     async incomingProductDetails(id) {
       this.incomingProductOrderData = []
       await HTTP.get('/productorder').then((res) => {
-        this.totproductOrder = res.data.productOrder.records;
+        this.totproductOrder = res.data.productorder.records;
       })
       let count = 0;
       while (count < this.totproductOrder.length) {
@@ -867,10 +888,10 @@ export default {
       }
       // console.log(this.incomingProductOrderData);
       await HTTP.get("/shipmentorder").then((res) => {
-        this.totIncomingShipOrder = res.data.shipmentOrder.records;
+        this.totIncomingShipOrder = res.data.shipmentorder.records;
       })
       await HTTP.get("/offeredorder").then((res) => {
-        this.allincomingOfferedOrderDetails = res.data.offeredOrder.records;
+        this.allincomingOfferedOrderDetails = res.data.offeredorder.records;
       })
       let up = 0;
       while (up < this.allincomingOfferedOrderDetails.length) {
@@ -908,7 +929,7 @@ export default {
     async outgoingProductDetails(id) {
       this.outgoingProductOrderData = []
       await HTTP.get('/productorder').then((res) => {
-        this.totproductOrder = res.data.productOrder.records;
+        this.totproductOrder = res.data.productorder.records;
       })
       let count = 0;
       while (count < this.totproductOrder.length) {
@@ -925,10 +946,10 @@ export default {
       }
       // console.log(this.incomingProductOrderData);
       await HTTP.get("/shipmentorder").then((res) => {
-        this.totIncomingShipOrder = res.data.shipmentOrder.records;
+        this.totIncomingShipOrder = res.data.shipmentorder.records;
       })
       await HTTP.get("/requestedorder").then((res) => {
-        this.allincomingOfferedOrderDetails = res.data.requestedOrder.records;
+        this.allincomingOfferedOrderDetails = res.data.requestedorder.records;
       })
       let up = 0;
       while (up < this.allincomingOfferedOrderDetails.length) {
@@ -1017,7 +1038,7 @@ export default {
       let item = this.incomingUpdateContent[0];
       let id = this.incomingUpdateContent[0].shipmentkeyId;
 
-      await HTTP.put('/shipmentOrder/' + id, item).then((res) => {
+      await HTTP.put('/shipmentorder/' + id, item).then((res) => {
         console.log("i guess you can sleep. With love, God");
       })
 
@@ -1072,7 +1093,7 @@ export default {
       let item = this.outgoingUpdateContent[0];
       let id = this.outgoingUpdateContent[0].shipmentkeyId;
 
-      await HTTP.put('/shipmentOrder/' + id, item).then((res) => {
+      await HTTP.put('/shipmentorder/' + id, item).then((res) => {
         console.log("i guess it worked twice. With love, God");
       })
 
@@ -1103,9 +1124,9 @@ export default {
 
       // get id of product order table to be deleted
 
-      await HTTP.get('/productOrder').then((res) => {
+      await HTTP.get('/productorder').then((res) => {
 
-        this.incomingProductOrderToDelete = res.data.productOrder.records;
+        this.incomingProductOrderToDelete = res.data.productorder.records;
       })
       console.log(this.incomingProductOrderToDelete);
 
@@ -1142,13 +1163,13 @@ export default {
         console.log("Item in orders tables has been deleted");
       })
 
-      await HTTP.delete('/offeredOrder/' + offeredOrderTableId).then((res) => {
+      await HTTP.delete('/offeredorder/' + offeredOrderTableId).then((res) => {
 
         console.log("Item in offeredOrder tables has been deleted");
 
       })
 
-      await HTTP.delete('/shipmentOrder/' + ShipmentOrderTableId).then((res) => {
+      await HTTP.delete('/shipmentorder/' + ShipmentOrderTableId).then((res) => {
 
         console.log("Item in ShipmentOrder tables has been deleted");
 
@@ -1158,7 +1179,7 @@ export default {
       let productOrderTableId = 0;
       while (count3 < this.incomingProductOrderToDeleteIds.length) {
         productOrderTableId = this.incomingProductOrderToDeleteIds[count3].productOrderTableId
-        await HTTP.delete('/productOrder/' + productOrderTableId).then((res) => {
+        await HTTP.delete('/productorder/' + productOrderTableId).then((res) => {
 
           console.log("Item in productOrder tables has been deleted");
 
@@ -1195,7 +1216,7 @@ export default {
 
       // get id of product order table to be deleted
 
-      await HTTP.get('/productOrder').then((res) => {
+      await HTTP.get('/productorder').then((res) => {
 
         this.outgoingProductOrderToDelete = res.data.productOrder.records;
       })
@@ -1235,13 +1256,13 @@ export default {
         console.log("Item in orders tables has been deleted");
       })
 
-      await HTTP.delete('/requestedOrder/' + requestedOrderTableId).then((res) => {
+      await HTTP.delete('/requestedorder/' + requestedOrderTableId).then((res) => {
 
         console.log("Item in offeredOrder tables has been deleted");
 
       })
 
-      await HTTP.delete('/shipmentOrder/' + ShipmentOrderTableId).then((res) => {
+      await HTTP.delete('/shipmentorder/' + ShipmentOrderTableId).then((res) => {
 
         console.log("Item in ShipmentOrder tables has been deleted");
 
@@ -1251,7 +1272,7 @@ export default {
       let productOrderTableId = 0;
       while (count3 < this.outgoingProductOrderToDeleteIds.length) {
         productOrderTableId = this.outgoingProductOrderToDeleteIds[count3].productOrderTableId
-        await HTTP.delete('/productOrder/' + productOrderTableId).then((res) => {
+        await HTTP.delete('/productorder/' + productOrderTableId).then((res) => {
 
           console.log("Item in productOrder tables has been deleted");
 
@@ -1325,7 +1346,7 @@ export default {
 
       let item2 = this.offeredOrderTable;
 
-      await HTTP.post('/offeredOrder', item2).then((res) => {
+      await HTTP.post('/offeredorder', item2).then((res) => {
         console.log(res)
         console.log("success adding");
 
@@ -1343,7 +1364,7 @@ export default {
 
         count2++;
       }
-      await HTTP.post('/productOrder', this.productOrderTable).then((res) => {
+      await HTTP.post('/productorder', this.productOrderTable).then((res) => {
         console.log(res)
         console.log("success P adding");
       })
@@ -1359,7 +1380,7 @@ export default {
         orderId: orderId
       })
 
-      await HTTP.post('/shipmentOrder', this.shipmentOrderTable).then((res) => {
+      await HTTP.post('/shipmentorder', this.shipmentOrderTable).then((res) => {
         console.log(res)
         console.log("success S adding");
       })
@@ -1416,7 +1437,7 @@ export default {
         total: totalAmount
       })
 
-      await HTTP.post('/requestedOrder', this.requestedOrderTable).then((res) => {
+      await HTTP.post('/requestedorder', this.requestedOrderTable).then((res) => {
         console.log(res)
         console.log("success adding");
 
@@ -1434,7 +1455,7 @@ export default {
         })
         count3++;
       }
-      await HTTP.post('/productOrder', this.productOrderTable).then((res) => {
+      await HTTP.post('/productorder', this.productOrderTable).then((res) => {
         console.log(res)
         console.log("success P adding");
       })
@@ -1447,7 +1468,7 @@ export default {
         orderId: orderId
       })
 
-      await HTTP.post('/shipmentOrder', this.shipmentOrderTable).then((res) => {
+      await HTTP.post('/shipmentorder', this.shipmentOrderTable).then((res) => {
         console.log(res)
         console.log("success S adding");
       })

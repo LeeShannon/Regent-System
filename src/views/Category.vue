@@ -56,13 +56,13 @@
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label> Category Name</label>
-                    <md-input type="text" required></md-input>
+                    <md-input type="text" v-model="newCategory.categoryName" value="newCategory.categoryName" required></md-input>
                   </md-field>
                 </div>
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label>Category Position</label>
-                    <md-input type="text" required></md-input>
+                    <md-input type="number" v-model="newCategory.categoryPosition" value="newCategory.categoryPosition" required></md-input>
                   </md-field>
                 </div>
               </div>
@@ -154,6 +154,12 @@ export default {
     searched: [],
     selected: {},
     categoryData: [],
+    newCategory: {
+      categoryId: null,
+      categoryName: null,
+      categoryPosition: null,
+      adminId: null,
+    },
     categories: [],
     category: [],
     errorData: '',
