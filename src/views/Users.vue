@@ -242,10 +242,10 @@ export default {
       let item = this.newUser;
       console.log('item is ', item);
       await HTTP.post('/admin', item).then((res) => {
-        console.log(res)
+        console.log(res.data)
         console.log("success adding");
           this.users.push({
-            id: 0,
+            id: res.data,
             name: this.newUser.adminName,
             surname: this.newUser.adminSurname,
             email: this.newUser.adminEmail,
@@ -283,8 +283,6 @@ export default {
 
       await HTTP.delete('/admin/' + userID).then((res) =>{
         console.log("user has been deleted");
-
-        // this.users.splice
 
       })
     }
