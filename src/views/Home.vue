@@ -26,7 +26,7 @@
           <router-link to="/users"> <i class="fas fa-user" id="icon"></i> <span class="test">Users</span></router-link>
         </li>
         <li>
-          <router-link to="/logout"> <i class="fas fa-sign-out-alt" id="icon"></i> <span class="test">Logout</span></router-link>
+          <span @click="logout()"> <i class="fas fa-sign-out-alt" id="icon"></i> <span class="test">Logout</span></span>
         </li>
       </ul>
     </div>
@@ -53,10 +53,20 @@
 </template>
 
 <script>
+import State from "../store/state";
+import router from '../router';
 export default {
   data() {
     return {
       showMenu: false
+    }
+  },
+  methods: {
+    logout() {
+      State.methods.revokeLogin()
+      router.push('/')
+      console.log('User has been logged out')
+      console.log(State.data.loggedIn)
     }
   }
 }
