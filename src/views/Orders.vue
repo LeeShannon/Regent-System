@@ -733,66 +733,49 @@ export default {
     orders: []
   }),
   methods: {
-    async populate2() {
-      await HTTP.get('/orders').then((res) => {
-          this.requestedOrderData = res;
-      })
-
+    async populate() {
       let count = 0;
       // Calls
-      // await HTTP.get('/offeredorder').then((res) => {
-      //     this.offeredOrderData = res;
-      //     // this.offeredOrderData = res.data.offeredorder.records;
-      //     this.allincomingOfferedOrderDetails = res;
-      //     // this.allincomingOfferedOrderDetails = res.data.offeredorder.records;
-      // })
-      // await HTTP.get('/requestedorder').then((res) => {
-      //     this.requestedOrderData = res;
-      //     // this.requestedOrderData = res.data.requestedorder.records;
-      // })
+      await HTTP.get('/offeredorder').then((res) => {
+          // this.offeredOrderData = res;
+          this.offeredOrderData = res.data.offeredorder.records;
+          // this.allincomingOfferedOrderDetails = res;
+          this.allincomingOfferedOrderDetails = res.data.offeredorder.records;
+      })
+      await HTTP.get('/requestedorder').then((res) => {
+          // this.requestedOrderData = res;
+          this.requestedOrderData = res.data.requestedorder.records;
+      })
       await HTTP.get('/shipment').then((res) => {
           // this.shipData = res;
           this.shipData = res.data.shipment.records;
       })
-      // await HTTP.get('/shipmentorder').then((res) => {
-      //     this.totShipOrders = res;
-      //     // this.totShipOrders = res.data.shipmentorder.records;
-      //     this.totIncomingShipOrder = res;
-      //     // this.totIncomingShipOrder = res.data.shipmentorder.records;
-      // })
-      // await HTTP.get('/productorder').then((res) => {
-      //     this.totproductOrder = res;
-      //     // this.totproductOrder = res.data.productorder.records;
-      // })
+      await HTTP.get('/shipmentorder').then((res) => {
+          // this.totShipOrders = res;
+          this.totShipOrders = res.data.shipmentorder.records;
+          // this.totIncomingShipOrder = res;
+          this.totIncomingShipOrder = res.data.shipmentorder.records;
+      })
+      await HTTP.get('/productorder').then((res) => {
+          // this.totproductOrder = res;
+          this.totproductOrder = res.data.productorder.records;
+      })
       await HTTP.get('/orders').then((res) => {
           // this.orderData = res;
           this.orderData = res.data.orders.records;
       })
-      // console.log(this.offeredOrderData)
-      // console.log(this.allincomingOfferedOrderDetails)
-      console.log(this.requestedOrderData)
-      console.log(this.shipData)
-      // console.log(this.totShipOrders)
-      // console.log(this.totIncomingShipOrder)
-      // console.log(this.totproductOrder)
-      console.log(this.orderData)
-
       // Setting Request Hierarchy
-      //OrderData
+      // OrderData
       count = 0;
       while (count < this.orderData[this.orderData.length - 1][0]) {
-        //Default values for missing entries
         this.order.push([0, 0])
         count++;
       }
       count = 0;
-      // while (count < this.orderData[this.orderData.length - 1][0]) { // - same as this
-      while (count < this.order.length) {
-        //Default values for missing entries
-        this.order[count] = [this.orderData[count][0], this.orderData[count][1]]
+      while (count < this.orderData.length) {
+        this.order[this.orderData[count][0]] = [99,99]
         count++;
       }
-
       // Processing Returned Data
       count = 0;
       while (count < this.shipData.length) {
@@ -811,102 +794,35 @@ export default {
       console.log('requestedorder')
       console.log(this.requestedOrderData)
       console.log('shipment')
-      console.log(this.shipData)
+      console.log(this.shipOption)
       console.log('shipmentorder')
       console.log(this.totShipOrders)
       console.log(this.totIncomingShipOrder)
       console.log('productorder')
       console.log(this.totproductOrder)
-      console.log('order - unprocessed')
-      console.log(this.orderData)
       console.log('order - processed')
       console.log(this.order)
-      // count = 0;
-      // // while (count < this.orderData[this.orderData.length - 1][0]) { // - same as this
-      // while (count < this.order.length) {
-      //   //Default values for missing entries
-      //   this.order[count] = [this.orderData[count][0], this.orderData[count][1]]
-      //   count++;
-      // }
-      
-      // // Processing Returned Data
-      // count = 0;
-      // while (count < this.shipData.length) {
-      //     this.shipOption.push({
-      //         shipId: this.shipData[count][0],
-      //         shipName: this.shipData[count][1],
-      //         shipPhone: this.shipData[count][2],
-      //         shipAddress: this.shipData[count][3],
-      //         shipEmail: this.shipData[count][4]
-      //     })
-      //     count++
-      // }
-      // console.log('offeredorder')
-      // console.log(this.offeredOrderData)
-      // console.log(this.allincomingOfferedOrderDetails)
-      // console.log('requestedorder')
-      // console.log(this.requestedOrderData)
-      // console.log('shipment')
-      // console.log(this.shipData)
-      // console.log('shipmentorder')
-      // console.log(this.totShipOrders)
-      // console.log(this.totIncomingShipOrder)
-      // console.log('productorder')
-      // console.log(this.totproductOrder)
-      // console.log('order - unprocessed')
-      // console.log(this.orderData)
-      // console.log('order - processed')
-      // console.log(this.order)
-    },
-    async populate() {
-      this.shipData = await HTTP.get('/shipment')
-      let count = 0;
-      while (count < this.shipData.data.shipment.records.length) {
-        this.shipOption.push({
-          shipId: this.shipData.data.shipment.records[count][0],
-          shipName: this.shipData.data.shipment.records[count][1],
-          shipPhone: this.shipData.data.shipment.records[count][2],
-          shipAddress: this.shipData.data.shipment.records[count][3],
-          shipEmail: this.shipData.data.shipment.records[count][4]
+      // Make a table of incoming order ids
+      count = 0;
+      while (count < this.offeredOrderData.length) {
+        let id = this.offeredOrderData[count][1];
+        this.orderTableData.push({
+          orderId: this.order[id][0]
         })
-        count++
-      }
-      await HTTP.get('/offeredorder').then((res) => {
-        let count = 0;
-        this.offeredOrderData = res.data.offeredorder.records;
-      })
-      await HTTP.get('/requestedorder').then((res) => {
-        this.requestedOrderData = res.data.requestedorder.records;
-      })
-      let count2 = 0;
-      while (count2 < this.offeredOrderData.length) {
-        let id = this.offeredOrderData[count2][1];
-        await HTTP.get('/orders/' + id).then((res) => {
-          this.orderTableData.push({
-            orderId: res.data.orderId
-          })
-        })
-        count2++;
+        count++;
       }
       console.log("OFFERED/INCOMING ORDER IDs");
       console.log(this.orderTableData);
-      let inc = 0;
-      while (inc < this.requestedOrderData.length) {
-        let id = this.requestedOrderData[inc][1];
-        await HTTP.get('/orders/' + id).then((res) => {
-          this.orderTableDataOut.push({
-            orderId: res.data.orderId
-          })
+      count = 0;
+      while (count < this.requestedOrderData.length) {
+        let id = this.requestedOrderData[count][1];
+        this.orderTableDataOut.push({
+          orderId: this.order[id][0]
         })
-        inc++;
+        count++;
       }
       console.log("REQUESTED/OUTGOING ORDER IDs");
       console.log(this.orderTableDataOut);
-      await HTTP.get('/shipmentorder').then((res) => {
-        this.totShipOrders = res.data.shipmentorder.records;
-      })
-      console.log("SHIPMENT ORDER TABLE");
-      console.log(this.totShipOrders);
       let g = 0;
       while (g < this.orderTableData.length) {
         let k = 0;
@@ -923,11 +839,15 @@ export default {
       }
       console.log("OFFERED SHIPMENT ORDER TABLE");
       console.log(this.offeredOrderShipData);
-      let g1 = 0;
+      g = 0;
+      console.log('orderTableData: '+this.orderTableData.length+' = 9')
       while (g < this.orderTableData.length) {
         let k = 0;
         while (k < this.totShipOrders.length) {
+          // console.log(this.orderTableData[g].orderId == this.totShipOrders[k][5])
+          // console.log(this.orderTableData[g].orderId + ' - ' + this.totShipOrders[k][5])
           if (this.orderTableData[g].orderId == this.totShipOrders[k][5]) {
+            console.log('add - offered')
             this.offeredOrderShipData.push({
               departure: this.totShipOrders[k][3],
               arrival: this.totShipOrders[k][4],
@@ -935,23 +855,27 @@ export default {
           }
           k++;
         }
-        g1++;
+        g++;
       }
       console.log("OFFERED SHIPMENT ORDER TABLE");
       console.log(this.offeredOrderShipData);
-      let g2 = 0;
-      while (g2 < this.orderTableDataOut.length) {
-        let k2 = 0;
-        while (k2 < this.totShipOrders.length) {
-          if (this.orderTableDataOut[g2].orderId == this.totShipOrders[k2][5]) {
+      g = 0;
+      console.log('orderTableDataOut: '+this.orderTableDataOut.length+' = 7')
+      while (g < this.orderTableDataOut.length) {
+        let k = 0;
+        while (k < this.totShipOrders.length) {
+          // console.log(k < this.totShipOrders.length)
+          // console.log(k + ' - ' + this.totShipOrders.length)
+          if (this.orderTableDataOut[g].orderId == this.totShipOrders[k][5]) {
+            console.log('add - requested')
             this.requestedOrderShipData.push({
-              departure: this.totShipOrders[k2][3],
-              arrival: this.totShipOrders[k2][4],
+              departure: this.totShipOrders[k][3],
+              arrival: this.totShipOrders[k][4],
             })
           }
-          k2++;
+          k++;
         }
-        g2++;
+        g++;
       }
       console.log("REQUESTED SHIPMENT ORDER TABLE");
       console.log(this.requestedOrderShipData);
@@ -967,15 +891,15 @@ export default {
       }
       console.log("INCOMING DISPLAY ORDER  TABLE");
       console.log(this.allIncomingOrdersDisplay);
-      let z1 = 0;
-      while (z1 < this.orderTableDataOut.length) {
+      z = 0;
+      while (z < this.orderTableDataOut.length) {
         this.allOutgoingOrdersDisplay.push({
-          orderid: this.orderTableDataOut[z1].orderId,
-          client: this.requestedOrderData[z1][2],
-          departure: this.requestedOrderShipData[z1].departure,
-          arrival: this.requestedOrderShipData[z1].arrival
+          orderid: this.orderTableDataOut[z].orderId,
+          client: this.requestedOrderData[z][2],
+          departure: this.requestedOrderShipData[z].departure,
+          arrival: this.requestedOrderShipData[z].arrival
         })
-        z1++;
+        z++;
       }
       console.log("OUTGOING DISPLAY ORDER TABLE");
       console.log(this.allOutgoingOrdersDisplay);
