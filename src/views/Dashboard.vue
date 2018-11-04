@@ -46,7 +46,7 @@
               <template v-if="selected === country.name" :value="countryRate">
                 <h2  class="home-headers" :key="index">{{country.name}}</h2>
                 <p class="" :key="index">Rate: {{country.rate}} ZAR</p>
-                <input id="currencyInputForeign" class="currency-input form-control input-field" @keyup="calcInput_2" :value="calc1" :key="index">
+                <input id="currencyInputForeign" class="currency-input form-control input-field" @keyup="calcInput_2" :value="calc1" :key="index"> -->
                 <span :key="index">{{country.money}}</span>
               </template>
             </template>

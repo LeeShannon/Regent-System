@@ -406,9 +406,6 @@
     </div>
   </div>
 
-
-
-
   <!-- View Incoming modal -->
   <div class="modal fade" id="viewIncomingProductModal" tabindex="-1" role="dialog" aria-labelledby="viewIncomingProductModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -566,15 +563,11 @@
     </div>
   </div>
 
-
 </div>
 </template>
 
 <script>
-import {
-  HTTP
-} from '../http-common'
-
+import {HTTP} from '../http-common'
 const toLower = text => {
   return text.toString().toLowerCase()
 }
@@ -605,6 +598,7 @@ export default {
       price: ''
     }],
     order: [],
+    orderData: [],
     requestOrder: [],
     orderTable: {
       adminId: '16'
@@ -660,6 +654,75 @@ export default {
     orders: []
   }),
   methods: {
+    async populate2() {
+      let count = 0;
+      // Calls
+      await HTTP.get('/offeredorder').then((res) => {
+          this.offeredOrderData = res.data.offeredorder.records;
+          this.allincomingOfferedOrderDetails = res.data.offeredorder.records;
+      })
+      await HTTP.get('/requestedorder').then((res) => {
+          this.requestedOrderData = res.data.requestedorder.records;
+      })
+      await HTTP.get('/shipment').then((res) => {
+          this.shipData = res.data.shipment.records;
+      })
+      await HTTP.get('/shipmentorder').then((res) => {
+          this.totShipOrders = res.data.shipmentorder.records;
+          this.totIncomingShipOrder = res.data.shipmentorder.records;
+      })
+      await HTTP.get('/productorder').then((res) => {
+          this.totproductOrder = res.data.productorder.records;
+      })
+      await HTTP.get('/order').then((res) => {
+          this.orderData = res.data.order.records;
+      })
+
+      // Setting Request Hierarchy
+      //OrderData
+      count = 0;
+      while (count < this.orderData[this.orderData.length - 1][0]) {
+        //Default values for missing entries
+        this.order.push([0, 0])
+        count++;
+      }
+      count = 0;
+      // while (count < this.orderData[this.orderData.length - 1][0]) { // - same as this
+      while (count < this.order.length) {
+        //Default values for missing entries
+        this.order[count] = [this.orderData[count][0], this.orderData[count][1]]
+        count++;
+      }
+      
+      // Processing Returned Data
+      count = 0;
+      while (count < this.shipData.length) {
+          this.shipOption.push({
+              shipId: this.shipData[count][0],
+              shipName: this.shipData[count][1],
+              shipPhone: this.shipData[count][2],
+              shipAddress: this.shipData[count][3],
+              shipEmail: this.shipData[count][4]
+          })
+          count++
+      }
+      console.log('offeredorder')
+      console.log(this.offeredOrderData)
+      console.log(this.allincomingOfferedOrderDetails)
+      console.log('requestedorder')
+      console.log(this.requestedOrderData)
+      console.log('shipment')
+      console.log(this.shipData)
+      console.log('shipmentorder')
+      console.log(this.totShipOrders)
+      console.log(this.totIncomingShipOrder)
+      console.log('productorder')
+      console.log(this.totproductOrder)
+      console.log('order - unprocessed')
+      console.log(this.orderData)
+      console.log('order - processed')
+      console.log(this.order)
+    },
     async populate() {
       this.shipData = await HTTP.get('/shipment')
       let count = 0;
@@ -670,69 +733,47 @@ export default {
           shipPhone: this.shipData.data.shipment.records[count][2],
           shipAddress: this.shipData.data.shipment.records[count][3],
           shipEmail: this.shipData.data.shipment.records[count][4]
-
         })
         count++
       }
-      await HTTP.get('/offeredOrder').then((res) => {
-
+      await HTTP.get('/offeredorder').then((res) => {
         let count = 0;
-
         this.offeredOrderData = res.data.offeredOrder.records;
-
-
       })
-
-      await HTTP.get('/requestedOrder').then((res) => {
-
+      await HTTP.get('/requestedorder').then((res) => {
         this.requestedOrderData = res.data.requestedOrder.records;
-
-
       })
-
       let count2 = 0;
-
       while (count2 < this.offeredOrderData.length) {
         let id = this.offeredOrderData[count2][1];
         await HTTP.get('/orders/' + id).then((res) => {
-
           this.orderTableData.push({
             orderId: res.data.orderId
           })
-
         })
         count2++;
       }
       console.log("OFFERED/INCOMING ORDER IDs");
       console.log(this.orderTableData);
-
       let inc = 0;
       while (inc < this.requestedOrderData.length) {
         let id = this.requestedOrderData[inc][1];
         await HTTP.get('/orders/' + id).then((res) => {
-
           this.orderTableDataOut.push({
             orderId: res.data.orderId
           })
-
         })
         inc++;
       }
-
       console.log("REQUESTED/OUTGOING ORDER IDs");
       console.log(this.orderTableDataOut);
-
-      await HTTP.get('/shipmentOrder').then((res) => {
-
+      await HTTP.get('/shipmentorder').then((res) => {
         this.totShipOrders = res.data.shipmentOrder.records;
       })
-
       console.log("SHIPMENT ORDER TABLE");
       console.log(this.totShipOrders);
-
       let g = 0;
       while (g < this.orderTableData.length) {
-
         let k = 0;
         while (k < this.totShipOrders.length) {
           if (this.orderTableData[g].orderId == this.totShipOrders[k][5]) {
@@ -745,13 +786,10 @@ export default {
         }
         g++;
       }
-
       console.log("OFFERED SHIPMENT ORDER TABLE");
       console.log(this.offeredOrderShipData);
-
       let g1 = 0;
       while (g < this.orderTableData.length) {
-
         let k = 0;
         while (k < this.totShipOrders.length) {
           if (this.orderTableData[g].orderId == this.totShipOrders[k][5]) {
@@ -764,15 +802,10 @@ export default {
         }
         g1++;
       }
-
       console.log("OFFERED SHIPMENT ORDER TABLE");
       console.log(this.offeredOrderShipData);
-
-
-
       let g2 = 0;
       while (g2 < this.orderTableDataOut.length) {
-
         let k2 = 0;
         while (k2 < this.totShipOrders.length) {
           if (this.orderTableDataOut[g2].orderId == this.totShipOrders[k2][5]) {
@@ -785,12 +818,8 @@ export default {
         }
         g2++;
       }
-
       console.log("REQUESTED SHIPMENT ORDER TABLE");
       console.log(this.requestedOrderShipData);
-
-
-
       let z = 0;
       while (z < this.orderTableData.length) {
         this.allIncomingOrdersDisplay.push({
@@ -803,7 +832,6 @@ export default {
       }
       console.log("INCOMING DISPLAY ORDER  TABLE");
       console.log(this.allIncomingOrdersDisplay);
-
       let z1 = 0;
       while (z1 < this.orderTableDataOut.length) {
         this.allOutgoingOrdersDisplay.push({
@@ -814,11 +842,8 @@ export default {
         })
         z1++;
       }
-
       console.log("OUTGOING DISPLAY ORDER TABLE");
       console.log(this.allOutgoingOrdersDisplay);
-
-
       this.orders.push({
         incoming: this.allIncomingOrdersDisplay,
         outgoing: this.allOutgoingOrdersDisplay
@@ -826,12 +851,10 @@ export default {
     },
     async incomingProductDetails(id) {
       this.incomingProductOrderData = []
-      await HTTP.get('/productOrder').then((res) => {
+      await HTTP.get('/productorder').then((res) => {
         this.totproductOrder = res.data.productOrder.records;
       })
-
       let count = 0;
-
       while (count < this.totproductOrder.length) {
         if (id == this.totproductOrder[count][2]) {
           // console.log(this.totproductOrder[count]);
@@ -840,44 +863,28 @@ export default {
             productQuantity: this.totproductOrder[count][4],
             productPrice: this.totproductOrder[count][5],
             shipmentId: this.totproductOrder[count][1]
-
           })
         }
         count++;
       }
-
       // console.log(this.incomingProductOrderData);
-
-      await HTTP.get("/shipmentOrder").then((res) => {
-
+      await HTTP.get("/shipmentorder").then((res) => {
         this.totIncomingShipOrder = res.data.shipmentOrder.records;
       })
-
-      await HTTP.get("/offeredOrder").then((res) => {
-
-
+      await HTTP.get("/offeredorder").then((res) => {
         this.allincomingOfferedOrderDetails = res.data.offeredOrder.records;
       })
-
       let up = 0;
-
-
       while (up < this.allincomingOfferedOrderDetails.length) {
-
         if (id == this.allincomingOfferedOrderDetails[up][1]) {
           // console.log(this.allincomingOfferedOrderDetails[up]);
           this.incomingOfferedOrderData = this.allincomingOfferedOrderDetails[up];
         }
-
         up++;
       }
-
-
       let count1 = 0;
-
       while (count1 < this.totIncomingShipOrder.length) {
         if (id == this.totIncomingShipOrder[count1][5]) {
-
           this.incomingProductShipDate.push({
             departure: this.totIncomingShipOrder[count1][3],
             arrival: this.totIncomingShipOrder[count1][4],
@@ -888,38 +895,24 @@ export default {
         }
         count1++;
       }
-
       await HTTP.get("/shipment").then((res) => {
-
         this.allShipmentCompanyDetails = res.data.shipment.records;
       })
-
-
       let count2 = 0;
       while (count2 < this.allShipmentCompanyDetails.length) {
-
         if (this.incomingProductShipDate[1] == this.allShipmentCompanyDetails[count2][0]) {
           // console.log(this.allShipmentCompanyDetails[count2]);
           this.incomingProductShipInfoData = this.allShipmentCompanyDetails[count2];
         }
-
         count2++;
       }
-
-
-
     },
     async outgoingProductDetails(id) {
-
       this.outgoingProductOrderData = []
-
-      await HTTP.get('/productOrder').then((res) => {
-
+      await HTTP.get('/productorder').then((res) => {
         this.totproductOrder = res.data.productOrder.records;
       })
-
       let count = 0;
-
       while (count < this.totproductOrder.length) {
         if (id == this.totproductOrder[count][2]) {
           // console.log(this.totproductOrder[count]);
@@ -928,45 +921,28 @@ export default {
             productQuantity: this.totproductOrder[count][4],
             productPrice: this.totproductOrder[count][5],
             shipmentId: this.totproductOrder[count][1]
-
           })
         }
         count++;
       }
-
       // console.log(this.incomingProductOrderData);
-
-      await HTTP.get("/shipmentOrder").then((res) => {
-
+      await HTTP.get("/shipmentorder").then((res) => {
         this.totIncomingShipOrder = res.data.shipmentOrder.records;
       })
-
-      await HTTP.get("/requestedOrder").then((res) => {
-
-
+      await HTTP.get("/requestedorder").then((res) => {
         this.allincomingOfferedOrderDetails = res.data.requestedOrder.records;
-
       })
-
       let up = 0;
-
-
       while (up < this.allincomingOfferedOrderDetails.length) {
-
         if (id == this.allincomingOfferedOrderDetails[up][1]) {
           // console.log(this.allincomingOfferedOrderDetails[up]);
           this.incomingOfferedOrderData = this.allincomingOfferedOrderDetails[up];
         }
-
         up++;
       }
-
-
       let count1 = 0;
-
       while (count1 < this.totIncomingShipOrder.length) {
         if (id == this.totIncomingShipOrder[count1][5]) {
-
           this.incomingProductShipDate.push({
             departure: this.totIncomingShipOrder[count1][3],
             arrival: this.totIncomingShipOrder[count1][4],
@@ -977,32 +953,21 @@ export default {
         }
         count1++;
       }
-
       await HTTP.get("/shipment").then((res) => {
-
         this.allShipmentCompanyDetails = res.data.shipment.records;
       })
-
-
       let count2 = 0;
       while (count2 < this.allShipmentCompanyDetails.length) {
-
         if (this.incomingProductShipDate[1] == this.allShipmentCompanyDetails[count2][0]) {
           // console.log(this.allShipmentCompanyDetails[count2]);
           this.incomingProductShipInfoData = this.allShipmentCompanyDetails[count2];
         }
-
         count2++;
       }
-
-
-
     },
     async incomingEditProduct(orderId) {
-
       this.incomingUpdateContent = [],
         this.incomingUpdateContentShip = []
-
       // console.log(orderId);
       // console.log(this.totShipOrders);
       // console.log(this.shipOption);
@@ -1076,8 +1041,6 @@ export default {
           count++;
         }
       })
-
-
 
       let count = 0;
       while (count < this.totShipOrders.length) {
@@ -1208,8 +1171,6 @@ export default {
       let count = 0;
       let requestedOrderTableId = 0;
 
-
-
       while (count < this.requestedOrderData.length) {
         if (id == this.requestedOrderData[count][1]) {
           console.log(this.requestedOrderData[count]);
@@ -1301,7 +1262,6 @@ export default {
     },
     async addOrderIn() {
 
-
       let count = 0;
 
       while (count < this.inputRows.length) {
@@ -1357,16 +1317,12 @@ export default {
           productPrice: this.inputRows[count2].price
         })
 
-
-
         count2++;
       }
       await HTTP.post('/productOrder', this.productOrderTable).then((res) => {
         console.log(res)
         console.log("success P adding");
       })
-
-
 
       console.log(this.newOrder.supplier);
       console.log(this.inputRows[0].productN);
@@ -1383,8 +1339,6 @@ export default {
         console.log(res)
         console.log("success S adding");
       })
-
-
 
     },
     async addOrderOut() {
@@ -1426,7 +1380,6 @@ export default {
         adminId: this.orderTable.adminId
       })
 
-
       await HTTP.post('/requestedOrder', this.requestedOrderTable).then((res) => {
         console.log(res)
         console.log("success adding");
@@ -1443,9 +1396,6 @@ export default {
           productQuantity: this.inputRows[count3].quantity,
           productPrice: this.inputRows[count3].price
         })
-
-
-
         count3++;
       }
       await HTTP.post('/productOrder', this.productOrderTable).then((res) => {
