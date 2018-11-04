@@ -89,7 +89,7 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers" v-model="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
+            <h3 class="del-headers" value:="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
           <br>
         </div>
         <div class="modal-footer" value:="selectedIncomingRow.orderId">
@@ -111,7 +111,7 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers" v-model="selectedOutgoingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedOutgoingRow.orderId }}</b> ?</h3>
+            <h3 class="del-headers" value:="selectedOutgoingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedOutgoingRow.orderId }}</b> ?</h3>
           <br>
         </div>
         <div class="modal-footer">
@@ -1503,7 +1503,7 @@ export default {
     this.onLoad()
   },
   beforeMount() {
-    this.populate()
+    this.populate2()
   }
 }
 </script>

@@ -202,7 +202,7 @@ export default {
 
       while(count1 < 3){
         this.lastOrderIds.push({
-          orderId : this.totalOrders[count-1][0]
+          orderId: this.totalOrders[count-1][0]
         })
         count1++;
         count--;
@@ -289,7 +289,7 @@ export default {
               count6++;
             }
 
-            this.profitMade = Number((amountSales - amountExpenses).toFixed(2));
+            this.profitMade = Number((amountSales - amountExpenses).toFixed(2))+"";
 
             console.log(Number(this.profitMade.toFixed(2)));
 
