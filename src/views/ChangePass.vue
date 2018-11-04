@@ -121,6 +121,7 @@ export default {
   cursor: pointer;
   transition: all 0.25s ease;
 }
+
 .form-button:hover {
   color:white;
   background: #96DFE2;
@@ -131,6 +132,7 @@ export default {
 .form-button:after {
   content:"SUBMIT";
 }
+
 .onclic {
   width: 40px;
   border-color: white;

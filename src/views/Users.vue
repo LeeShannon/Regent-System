@@ -29,7 +29,7 @@
           <button @click="getUserInfo(item.id)"  type="button" class="my-btn-icon" data-toggle="modal" data-target="#editUserModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-          <button  @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteUserModal">
+          <button  @click="getUserInfo(item.id)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteUserModal">
             <i class="fas fa-trash-alt"></i>
           </button>
         </md-table-cell>
@@ -84,7 +84,7 @@
             </div>
             <div class="col-lg-6">
               <label for="userType">User Type</label>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="newUser.admin" required>
+              <select class="form-control" id="exampleFormControlSelect1" v-model="newUser.adminType" required>
                 <option value="1">Admin</option>
                 <option value="2">Manager</option>
                 <option value="2">Employee</option>
@@ -176,7 +176,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn cancel-btn" data-dismiss="modal">Cancel</button>
-          <button @click="deleteUser()" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Confirm</button>
+          <button @click="deleteUser(userDetails.adminId)" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
@@ -222,13 +222,9 @@ export default {
   methods: {
     async populate() {
       this.usersData = await HTTP.get('/admin')
-      console.log(this.usersData.data.admin.records);
-      console.log(this.usersData.data.admin.records.length);
 
       let count =0;
       while (count < this.usersData.data.admin.records.length) {
-
-       console.log(this.usersData.data.admin.records[count][2]);
 
        this.users.push({
           id: this.usersData.data.admin.records[count][0],
@@ -244,9 +240,20 @@ export default {
    },
    async addUser(){
       let item = this.newUser;
+      console.log('item is ', item);
       await HTTP.post('/admin', item).then((res) => {
-        console.log(res)
+        console.log(res.data)
         console.log("success adding");
+          this.users.push({
+            id: res.data,
+            name: this.newUser.adminName,
+            surname: this.newUser.adminSurname,
+            email: this.newUser.adminEmail,
+            phone: this.newUser.adminPhoneNumber,
+            title: this.newUser.adminType,
+            surname: this.newUser.surname
+          }
+        )
       })
     },
     async getUserInfo(id) {
@@ -268,6 +275,16 @@ export default {
 
       console.log(item.adminName);
       await HTTP.put('/admin/' + id, item)
+    },
+    async deleteUser(id){
+      console.log("delete function:" + id)
+      let userID = this.userDetails.adminId;
+
+
+      await HTTP.delete('/admin/' + userID).then((res) =>{
+        console.log("user has been deleted");
+
+      })
     }
   },
   created() {

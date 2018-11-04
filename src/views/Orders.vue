@@ -33,7 +33,7 @@
         <button @click="incomingEditProduct(item.orderid)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editIncomingProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-        <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteIncModal">
+        <button @click="passIncomingInfo(item.orderid)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteIncModal">
             <i class="fas fa-trash-alt"></i>
           </button>
       </md-table-cell>
@@ -41,7 +41,7 @@
   </md-table>
 
   <!-- Outgoing TABLE -->
-  <md-table v-model="allOutgoingOrdersDisplay" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg">
+  <md-table v-model="allOutgoingOrdersDisplay" md-sort="name" md-sort-order="asc" md-card md-fixed-header class="table-bg" style="margin-bottom: 5%">
     <md-table-toolbar class="table-header">
       <div class=" md-toolbar-section-start">
         <h1 class="md-title page-headers"> Outgoing Orders</h1>
@@ -71,14 +71,14 @@
         <button @click="outgoingEditProduct(item.orderid)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editOutgoingProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-        <button  @click="onSelect(item)" type="button" class="my-btn-icon"  data-toggle="modal" data-target="#deleteOutModal">
+        <button  @click="passOutgoingInfo(item.orderid)" type="button" class="my-btn-icon"  data-toggle="modal" data-target="#deleteOutModal">
             <i class="fas fa-trash-alt"></i>
           </button>
       </md-table-cell>
     </md-table-row>
   </md-table>
 
-  <!-- delete incomming Modal doesnt work-->
+  <!-- delete incomming Modal-->
   <div class="modal fade" id="deleteIncModal" tabindex="-1" role="dialog" aria-labelledby="deleteIncModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -89,18 +89,18 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers">Are you sure you wish to delete Order ID: <b>{{ selected.orderId }}</b> ?</h3>
+            <h3 class="del-headers" v-model="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
           <br>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" value:="selectedIncomingRow.orderId">
           <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteIncomingRecord(item.orderid)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <button @click="deleteIncomingRecord(selectedIncomingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- delete outgoing Modal doesnt work-->
+  <!-- delete outgoing Modal-->
   <div class="modal fade" id="deleteOutModal" tabindex="-1" role="dialog" aria-labelledby="deleteOutModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -111,12 +111,12 @@
         </button>
         </div>
         <div class="modal-body">
-            <h3 class="del-headers">Are you sure you wish to delete Order ID: <b>{{ selected.orderId }}</b> ?</h3>
+            <h3 class="del-headers" v-model="selectedOutgoingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedOutgoingRow.orderId }}</b> ?</h3>
           <br>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-          <button @click="deleteOutgoingRecord(item.orderid)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <button @click="deleteOutgoingRecord(selectedOutgoingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
@@ -190,14 +190,14 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="departure" required v-model="newOrder.departure">
+                  <md-input  type="date" id="dateField" placeholder="departure" required v-model="newOrder.departure">
                   </md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" placeholder="arrival" required v-model="newOrder.arrival">/>
+                  <md-input type="date" id="dateField2" placeholder="arrival" required v-model="newOrder.arrival">/>
                   </md-input>
                 </md-field>
               </div>
@@ -257,7 +257,7 @@
             <div class="form-row">
               <div class="col">
                 <md-field class="modal-input">
-                  <label>Supplier</label>
+                  <label>Client</label>
                   <md-input type="text" required v-model="newOrder.supplier"></md-input>
                 </md-field>
               </div>
@@ -277,13 +277,13 @@
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Departure</label>
-                  <md-input type="date" placeholder="departure" required v-model="newOrder.departure"> /></md-input>
+                  <md-input type="date" id="dateField3" placeholder="departure" required v-model="newOrder.departure"> /></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" placeholder="arrival" required v-model="newOrder.arrival"> /></md-input>
+                  <md-input type="date" id="dateField4" placeholder="arrival" required v-model="newOrder.arrival"> /></md-input>
                 </md-field>
               </div>
             </div>
@@ -315,13 +315,13 @@
                 <md-field class="modal-input">
                   <label>Departure</label>
                   <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
-                  <md-input type="date" v-model="incomingUpdateContent[0].departure" value="incomingUpdateContent[0].departure"></md-input>
+                  <md-input type="date" id="dateField5" v-model="incomingUpdateContent[0].departure" value="incomingUpdateContent[0].departure"></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" v-model="incomingUpdateContent[0].arrival" value="incomingUpdateContent[0].arrival"></md-input>
+                  <md-input type="date" id="dateField6" v-model="incomingUpdateContent[0].arrival" value="incomingUpdateContent[0].arrival"></md-input>
                 </md-field>
               </div>
             </div>
@@ -333,12 +333,6 @@
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
               <option v-for="option in incomingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
-              </div>
-              <div class="col">
-                <md-field class="modal-input">
-                  <label>Status</label>
-                  <md-input type="text" v-model="selected.status" value="selected.status"></md-input>
-                </md-field>
               </div>
             </div>
           </form>
@@ -368,13 +362,13 @@
                 <md-field class="modal-input">
                   <label>Departure</label>
                   <!-- <md-input type="date" v-model="selected.departure" value="selected.departure"></md-input> -->
-                  <md-input type="date" v-model="outgoingUpdateContent[0].departure" value="outgoingUpdateContent[0].departure"></md-input>
+                  <md-input type="date"  id="dateField7" v-model="outgoingUpdateContent[0].departure" value="outgoingUpdateContent[0].departure"></md-input>
                 </md-field>
               </div>
               <div class="form-group col">
                 <md-field class="modal-input">
                   <label>Arrival</label>
-                  <md-input type="date" v-model="outgoingUpdateContent[0].arrival" value="outgoingUpdateContent[0].arrival"></md-input>
+                  <md-input type="date"  id="dateField8" v-model="outgoingUpdateContent[0].arrival" value="outgoingUpdateContent[0].arrival"></md-input>
                 </md-field>
               </div>
             </div>
@@ -387,12 +381,6 @@
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
               <option v-for="option in outgoingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
             </select>
-              </div>
-              <div class="col">
-                <md-field class="modal-input">
-                  <label>Status</label>
-                  <md-input type="text" v-model="selected.status" value="selected.status"></md-input>
-                </md-field>
               </div>
             </div>
           </form>
@@ -434,10 +422,13 @@
                   <td>R {{p.productPrice}}</td>
                 </tr>
               </tbody>
+              <tfoot>
+                <td></td>
+                <td style="font-weight: 400">Total:</td>
+                <td style="font-weight: 400"><p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p></td>
+              </tfoot>
             </table>
-
             <hr>
-
             <div class="row">
               <div class="col" style="padding-left: 5%">
                 <label class="home-headers">Supplier:</label>
@@ -514,6 +505,11 @@
                       <td>R {{p.productPrice}}</td>
                     </tr>
                   </tbody>
+                  <tfoot>
+                    <td></td>
+                    <td style="font-weight: 400">Total:</td>
+                    <td style="font-weight: 400"><p value:="incomingOfferedOrderData[5]" value="incomingOfferedOrderData[5]"> R {{incomingOfferedOrderData[5]}}</p></td>
+                  </tfoot>
                 </table>
               </div>
             </div>
@@ -651,6 +647,8 @@ export default {
     incomingProductOrderToDeleteIds: [],
     outgoingProductOrderToDelete: [],
     outgoingProductOrderToDeleteIds: [],
+    selectedIncomingRow:[],
+    selectedOutgoingRow: [],
     orders: []
   }),
   methods: {
@@ -1078,6 +1076,13 @@ export default {
         console.log("i guess it worked twice. With love, God");
       })
 
+    }, async passIncomingInfo(id){
+      let incomindOrderid = id;
+      await HTTP.get("/orders/" + incomindOrderid).then((res)=>{
+        // console.log(res.data);
+        this.selectedIncomingRow = res.data;
+      })
+
     },
     async deleteIncomingRecord(id) {
 
@@ -1160,6 +1165,15 @@ export default {
         })
         count3++;
       }
+
+    }, async passOutgoingInfo(id){
+      let outgoingOrderid = id;
+      await HTTP.get("/orders/" + outgoingOrderid).then((res)=>{
+        // console.log(res.data);
+        this.selectedOutgoingRow = res.data;
+      })
+
+
 
     },
     async deleteOutgoingRecord(id) {
@@ -1281,6 +1295,15 @@ export default {
         count++
 
       }
+      let iterate=0;
+      let totalAmount=0;
+      while(iterate<this.order.length){
+
+        totalAmount+= this.order[iterate].quantity * this.order[iterate].price;
+
+        iterate++;
+      }
+      console.log(this.order);
 
       let item = this.orderTable;
       var orderId;
@@ -1296,7 +1319,8 @@ export default {
       this.offeredOrderTable.push({
         orderId: orderId,
         supplierName: this.newOrder.supplier,
-        adminId: this.orderTable.adminId
+        adminId: this.orderTable.adminId,
+        total: totalAmount
       })
 
       let item2 = this.offeredOrderTable;
@@ -1365,6 +1389,17 @@ export default {
 
       }
 
+            let iterate=0;
+            let totalAmount=0;
+            while(iterate<this.requestOrder.length){
+
+              totalAmount+= this.requestOrder[iterate].quantity * this.requestOrder[iterate].price;
+
+              iterate++;
+            }
+            console.log(this.requestOrder);
+
+
       var orderId;
       var adminNo;
       await HTTP.post('/orders', this.orderTable).then((res) => {
@@ -1377,7 +1412,8 @@ export default {
       this.requestedOrderTable.push({
         orderId: orderId,
         clientName: this.newOrder.supplier,
-        adminId: this.orderTable.adminId
+        adminId: this.orderTable.adminId,
+        total: totalAmount
       })
 
       await HTTP.post('/requestedOrder', this.requestedOrderTable).then((res) => {
@@ -1407,7 +1443,8 @@ export default {
         shipmentId: this.newOrder.shipCo,
         adminId: this.orderTable.adminId,
         departure: this.newOrder.departure,
-        arrival: this.newOrder.arrival
+        arrival: this.newOrder.arrival,
+        orderId: orderId
       })
 
       await HTTP.post('/shipmentOrder', this.shipmentOrderTable).then((res) => {
@@ -1417,10 +1454,53 @@ export default {
     },
     removeRow(index) {
       this.inputRows.splice(index, 1);
+    },
+    onLoad() {
+    //I know its stupid but, selecting elements by name doesnt work so.... yea
+    //we have 8 different IDs to get this validation to work for each input
+      var input = document.getElementById("dateField");
+      var input2 = document.getElementById("dateField2");
+      var input3 = document.getElementById("dateField3");
+      var input4 = document.getElementById("dateField4");
+      var input5 = document.getElementById("dateField5");
+      var input6 = document.getElementById("dateField6");
+      var input7 = document.getElementById("dateField7");
+      var input8 = document.getElementById("dateField8");
+
+      var today = new Date();
+      // Set month and day to string to add leading 0
+      var day = new String(today.getDate());
+      var mon = new String(today.getMonth()+1); //January is 0!
+      var yr = today.getFullYear();
+
+      if(day.length < 2) { day = "0" + day; }
+      if(mon.length < 2) { mon = "0" + mon; }
+
+      var date = new String( yr + '-' + mon + '-' + day );
+
+      input.disabled = false;
+      input.setAttribute('min', date);
+      input2.disabled = false;
+      input2.setAttribute('min', date);
+      input3.disabled = false;
+      input3.setAttribute('min', date);
+      input4.disabled = false;
+      input4.setAttribute('min', date);
+      input5.disabled = false;
+      input5.setAttribute('min', date);
+      input6.disabled = false;
+      input6.setAttribute('min', date);
+      input7.disabled = false;
+      input7.setAttribute('min', date);
+      input8.disabled = false;
+      input8.setAttribute('min', date);
     }
   },
   created() {
     this.searched = this.orders
+  },
+  mounted(){
+    this.onLoad()
   },
   beforeMount() {
     this.populate()

@@ -10,10 +10,10 @@
           <thead class="table-header">
             <tr>
               <th scope="col">Customer</th>
-              <th scope="col">Order Status</th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
-          <tbody v-for="client in clients" :key="client.id">
+          <tbody v-for="client in shippingstatuts" :key="client.name">
             <tr>
               <td>{{client.name}}</td>
               <td>{{client.status}}</td>
@@ -29,7 +29,7 @@
       <div class="div-style" align="center">
         <h3 class="home-headers">Currency Conversion</h3>
 
-        <select class="form-control" @change="updateInputs" v-model="selected" style="width: 350px">
+        <select class="form-control" @change="updateInputs" v-model="selected" >
           <option v-for="country in countries"  :key="country.id">{{country.name}}</option>
         </select>
 
@@ -86,7 +86,7 @@
         <div class="revenue-stat" >
             <div class="" align="center" style="text-align: center">
               <h3 class="home-headers">revenue</h3>
-              <h1>R {{revenue}}</h1>
+              <h1>R {{profitMade}}</h1>
               <br>
               <p class="stats-color">Since {{revenueUpdated}} {{days}}</p>
             </div>
@@ -113,11 +113,12 @@
 <script lang="ts">
 import LineExample from '../components/revenue-graph.js'
 import TodoList from '../components/todo-list.vue'
+import {HTTP} from '../http-common'
 export default {
   name: 'app',
   data: () => ({
     revenue: 60235,
-    orders: 500,
+    orders: '',
     //thinking if the clients update with each new entry we can keep track of the time since the last entry
     // if the mins >= 60 then time is updated to "hours" and clientsUpdated is reset to 1
     clientsUpdated: 1,
@@ -179,9 +180,120 @@ export default {
 				money: "YEN",
 				rate: 88.51,
 			}
-		]
+		],
+    totalOrders: [],
+    lastOrderIds: [],
+    allOfferedOrder: [],
+    allRequestedOrder: [],
+    shippingstatuts: [],
+    profitMade: ''
   }),
   methods: {
+    async populate() {
+
+      await HTTP.get("/orders").then((res)=> {
+
+        this.totalOrders = res.data.orders.records;
+        this.orders =res.data.orders.records.length;
+      })
+
+      let count=this.totalOrders.length;
+      let count1=0
+
+      while(count1 < 3){
+        this.lastOrderIds.push({
+          orderId : this.totalOrders[count-1][0]
+        })
+        count1++;
+        count--;
+      }
+
+
+      await HTTP.get("/offeredOrder").then((res) => {
+        this.allOfferedOrder = res.data.offeredOrder.records;
+      })
+      await HTTP.get("/requestedOrder").then((res) => {
+        this.allRequestedOrder = res.data.requestedOrder.records;
+      })
+
+
+      let count3=0;
+
+      while(count3<this.lastOrderIds.length){
+
+        let iterate =0;
+        while(iterate<this.allOfferedOrder.length){
+
+          if(this.lastOrderIds[count3].orderId == this.allOfferedOrder[iterate][1]){
+            this.shippingstatuts.push({
+              name: this.allOfferedOrder[iterate][2],
+              status: 'Incoming'
+            })
+          }
+          iterate++;
+        }
+        count3++;
+      }
+
+
+            let count4=0;
+
+            while(count4<this.lastOrderIds.length){
+
+              let iterate2 =0;
+              while(iterate2<this.allRequestedOrder.length){
+
+                if(this.lastOrderIds[count4].orderId == this.allRequestedOrder[iterate2][1]){
+                  console.log(this.allRequestedOrder[iterate2]);
+                  this.shippingstatuts.push({
+                    name: this.allRequestedOrder[iterate2][2],
+                    status: 'Outgoing'
+                  })
+                }
+                iterate2++;
+              }
+              count4++;
+            }
+
+            console.log(this.totalOrders);
+
+            let count5=0;
+            let amountSales =0;
+
+            while(count5<this.totalOrders.length){
+
+              let iterate3 =0;
+              while(iterate3<this.allRequestedOrder.length){
+
+                if(this.totalOrders[count5][0] == this.allRequestedOrder[iterate3][1]){
+                  amountSales += this.allRequestedOrder[iterate3][5]
+                }
+                iterate3++;
+              }
+              count5++;
+            }
+
+            let count6=0;
+            let amountExpenses =0;
+
+            while(count6<this.totalOrders.length){
+
+              let iterate4 =0;
+              while(iterate4<this.allOfferedOrder.length){
+
+                if(this.totalOrders[count6][0] == this.allOfferedOrder[iterate4][1]){
+                  amountExpenses += this.allOfferedOrder[iterate4][5]
+                }
+                iterate4++;
+              }
+              count6++;
+            }
+
+            this.profitMade = Number((amountSales - amountExpenses).toFixed(2));
+
+            console.log(Number(this.profitMade.toFixed(2)));
+
+},
     calcInput_1(e: any){
       this.firstInputSelected = true;
       this.calculate(e);
@@ -228,6 +340,9 @@ export default {
   components: {
     LineExample,
     TodoList
+  },
+  beforeMount () {
+    this.populate()
   }
 }
 
