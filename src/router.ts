@@ -7,12 +7,12 @@ import Orders from './views/Orders.vue';
 import Dashboard from './views/Dashboard.vue';
 import Inventory from './views/Inventory.vue';
 import Welcome from './views/Welcome.vue';
-//test need to change later
+// test need to change later
 import Users from './views/Users.vue';
 import Suppliers from './views/Suppliers.vue';
 import Statistics from './views/Statistics.vue';
 import Category from './views/Category.vue';
-import Subcategory from './views/Subcategory'
+import Subcategory from './views/Subcategory.vue';
 
 Vue.use(Router);
 
@@ -65,20 +65,19 @@ export default new Router({
         {
           path: '/suppliers',
           name: 'suppliers',
-          component: Suppliers
+          component: Suppliers,
         },
         {
           path: '/category',
           name: 'category',
-          component: Category
+          component: Category,
         },
         {
           path: '/subcategory',
           name: 'subcategory',
-          component: Subcategory
-        }
-      ]
-    }
-
-  ]
+          component: Subcategory,
+        },
+      ],
+    },
+  ],
 });

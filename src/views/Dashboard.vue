@@ -46,7 +46,7 @@
               <template v-if="selected === country.name" :value="countryRate">
                 <h2  class="home-headers" :key="index">{{country.name}}</h2>
                 <p class="" :key="index">Rate: {{country.rate}} ZAR</p>
-                <input id="currencyInputForeign" class="currency-input form-control input-field" @keyup="calcInput_2" :value="calc1" :key="index">
+                <input id="currencyInputForeign" class="currency-input form-control input-field" @keyup="calcInput_2" :value="calc1" :key="index"> -->
                 <span :key="index">{{country.money}}</span>
               </template>
             </template>
@@ -202,7 +202,7 @@ export default {
 
       while(count1 < 3){
         this.lastOrderIds.push({
-          orderId : this.totalOrders[count-1][0]
+          orderId: this.totalOrders[count-1][0]
         })
         count1++;
         count--;
@@ -289,7 +289,7 @@ export default {
               count6++;
             }
 
-            this.profitMade = Number((amountSales - amountExpenses).toFixed(2));
+            this.profitMade = Number((amountSales - amountExpenses).toFixed(2))+"";
 
             console.log(Number(this.profitMade.toFixed(2)));
 
