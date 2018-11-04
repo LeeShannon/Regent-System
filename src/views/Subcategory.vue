@@ -82,22 +82,22 @@
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label> Subcategory Name</label>
-                    <md-input type="text" required></md-input>
+                    <md-input type="text" v-model="newSubCategory.subCategoryName" value="newSubCategory.subCategoryName" required></md-input>
                   </md-field>
                 </div>
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label>Subcategory Position</label>
-                    <md-input type="text" required></md-input>
+                    <md-input type="number" v-model="newSubCategory.subCategoryPosition" value="newSubCategory.subCategoryPosition" required></md-input>
                   </md-field>
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col">
                   <label for="exampleFormControlSelect1">Category</label>
-                  <select class="form-control" id="exampleFormControlSelect1">
-                  <option>
-                    Fruit
+                  <select class="form-control" id="addSubCategoryForm" v-model="newSubCategory.category" value="newProduct.category">
+                  <option v-for="cat in addCategory" v-if="cat[1] != null" :key="cat.id">
+                    {{ cat[1] }}
                   </option>
                 </select>
                 </div>
@@ -133,7 +133,7 @@
                   <div class="col-lg-6">
                     <md-field class="modal-input">
                       <label>Subcategory Position</label>
-                      <md-input type="text" required></md-input>
+                      <md-input type="number" required></md-input>
                     </md-field>
                   </div>
                 </div>
@@ -204,12 +204,20 @@ export default {
     alertRed: false,
     searched: [],
     selected: {},
+    newSubCategory: {
+      subCategoryName: null,
+      subCategoryPosition: null,
+      category: null,
+      // categoryId: null,
+      adminId: null,
+    },
     subCategoryData: [],
     subCategories: [],
     subCategory: [],
     errorData: '',
     dataAccessSuccess: true,
     categoryData: [],
+    addCategory: [],
     category: []
   }),
   methods: {
@@ -276,10 +284,61 @@ export default {
         }
         console.log(this.subCategories);
       }
+      // addCategory
+      let count = 0
+      while (count<this.category.length) {
+        if (this.category[count][0] != 0) {
+          this.addCategory.push(this.category[count])
+        }
+        count++
+      }
+      console.log(this.addCategory)
     },
-    // async addCategory(){
-    //
-    //  },
+    async addSubcategory(){
+      if (State.data.loggedIn) {
+        console.log('Add SubCategory')
+        console.log(this.newSubCategory)
+        let catId = 0
+        let count = 0
+        let found = false
+        var e = document.getElementById("addSubCategoryForm");
+        if (e) {
+          var name = e.options[e.selectedIndex].text;
+          while (count<this.category.length && !found) {
+            if (this.category[count][1] == name) {
+              catId = this.category[count][0]
+            }
+            count++
+          }
+          if (catId>0 && 
+          this.newSubCategory.subCategoryName != null &&
+          this.newSubCategory.subCategoryPosition != null) {
+            console.log('New Sub Category')
+            console.log({
+              subCategoryName: this.newSubCategory.subCategoryName,
+              subCategoryPosition: this.newSubCategory.subCategoryPosition,
+              categoryId: catId,
+              adminId: State.data.adminInfo.adminId
+              })
+            await HTTP.post('/subcategory', {
+              // subCategoryId: 0,
+              subCategoryName: this.newSubCategory.subCategoryName,
+              subCategoryPosition: this.newSubCategory.subCategoryPosition,
+              categoryId: catId,
+              adminId: State.data.adminInfo.adminId
+            }).then((res) => {
+              console.log(res)
+            })
+          } else {
+            console.log('SubCategory could not be added successfully')
+          }
+        } else {
+          console.log('Issue getting the element')
+        }
+      } else {
+        console.log('User must login to add a subcategory')
+      }
+    },
     //  async getSupplierInfo(id) {
     //    console.log(id);
     //

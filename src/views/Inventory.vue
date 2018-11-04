@@ -67,7 +67,7 @@
       <md-table-cell md-label="AdminId" md-sort-by="adminId" md-numeric> {{ item.adminId }} </md-table-cell>
       <md-table-cell md-label="Timestamp" md-sort-by="productStamp" md-numeric> {{ item.productStamp }} </md-table-cell>
       <md-table-cell md-label="Actions">
-         <!-- v-if="State.data.adminInfo.adminType" -->
+         <!-- v-if="State.data.adminInfo.adminType>2" -->
         <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editProductModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
@@ -139,7 +139,6 @@
                   <option v-for="cat in category" v-if="cat[1] != null" :key="cat.id">
                     {{ cat[1] }}
                   </option>
-
               </select>
               </div>
               <div class="form-group col">
@@ -389,7 +388,7 @@ export default {
           this.subCategory.push([ 0, 'Not Found', 0, 0, 0])
           count++;
         }
-        count = 0;
+        count = 1;
         while (count < this.subCategoryData.length) {
           this.subCategory[this.subCategoryData[count][0]] = this.subCategoryData[count];
           count++;
@@ -417,6 +416,10 @@ export default {
         }
         count = 0;
         var active = false;
+        // console.log('PROBLEM')
+        // console.log(this.category)
+        // console.log(this.subCategory)
+        // console.log(this.productData)
         while (count < this.productData.length) {
           active = false;
           if (this.productData[count][6] === 1) {

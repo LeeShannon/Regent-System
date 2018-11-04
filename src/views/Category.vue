@@ -122,7 +122,7 @@
                   <div class="col-lg-6">
                     <md-field class="modal-input">
                       <label>Category Position</label>
-                      <md-input type="text" required></md-input>
+                      <md-input type="number" required></md-input>
                     </md-field>
                   </div>
                 </div>
@@ -185,7 +185,6 @@ export default {
     selected: {},
     categoryData: [],
     newCategory: {
-      categoryId: null,
       categoryName: null,
       categoryPosition: null,
       adminId: null,
@@ -256,9 +255,33 @@ export default {
         console.log('No item selected')
       }
     },
-    // async addCategory(){
-    //
-    //  },
+    async addCategory(){
+      if (State.data.loggedIn) {
+        console.log('Add Category')
+        console.log(this.newCategory)
+        if (this.newCategory.categoryName != null &&
+        this.newCategory.categoryPosition != null) {
+          console.log('New Category')
+          console.log({
+            categoryName: this.newCategory.categoryName,
+            categoryPosition: this.newCategory.categoryPosition,
+            adminId: State.data.adminInfo.adminId
+            })
+          await HTTP.post('/category', {
+            // categoryId: 0,
+            categoryName: this.newCategory.categoryName,
+            categoryPosition: this.newCategory.categoryPosition,
+            adminId: State.data.adminInfo.adminId
+          }).then((res) => {
+            console.log(res)
+          })
+        } else {
+          console.log('Category could not be added successfully')
+        }
+      } else {
+        console.log('User must login to add a category')
+      }
+    },
     //  async getSupplierInfo(id) {
     //    console.log(id);
     //
