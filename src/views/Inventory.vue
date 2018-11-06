@@ -136,7 +136,7 @@
               <div class="form-group col">
                 <label for="exampleFormControlSelect1">Category</label>
                 <select class="form-control" id="addProductForm" @input="selectCategory(false)" v-model="newProduct.category" value="newProduct.category">
-                  <option v-for="cat in category" v-if="cat[1] != null" :key="cat.id">
+                  <option v-for="cat in newCategory" v-if="cat[1] != null" :key="cat.id">
                     {{ cat[1] }}
                   </option>
               </select>
@@ -295,6 +295,7 @@
 /* tslint:disable */
 import State from "../store/state";
 import {HTTP} from '../http-common';
+import router from '../router';
 import {POINT_CONVERSION_COMPRESSED} from 'constants';
 import * as firebase from 'firebase';
 const toLower = text => {
@@ -337,6 +338,7 @@ export default {
     subCategoryData: [],
     productData: [],
     category: [],
+    newCategory: [],
     subCategory: [],
     subSubCategory: [],
     product: [],
@@ -364,7 +366,10 @@ export default {
         this.errorData = 'The database connection is offline';
         // console.log(this.dataAccessSuccess);
       }
-      if (this.dataAccessSuccess) {
+      if (this.dataAccessSuccess && 
+      this.categoryData != [] && 
+      this.subCategoryData != [] && 
+      this.productData != []) {
         console.log('PLACE DATA')
         console.log(this.categoryData)
         console.log(this.subCategoryData)
@@ -379,6 +384,7 @@ export default {
         count = 0;
         while (count < this.categoryData.length) {
           this.category[this.categoryData[count][0]] = this.categoryData[count];
+          this.newCategory.push(this.categoryData[count])
           count++;
         }
         //Sub-Category
@@ -823,11 +829,15 @@ export default {
   beforeMount() {
     if (State.data.loggedIn) {
       this.populate();
-    } else {
-      this.errorData = 'You need to be logged in to make a view data';
+      console.log('Displayed Category')
+      console.log(this.newCategory)
     }
-    console.log('User Logged in')
-    console.log(State.data.loggedIn)
+    if (!State.data.loggedIn) {
+      console.log('You need to be logged in to make a view data')
+      this.errorData = 'You need to be logged in to make a view data';
+      router.push('')
+    }
+    console.log('Is user logged in ' + State.data.loggedIn)
   },
 };
 </script>

@@ -139,10 +139,9 @@
         </button>
         </div>
         <div class="modal-body">
-          <h3 class="del-headers" value:="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
+          <h3 class="del-headers" v-model="selectedIncomingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedIncomingRow.orderId }}</b> ?</h3>
           <br>
         </div>
-          <!-- TODO - does the value: work instead of v-model -->
           <div class="modal-footer" value:="selectedIncomingRow.orderId">
             <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
             <button @click="deleteIncomingRecord(selectedIncomingRow.orderId)" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
@@ -162,8 +161,7 @@
         </button>
           </div>
           <div class="modal-body">
-            <!-- TODO - does the value: work instead of v-model -->
-            <h3 class="del-headers" value:="selectedOutgoingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedOutgoingRow.orderId }}</b> ?</h3>
+            <h3 class="del-headers" v-model="selectedOutgoingRow.orderId">Are you sure you wish to delete Order ID: <b>{{ selectedOutgoingRow.orderId }}</b> ?</h3>
             <br>
         </div>
             <div class="modal-footer">
@@ -173,6 +171,9 @@
           </div>
         </div>
       </div>
+
+<form >
+
 
       <!-- ADD Incoming orders modal -->
       <div class="modal fade" id="addIncomingOrder" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
@@ -263,7 +264,7 @@
           </div>
         </div>
       </div>
-
+</form>
       <!-- ADD Outgoing orders modal -->
       <div class="modal fade" id="addOutgoingOrder" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -449,7 +450,6 @@
 
 
 
-
       <!-- View Incoming modal -->
       <div class="modal fade" id="viewIncomingProductModal" tabindex="-1" role="dialog" aria-labelledby="viewIncomingProductModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -631,12 +631,15 @@
         </div>
       </div>
 
-</div>
+
+    </div>
 </template>
 
 <script>
-import {HTTP} from '../http-common'
-import State from "../store/state"
+import {
+  HTTP
+} from '../http-common'
+
 const toLower = text => {
   return text.toString().toLowerCase()
 }
@@ -650,6 +653,7 @@ export default {
   name: 'TableSearch',
   data: () => ({
     search: null,
+    errorData: '',
     alertBlue1: false,
     alertGreen1: false,
     alertOrange1: false,
@@ -675,7 +679,6 @@ export default {
       price: ''
     }],
     order: [],
-    orderData: [],
     requestOrder: [],
     orderTable: {
       adminId: '16'
@@ -734,95 +737,56 @@ export default {
   }),
   methods: {
     async populate() {
+      this.shipData = await HTTP.get('/shipment')
       let count = 0;
-      // Calls
+      while (count < this.shipData.data.shipment.records.length) {
+        this.shipOption.push({
+          shipId: this.shipData.data.shipment.records[count][0],
+          shipName: this.shipData.data.shipment.records[count][1],
+          shipPhone: this.shipData.data.shipment.records[count][2],
+          shipAddress: this.shipData.data.shipment.records[count][3],
+          shipEmail: this.shipData.data.shipment.records[count][4]
+        })
+        count++
+      }
       await HTTP.get('/offeredorder').then((res) => {
-          // this.offeredOrderData = res;
-          this.offeredOrderData = res.data.offeredorder.records;
-          // this.allincomingOfferedOrderDetails = res;
-          this.allincomingOfferedOrderDetails = res.data.offeredorder.records;
+        let count = 0;
+        this.offeredOrderData = res.data.offeredorder.records;
       })
       await HTTP.get('/requestedorder').then((res) => {
-          // this.requestedOrderData = res;
-          this.requestedOrderData = res.data.requestedorder.records;
+        this.requestedOrderData = res.data.requestedorder.records;
       })
-      await HTTP.get('/shipment').then((res) => {
-          // this.shipData = res;
-          this.shipData = res.data.shipment.records;
-      })
-      await HTTP.get('/shipmentorder').then((res) => {
-          // this.totShipOrders = res;
-          this.totShipOrders = res.data.shipmentorder.records;
-          // this.totIncomingShipOrder = res;
-          this.totIncomingShipOrder = res.data.shipmentorder.records;
-      })
-      await HTTP.get('/productorder').then((res) => {
-          // this.totproductOrder = res;
-          this.totproductOrder = res.data.productorder.records;
-      })
-      await HTTP.get('/orders').then((res) => {
-          // this.orderData = res;
-          this.orderData = res.data.orders.records;
-      })
-      // Setting Request Hierarchy
-      // OrderData
-      count = 0;
-      while (count < this.orderData[this.orderData.length - 1][0]) {
-        this.order.push([0, 0])
-        count++;
-      }
-      count = 0;
-      while (count < this.orderData.length) {
-        this.order[this.orderData[count][0]] = [99,99]
-        count++;
-      }
-      // Processing Returned Data
-      count = 0;
-      while (count < this.shipData.length) {
-          this.shipOption.push({
-              shipId: this.shipData[count][0],
-              shipName: this.shipData[count][1],
-              shipPhone: this.shipData[count][2],
-              shipAddress: this.shipData[count][3],
-              shipEmail: this.shipData[count][4]
+      let count2 = 0;
+//REDFLAG
+      while (count2 < this.offeredOrderData.length) {
+        let id = this.offeredOrderData[count2][1];
+        await HTTP.get('/orders/' + id).then((res) => {
+          this.orderTableData.push({
+            orderId: res.data.orderId
           })
-          count++
-      }
-      console.log('offeredorder')
-      console.log(this.offeredOrderData)
-      console.log(this.allincomingOfferedOrderDetails)
-      console.log('requestedorder')
-      console.log(this.requestedOrderData)
-      console.log('shipment')
-      console.log(this.shipOption)
-      console.log('shipmentorder')
-      console.log(this.totShipOrders)
-      console.log(this.totIncomingShipOrder)
-      console.log('productorder')
-      console.log(this.totproductOrder)
-      console.log('order - processed')
-      console.log(this.order)
-      // Make a table of incoming order ids
-      count = 0;
-      while (count < this.offeredOrderData.length) {
-        let id = this.offeredOrderData[count][1];
-        this.orderTableData.push({
-          orderId: this.order[id][0]
         })
-        count++;
+        count2++;
       }
       console.log("OFFERED/INCOMING ORDER IDs");
       console.log(this.orderTableData);
-      count = 0;
-      while (count < this.requestedOrderData.length) {
-        let id = this.requestedOrderData[count][1];
-        this.orderTableDataOut.push({
-          orderId: this.order[id][0]
+      let inc = 0;
+//REDFLAG
+      while (inc < this.requestedOrderData.length) {
+        let id = this.requestedOrderData[inc][1];
+        await HTTP.get('/orders/' + id).then((res) => {
+          this.orderTableDataOut.push({
+            orderId: res.data.orderId
+          })
         })
-        count++;
+        inc++;
       }
       console.log("REQUESTED/OUTGOING ORDER IDs");
       console.log(this.orderTableDataOut);
+      await HTTP.get('/shipmentorder').then((res) => {
+        this.totShipOrders = res.data.shipmentorder.records;
+      })
+      console.log("SHIPMENT ORDER TABLE");
+      console.log(this.totShipOrders);
       let g = 0;
       while (g < this.orderTableData.length) {
         let k = 0;
@@ -839,15 +803,11 @@ export default {
       }
       console.log("OFFERED SHIPMENT ORDER TABLE");
       console.log(this.offeredOrderShipData);
-      g = 0;
-      console.log('orderTableData: '+this.orderTableData.length+' = 9')
+      let g1 = 0;
       while (g < this.orderTableData.length) {
         let k = 0;
         while (k < this.totShipOrders.length) {
-          // console.log(this.orderTableData[g].orderId == this.totShipOrders[k][5])
-          // console.log(this.orderTableData[g].orderId + ' - ' + this.totShipOrders[k][5])
           if (this.orderTableData[g].orderId == this.totShipOrders[k][5]) {
-            console.log('add - offered')
             this.offeredOrderShipData.push({
               departure: this.totShipOrders[k][3],
               arrival: this.totShipOrders[k][4],
@@ -855,27 +815,23 @@ export default {
           }
           k++;
         }
-        g++;
+        g1++;
       }
       console.log("OFFERED SHIPMENT ORDER TABLE");
       console.log(this.offeredOrderShipData);
-      g = 0;
-      console.log('orderTableDataOut: '+this.orderTableDataOut.length+' = 7')
-      while (g < this.orderTableDataOut.length) {
-        let k = 0;
-        while (k < this.totShipOrders.length) {
-          // console.log(k < this.totShipOrders.length)
-          // console.log(k + ' - ' + this.totShipOrders.length)
-          if (this.orderTableDataOut[g].orderId == this.totShipOrders[k][5]) {
-            console.log('add - requested')
+      let g2 = 0;
+      while (g2 < this.orderTableDataOut.length) {
+        let k2 = 0;
+        while (k2 < this.totShipOrders.length) {
+          if (this.orderTableDataOut[g2].orderId == this.totShipOrders[k2][5]) {
             this.requestedOrderShipData.push({
-              departure: this.totShipOrders[k][3],
-              arrival: this.totShipOrders[k][4],
+              departure: this.totShipOrders[k2][3],
+              arrival: this.totShipOrders[k2][4],
             })
           }
-          k++;
+          k2++;
         }
-        g++;
+        g2++;
       }
       console.log("REQUESTED SHIPMENT ORDER TABLE");
       console.log(this.requestedOrderShipData);
@@ -891,15 +847,15 @@ export default {
       }
       console.log("INCOMING DISPLAY ORDER  TABLE");
       console.log(this.allIncomingOrdersDisplay);
-      z = 0;
-      while (z < this.orderTableDataOut.length) {
+      let z1 = 0;
+      while (z1 < this.orderTableDataOut.length) {
         this.allOutgoingOrdersDisplay.push({
-          orderid: this.orderTableDataOut[z].orderId,
-          client: this.requestedOrderData[z][2],
-          departure: this.requestedOrderShipData[z].departure,
-          arrival: this.requestedOrderShipData[z].arrival
+          orderid: this.orderTableDataOut[z1].orderId,
+          client: this.requestedOrderData[z1][2],
+          departure: this.requestedOrderShipData[z1].departure,
+          arrival: this.requestedOrderShipData[z1].arrival
         })
-        z++;
+        z1++;
       }
       console.log("OUTGOING DISPLAY ORDER TABLE");
       console.log(this.allOutgoingOrdersDisplay);
@@ -1030,21 +986,17 @@ export default {
       // console.log(orderId);
       // console.log(this.totShipOrders);
       // console.log(this.shipOption);
-
       HTTP.get("/shipment").then((res) => {
-
         let count = 0;
         while (count < res.data.shipment.records.length) {
           this.incomingUpdateContentShip.push({
             shipmentId: res.data.shipment.records[count][0],
             companyName: res.data.shipment.records[count][1],
-
           })
           count++;
         }
       })
       console.log(this.totShipOrders);
-
       let count = 0;
       while (count < this.totShipOrders.length) {
         if (orderId == this.totShipOrders[count][5]) {
@@ -1059,7 +1011,6 @@ export default {
                 shipTable: this.incomingUpdateContentShip,
                 orderId: this.totShipOrders[count][5],
                 shipmentkeyId: this.totShipOrders[count][0]
-
               })
             }
             count1++;
@@ -1067,27 +1018,22 @@ export default {
         }
         count++;
       }
-
       console.log(this.incomingUpdateContent[0]);
-
     },
     async saveEditedIncomingOrder() {
       console.log(this.incomingUpdateContent[0]);
       console.log(this.allIncomingOrdersDisplay);
-
       let item = this.incomingUpdateContent[0];
       let id = this.incomingUpdateContent[0].shipmentkeyId;
-
+//REDFLAG
       await HTTP.put('/shipmentorder/' + id, item).then((res) => {
+        this.alertBlue1 = true;
         console.log("i guess you can sleep. With love, God");
       })
-
     },
     async outgoingEditProduct(orderId) {
-
       this.outgoingUpdateContent = [],
         this.outgoingUpdateContentShip = []
-
       HTTP.get("/shipment").then((res) => {
         this.alertBlue2 = true;
         let count = 0;
@@ -1095,12 +1041,10 @@ export default {
           this.outgoingUpdateContentShip.push({
             shipmentId: res.data.shipment.records[count][0],
             companyName: res.data.shipment.records[count][1],
-
           })
           count++;
         }
       })
-
       let count = 0;
       while (count < this.totShipOrders.length) {
         if (orderId == this.totShipOrders[count][5]) {
@@ -1115,7 +1059,6 @@ export default {
                 shipTable: this.outgoingUpdateContentShip,
                 orderId: this.totShipOrders[count][5],
                 shipmentkeyId: this.totShipOrders[count][0]
-
               })
             }
             count1++;
@@ -1123,20 +1066,16 @@ export default {
         }
         count++;
       }
-
       console.log(this.outgoingUpdateContent);
     },
     async saveEditedOutgoingOrder() {
       console.log(this.outgoingUpdateContent[0]);
       console.log(this.allIncomingOrdersDisplay);
-
       let item = this.outgoingUpdateContent[0];
       let id = this.outgoingUpdateContent[0].shipmentkeyId;
-
       await HTTP.put('/shipmentorder/' + id, item).then((res) => {
         console.log("i guess it worked twice. With love, God");
       })
-
     },
     async passIncomingInfo(id) {
       let incomindOrderid = id;
@@ -1144,17 +1083,13 @@ export default {
         // console.log(res.data);
         this.selectedIncomingRow = res.data;
       })
-
     },
     async deleteIncomingRecord(id) {
-
       console.log(id);
-
       // Offered ORDER table to get primary key ID
       this.incomingProductOrderToDeleteIds = []
       let count = 0;
       let offeredOrderTableId = 0;
-
       while (count < this.offeredOrderData.length) {
         if (id == this.offeredOrderData[count][1]) {
           console.log(this.offeredOrderData[count]);
@@ -1162,30 +1097,22 @@ export default {
         }
         count++;
       }
-
       // get id of product order table to be deleted
-
       await HTTP.get('/productorder').then((res) => {
-
         this.incomingProductOrderToDelete = res.data.productorder.records;
       })
       console.log(this.incomingProductOrderToDelete);
-
       let count1 = 0;
-
       while (count1 < this.incomingProductOrderToDelete.length) {
         if (id == this.incomingProductOrderToDelete[count1][2]) {
           // console.log(this.totproductOrder[count]);
           this.incomingProductOrderToDeleteIds.push({
             productOrderTableId: this.incomingProductOrderToDelete[count1][0]
-
           })
         }
         count1++;
       }
-
       // GET shipment Order table Id
-
       let count2 = 0;
       let ShipmentOrderTableId = 0;
       while (count2 < this.totShipOrders.length) {
@@ -1198,36 +1125,25 @@ export default {
       console.log(offeredOrderTableId);
       console.log(this.incomingProductOrderToDeleteIds);
       console.log(ShipmentOrderTableId);
-
       await HTTP.delete('/orders/' + id).then((res) => {
-
         console.log("Item in orders tables has been deleted");
       })
-
       await HTTP.delete('/offeredorder/' + offeredOrderTableId).then((res) => {
-
         console.log("Item in offeredOrder tables has been deleted");
-
       })
-
       await HTTP.delete('/shipmentorder/' + ShipmentOrderTableId).then((res) => {
-
+        this.alertOrange1 = true;
         console.log("Item in ShipmentOrder tables has been deleted");
-
       })
-
       let count3 = 0;
       let productOrderTableId = 0;
       while (count3 < this.incomingProductOrderToDeleteIds.length) {
         productOrderTableId = this.incomingProductOrderToDeleteIds[count3].productOrderTableId
         await HTTP.delete('/productorder/' + productOrderTableId).then((res) => {
-
           console.log("Item in productOrder tables has been deleted");
-
         })
         count3++;
       }
-
     },
     async passOutgoingInfo(id) {
       let outgoingOrderid = id;
@@ -1235,19 +1151,13 @@ export default {
         // console.log(res.data);
         this.selectedOutgoingRow = res.data;
       })
-
-
-
     },
     async deleteOutgoingRecord(id) {
-
       console.log(id);
-
       // Offered ORDER table to get primary key ID
       this.outgoingProductOrderToDeleteIds = []
       let count = 0;
       let requestedOrderTableId = 0;
-
       while (count < this.requestedOrderData.length) {
         if (id == this.requestedOrderData[count][1]) {
           console.log(this.requestedOrderData[count]);
@@ -1256,29 +1166,21 @@ export default {
         count++;
       }
       // get id of product order table to be deleted
-
       await HTTP.get('/productorder').then((res) => {
-
-        this.outgoingProductOrderToDelete = res.data.productOrder.records;
+        this.outgoingProductOrderToDelete = res.data.productorder.records;
       })
       console.log(this.outgoingProductOrderToDelete);
-
       let count1 = 0;
-
       while (count1 < this.outgoingProductOrderToDelete.length) {
         if (id == this.outgoingProductOrderToDelete[count1][2]) {
-
           this.outgoingProductOrderToDeleteIds.push({
             productOrderTableId: this.outgoingProductOrderToDelete[count1][0]
-
           })
         }
         count1++;
       }
       console.log(this.outgoingProductOrderToDeleteIds);
-
       // GET shipment Order table Id
-
       let count2 = 0;
       let ShipmentOrderTableId = 0;
       while (count2 < this.totShipOrders.length) {
@@ -1291,36 +1193,25 @@ export default {
       console.log(requestedOrderTableId);
       console.log(this.outgoingProductOrderToDeleteIds);
       console.log(ShipmentOrderTableId);
-
       await HTTP.delete('/orders/' + id).then((res) => {
-
         console.log("Item in orders tables has been deleted");
       })
-
       await HTTP.delete('/requestedorder/' + requestedOrderTableId).then((res) => {
-
         console.log("Item in offeredOrder tables has been deleted");
-
       })
-
       await HTTP.delete('/shipmentorder/' + ShipmentOrderTableId).then((res) => {
-
+        this.alertOrange2 = true;
         console.log("Item in ShipmentOrder tables has been deleted");
-
       })
-
       let count3 = 0;
       let productOrderTableId = 0;
       while (count3 < this.outgoingProductOrderToDeleteIds.length) {
         productOrderTableId = this.outgoingProductOrderToDeleteIds[count3].productOrderTableId
         await HTTP.delete('/productorder/' + productOrderTableId).then((res) => {
-
           console.log("Item in productOrder tables has been deleted");
-
         })
         count3++;
       }
-
     },
     searchOnTable() {
       this.searched = searchByName(this.orders, this.search)
@@ -1337,13 +1228,9 @@ export default {
       });
     },
     async addOrderIn() {
-
       let count = 0;
-
       while (count < this.inputRows.length) {
-
         console.log(this.inputRows[count].productN);
-
         this.order.push({
           ship: this.newOrder.shipCo,
           supplier: this.newOrder.supplier,
@@ -1353,20 +1240,15 @@ export default {
           quantity: this.inputRows[count].quantity,
           price: this.inputRows[count].price
         })
-
         count++
-
       }
       let iterate = 0;
       let totalAmount = 0;
       while (iterate < this.order.length) {
-
         totalAmount += this.order[iterate].quantity * this.order[iterate].price;
-
         iterate++;
       }
       console.log(this.order);
-
       let item = this.orderTable;
       var orderId;
       var adminNo;
@@ -1374,27 +1256,21 @@ export default {
         console.log(res)
         console.log("success adding");
         orderId = res.data;
-
       })
       console.log(orderId);
-
       this.offeredOrderTable.push({
         orderId: orderId,
         supplierName: this.newOrder.supplier,
         adminId: this.orderTable.adminId,
         total: totalAmount
       })
-
       let item2 = this.offeredOrderTable;
-
       await HTTP.post('/offeredorder', item2).then((res) => {
         console.log(res)
         console.log("success adding");
-
       })
       let count2 = 0;
       while (count2 < this.order.length) {
-
         this.productOrderTable.push({
           shipmentOrderId: this.newOrder.shipCo,
           orderId: orderId,
@@ -1408,10 +1284,8 @@ export default {
         console.log(res)
         console.log("success P adding");
       })
-
       console.log(this.newOrder.supplier);
       console.log(this.inputRows[0].productN);
-
       this.shipmentOrderTable.push({
         shipmentId: this.newOrder.shipCo,
         adminId: this.orderTable.adminId,
@@ -1419,24 +1293,19 @@ export default {
         arrival: this.newOrder.arrival,
         orderId: orderId
       })
-
       await HTTP.post('/shipmentorder', this.shipmentOrderTable).then((res) => {
+        this.alertGreen1 = true;
         console.log(res)
         console.log("success S adding");
       })
-
     },
     async addOrderOut() {
       this.alertGreen2 = true;
       console.log(this.newOrder.supplier);
       console.log(this.inputRows[0].productN);
-
       let count = 0;
-
       while (count < this.inputRows.length) {
-
         console.log(this.inputRows[count].productN);
-
         this.requestOrder.push({
           ship: this.newOrder.shipCo,
           supplier: this.newOrder.supplier,
@@ -1448,43 +1317,32 @@ export default {
         })
         count++
       }
-
       let iterate = 0;
       let totalAmount = 0;
       while (iterate < this.requestOrder.length) {
-
         totalAmount += this.requestOrder[iterate].quantity * this.requestOrder[iterate].price;
-
         iterate++;
       }
       console.log(this.requestOrder);
-
-
       var orderId;
       var adminNo;
       await HTTP.post('/orders', this.orderTable).then((res) => {
         console.log(res)
         console.log("success adding");
         orderId = res.data;
-
       })
-
       this.requestedOrderTable.push({
         orderId: orderId,
         clientName: this.newOrder.supplier,
         adminId: this.orderTable.adminId,
         total: totalAmount
       })
-
       await HTTP.post('/requestedorder', this.requestedOrderTable).then((res) => {
         console.log(res)
         console.log("success adding");
-
       })
-
       let count3 = 0;
       while (count3 < this.requestOrder.length) {
-
         this.productOrderTable.push({
           shipmentOrderId: this.newOrder.shipCo,
           orderId: orderId,
@@ -1498,7 +1356,6 @@ export default {
         console.log(res)
         console.log("success P adding");
       })
-
       this.shipmentOrderTable.push({
         shipmentId: this.newOrder.shipCo,
         adminId: this.orderTable.adminId,
@@ -1506,7 +1363,6 @@ export default {
         arrival: this.newOrder.arrival,
         orderId: orderId
       })
-
       await HTTP.post('/shipmentorder', this.shipmentOrderTable).then((res) => {
         console.log(res)
         console.log("success S adding");
@@ -1526,22 +1382,18 @@ export default {
       var input6 = document.getElementById("dateField6");
       var input7 = document.getElementById("dateField7");
       var input8 = document.getElementById("dateField8");
-
       var today = new Date();
       // Set month and day to string to add leading 0
       var day = new String(today.getDate());
       var mon = new String(today.getMonth() + 1); //January is 0!
       var yr = today.getFullYear();
-
       if (day.length < 2) {
         day = "0" + day;
       }
       if (mon.length < 2) {
         mon = "0" + mon;
       }
-
       var date = new String(yr + '-' + mon + '-' + day);
-
       input.disabled = false;
       input.setAttribute('min', date);
       input2.disabled = false;
@@ -1567,10 +1419,12 @@ export default {
     this.onLoad()
   },
   beforeMount() {
+    console.log(State.data.loggedIn)
     if (State.data.loggedIn) {
       this.populate();
     } else {
       this.errorData = 'You need to be logged in to make a view data';
+      console.log('You need to be logged in to make a view data')
     }
   }
 }

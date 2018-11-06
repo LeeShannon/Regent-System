@@ -56,10 +56,10 @@
           <md-table-cell md-label="Position" md-sort-by="categoryPosition">{{ item.categoryPosition }}</md-table-cell>
           <md-table-cell md-label="Position" md-sort-by="adminId">{{ item.adminId }}</md-table-cell>
           <md-table-cell md-label="Actions">
-            <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editCategoryModal">
+            <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editCategoryModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-            <button  @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteCategoryModal">
+            <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteCategoryModal">
             <i class="fas fa-trash-alt"></i>
           </button>
           </md-table-cell>
@@ -81,13 +81,13 @@
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label> Category Name</label>
-                    <md-input type="text" v-model="newCategory.categoryName" value="newCategory.categoryName" required></md-input>
+                    <md-input type="text" v-model="newCategory.categoryName" value="" required></md-input>
                   </md-field>
                 </div>
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label>Category Position</label>
-                    <md-input type="number" v-model="newCategory.categoryPosition" value="newCategory.categoryPosition" required></md-input>
+                    <md-input type="number" v-model="newCategory.categoryPosition" value="" required></md-input>
                   </md-field>
                 </div>
               </div>
@@ -116,13 +116,13 @@
                   <div class="col-lg-6">
                     <md-field class="modal-input">
                       <label> Category Name</label>
-                      <md-input type="text" required></md-input>
+                      <md-input type="text" v-model="selected.categoryName" required></md-input>
                     </md-field>
                   </div>
                   <div class="col-lg-6">
                     <md-field class="modal-input">
                       <label>Category Position</label>
-                      <md-input type="number" required></md-input>
+                      <md-input type="number" v-model="selected.categoryPosition" required></md-input>
                     </md-field>
                   </div>
                 </div>
@@ -130,7 +130,7 @@
               </div>
                 <div class="modal-footer">
                   <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
-                  <button @click="updateUser(userDetails.adminId)" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Save changes</button>
+                  <button @click="editCategory()" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Save changes</button>
                 </div>
               </div>
             </div>
@@ -163,6 +163,7 @@
 <script>
 import {HTTP} from '../http-common';
 import State from "../store/state";
+import router from '../router';
 const toLower = text => {
   return text.toString().toLowerCase()
 }
@@ -255,6 +256,24 @@ export default {
         console.log('No item selected')
       }
     },
+    async editCategory(){
+      console.log('TODO - Edit Category')
+      console.log(this.selected)
+      // Get catId
+      let catId = null
+      if (this.selected != {}) {
+        catId = this.selected.categoryId
+      }
+      if (!catId && this.selected.categoryName.length>0 
+      && this.selected.categoryPosition.length>0) {
+        let cat = {
+          categoryName: this.selected.categoryName,
+          categoryPosition: this.selected.categoryPosition
+        }
+        console.log(cat)
+        await HTTP.put('/category/' + catId, cat).then((res) => {console.log(res)})
+      }
+    },
     async addCategory(){
       if (State.data.loggedIn) {
         console.log('Add Category')
@@ -281,29 +300,28 @@ export default {
       } else {
         console.log('User must login to add a category')
       }
+      this.populate()
     },
-    //  async getSupplierInfo(id) {
-    //    console.log(id);
-    //
-    //  },
     searchOnTable() {
       this.searched = searchByName(this.categories, this.search)
     },
     onSelect(item) {
       this.selected = item
       console.log(this.selected)
-    },
-    async updateSupplier(id) {
-
     }
   },
   created() {
+    console.log('on create')
     this.searched = this.categories
   },
   beforeMount() {
+    console.log('Loggin State:')
+    console.log(State.data.loggedIn)
     if (State.data.loggedIn) {
       this.populate();
     } else {
+      router.push('login')
+      console.log('You need to be logged in to make a view data')
       this.errorData = 'You need to be logged in to make a view data';
     }
   }

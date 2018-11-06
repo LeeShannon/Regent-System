@@ -57,10 +57,10 @@
           <md-table-cell md-label="Position" md-sort-by="subCategoryPosition">{{ item.subCategoryPosition }}</md-table-cell>
           <md-table-cell md-label="Admin ID" md-sort-by="adminId">{{ item.adminId }}</md-table-cell>
           <md-table-cell md-label="Actions">
-            <button type="button" class="my-btn-icon" data-toggle="modal" data-target="#editSubcategoryModal">
+            <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#editSubcategoryModal">
               <i class="fas fa-pencil-alt"></i>
           </button>
-            <button  @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteSubcategoryModal">
+            <button @click="onSelect(item)" type="button" class="my-btn-icon" data-toggle="modal" data-target="#deleteSubcategoryModal">
             <i class="fas fa-trash-alt"></i>
           </button>
           </md-table-cell>
@@ -82,13 +82,13 @@
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label> Subcategory Name</label>
-                    <md-input type="text" v-model="newSubCategory.subCategoryName" value="newSubCategory.subCategoryName" required></md-input>
+                    <md-input type="text" v-model="newSubCategory.subCategoryName" value="" required></md-input>
                   </md-field>
                 </div>
                 <div class="col-lg-6">
                   <md-field class="modal-input">
                     <label>Subcategory Position</label>
-                    <md-input type="number" v-model="newSubCategory.subCategoryPosition" value="newSubCategory.subCategoryPosition" required></md-input>
+                    <md-input type="number" v-model="newSubCategory.subCategoryPosition" value="" required></md-input>
                   </md-field>
                 </div>
               </div>
@@ -127,23 +127,23 @@
                   <div class="col-lg-6">
                     <md-field class="modal-input">
                       <label> Subcategory Name</label>
-                      <md-input type="text" required></md-input>
+                      <md-input type="text" v-model="selected.subCategoryName" required></md-input>
                     </md-field>
                   </div>
                   <div class="col-lg-6">
                     <md-field class="modal-input">
                       <label>Subcategory Position</label>
-                      <md-input type="number" required></md-input>
+                      <md-input type="number" v-model="selected.subCategoryPosition" required></md-input>
                     </md-field>
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col">
                     <label for="exampleFormControlSelect1">Category</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                    <option>
-                      Fruit
-                    </option>
+                    <select class="form-control" id="editCategorySelect">
+                    <option v-for="cat in category" v-if="cat[1] != 'Not Found'" :key="cat.id">
+                    {{ cat[1] }}
+                  </option>
                   </select>
                   </div>
                 </div>
@@ -151,7 +151,7 @@
               </div>
                 <div class="modal-footer">
                   <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
-                  <button @click="updateUser(userDetails.adminId)" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Save changes</button>
+                  <button @click="editSubCategory()" type="button" class="btn btn-primary submit-btn" data-dismiss="modal">Save changes</button>
                 </div>
               </div>
             </div>
@@ -217,12 +217,15 @@ export default {
     errorData: '',
     dataAccessSuccess: true,
     categoryData: [],
+    displayCategory: [],
     addCategory: [],
     category: []
   }),
   methods: {
     async populate() {
-      this.subCategoryData = []
+      this.addCategory = []
+      this.category = []
+      this.displayCategory = []
       this.errorData = '';
       try {
         this.categoryData = await HTTP.get('/category');
@@ -244,21 +247,24 @@ export default {
         count = 0;
         while (count < this.categoryData.length) {
           this.category[this.categoryData[count][0]] = this.categoryData[count];
+          this.displayCategory.push(this.categoryData[count])
           count++;
         }
-        //SubCategory
-        count = 0;
-        while (count < this.subCategoryData[this.subCategoryData.length - 1][0]) {
-          //Default values for missing entries
-          this.subCategory.push({
-            subCategoryId: 0,
-            subCategoryName: 'Not Found',
-            subCategoryPosition: 0,
-            category: 'Not Found',
-            adminId: 0,
-            visible: false
-          })
-          count++;
+        if (this.subCategoryData.length>0) {
+          //SubCategory
+          count = 0;
+          while (count < this.subCategoryData[this.subCategoryData.length - 1][0]) {
+            //Default values for missing entries
+            this.subCategory.push({
+              subCategoryId: 0,
+              subCategoryName: 'Not Found',
+              subCategoryPosition: 0,
+              category: 'Not Found',
+              adminId: 0,
+              visible: false
+            })
+            count++;
+          }
         }
         count = 0;
         while (count < this.subCategoryData.length) {
@@ -273,7 +279,6 @@ export default {
           this.subCategoryData[count];
           count++;
         }
-        console.log(this.subCategory)
         // Place where I am probably gonna fuck this shit up
         let counter = 0
         while (counter < this.subCategory.length) {
@@ -282,17 +287,55 @@ export default {
           }
           counter++
         }
+        console.log('Subs')
         console.log(this.subCategories);
       }
       // addCategory
       let count = 0
       while (count<this.category.length) {
+        console.log(this.category[count])
         if (this.category[count][0] != 0) {
           this.addCategory.push(this.category[count])
         }
         count++
       }
+      console.log('Add Cat')
       console.log(this.addCategory)
+    },
+    async editSubCategory(){
+      console.log('TODO Edit Category')
+      console.log(this.selected)
+      // Get subId
+      let subId = null
+      if (this.selected != {}) {
+        subId = this.selected.subCategoryId
+      }
+      // Get catId
+      let catId = null
+      if (this.selected != {}) {
+        let found = false
+        let count = 0
+        while (count<this.categoryData.length && !found) {
+          if(this.categoryData[count][1] == this.selected.category) {
+            console.log('Matching categories in getting catId')
+            console.log(this.categoryData[count])
+            console.log(this.categoryData[count][0])
+            catId = this.categoryData[count][0]
+          }
+          count++
+        }
+      }
+      if (!catId && !subId && this.selected.subCategoryName.length>0 
+      && this.selected.subCategoryPosition.length>0) {
+        let sub = {
+          subCategoryName: this.selected.subCategoryName,
+          subCategoryPosition: this.selected.subCategoryPosition,
+          categoryId: catId
+        }
+        console.log(sub)
+        await HTTP.put('/subcategory/' + subId, sub).then((res) => {console.log(res)})
+      }
+
     },
     async addSubcategory(){
       if (State.data.loggedIn) {
@@ -329,6 +372,16 @@ export default {
             }).then((res) => {
               console.log(res)
             })
+            // await HTTP.post('/subcategory', {
+            //   // subCategoryId: 0,
+            //   subCategoryName: 'Sub One',
+            //   subCategoryPosition: 5,
+            //   categoryId: 2,
+            //   adminId: 1
+            // }).then((res) => {
+            //   console.log(res)
+            // })
+            this.populate()
           } else {
             console.log('SubCategory could not be added successfully')
           }
@@ -339,10 +392,6 @@ export default {
         console.log('User must login to add a subcategory')
       }
     },
-    //  async getSupplierInfo(id) {
-    //    console.log(id);
-    //
-    //  },
     deleteSubcategory() {
       if (this.selected != {}) {
         console.log('Delete Sub Category'+this.selected.subCategoryName)
@@ -363,9 +412,6 @@ export default {
     onSelect(item) {
       this.selected = item
       console.log(this.selected)
-    },
-    async updateSupplier(id) {
-
     }
   },
   created() {
