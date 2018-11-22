@@ -63,6 +63,9 @@
       <md-table-cell md-label="Purchase Price" md-sort-by="productPurchasePrice" md-numeric> {{ item.productPurchasePrice }} </md-table-cell>
       <md-table-cell md-label="Selling Price" md-sort-by="productSellingPrice" md-numeric> {{ item.productSellingPrice }} </md-table-cell>
       <md-table-cell md-label="ImgUrl" md-sort-by="productImgUrl" md-numeric> {{ item.productImgUrl }} </md-table-cell>
+      <md-table-cell md-label="Quantity" md-sort-by="quantity" md-numeric> {{ item.quantity }} </md-table-cell>
+      <md-table-cell md-label="Unit" md-sort-by="unit" md-numeric> {{ item.unit }} </md-table-cell>
+      <md-table-cell md-label="Weight" md-sort-by="weight" md-numeric> {{ item.weight }} </md-table-cell>
       <md-table-cell md-label="Active" md-sort-by="productActive" md-numeric> {{ item.productActive }} </md-table-cell>
       <md-table-cell md-label="AdminId" md-sort-by="adminId" md-numeric> {{ item.adminId }} </md-table-cell>
       <md-table-cell md-label="Timestamp" md-sort-by="productStamp" md-numeric> {{ item.productStamp }} </md-table-cell>
@@ -114,6 +117,32 @@
                   <label>Selling Price</label>
                   <md-input type="number" v-model="newProduct.productSellingPrice" value="newProduct.productSellingPrice" required></md-input>
                 </md-field>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Quantity</label>
+                  <md-input type="number" v-model="newProduct.quantity" value="newProduct.quantity" required></md-input>
+                </md-field>
+              </div>
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Unit</label>
+                  <md-input type="text" v-model="newProduct.unit" value="newProduct.unit" required></md-input>
+                </md-field>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Weight</label>
+                  <md-input type="number" v-model="newProduct.weight" value="newProduct.weight" required></md-input>
+                </md-field>
+              </div>
+              <div class="col">
               </div>
             </div>
 
@@ -203,6 +232,32 @@
                   <label>Selling Price</label>
                   <md-input type="number" v-model="selected.productSellingPrice" value="selected.productSellingPrice" required></md-input>
                 </md-field>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Quantity</label>
+                  <md-input type="number" v-model="selected.quantity" value="selected.quantity" required></md-input>
+                </md-field>
+              </div>
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Unit</label>
+                  <md-input type="text" v-model="selected.unit" value="selected.unit" required></md-input>
+                </md-field>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col">
+                <md-field class="modal-input">
+                  <label>Weight</label>
+                  <md-input type="number" v-model="selected.weight" value="selected.weight" required></md-input>
+                </md-field>
+              </div>
+              <div class="col">
               </div>
             </div>
 
@@ -333,6 +388,9 @@ export default {
       productActive: null,
       productDescription: null,
       adminId: null,
+      quantity: null,
+      unit: null,
+      weight: null,
     },
     categoryData: [],
     subCategoryData: [],
@@ -416,6 +474,9 @@ export default {
             productDescription: 'Not Found',
             adminId: 'Not Found',
             productStamp: 'Not Found',
+            quantity: 0,
+            unit: 'Not Found',
+            weight: 0,
             visible: false
           })
           count++;
@@ -445,6 +506,9 @@ export default {
               productDescription: this.productData[count][7],
               adminId: this.productData[count][8],
               productStamp: this.productData[count][9],
+              quantity: this.productData[count][10],
+              unit: this.productData[count][11],
+              weight: this.productData[count][12],
               visible: true
             }
           } else {
@@ -543,7 +607,10 @@ export default {
           productSellingPrice: this.selected.productSellingPrice,
           productImgUrl: imageInput,
           productActive: this.selected.productActive,
-          productDescription: this.selected.productDescription
+          productDescription: this.selected.productDescription,
+          quantity: this.selected.quantity,
+          unit: this.selected.unit,
+          weight: this.selected.weight
         }
         console.log(prod)
         await HTTP.put('/product/' + itemId, prod)
@@ -661,7 +728,10 @@ export default {
               productImgUrl: this.imageUrl,
               productActive: 'true',
               productDescription: this.newProduct.productDescription,
-              adminId: State.data.adminInfo.adminId
+              adminId: State.data.adminInfo.adminId,
+              quantity: this.newProduct.quantity,
+              unit: this.newProduct.unit,
+              weight: this.newProduct.weight
             }).then((res) => {
               this.alertGreen = true
               console.log(res)

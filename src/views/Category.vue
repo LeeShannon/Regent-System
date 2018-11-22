@@ -257,22 +257,31 @@ export default {
       }
     },
     async editCategory(){
-      console.log('TODO - Edit Category')
-      console.log(this.selected)
       // Get catId
       let catId = null
-      if (this.selected != {}) {
+      // if (this.selected != {}) {
         catId = this.selected.categoryId
-      }
-      if (!catId && this.selected.categoryName.length>0 
-      && this.selected.categoryPosition.length>0) {
+      // }
+      // if (catId && this.selected.categoryName.length>0 
+      // && this.selected.categoryPosition.length>0) {
         let cat = {
           categoryName: this.selected.categoryName,
           categoryPosition: this.selected.categoryPosition
         }
-        console.log(cat)
         await HTTP.put('/category/' + catId, cat).then((res) => {console.log(res)})
+      // }
+      this.populate();
+    },
+    async updateCategory() {
+      console.log(this.infoToUpdate);
+      let item = {
+        categoryName: this.infoToUpdate.catName,
+        adminId : this.connectedAdminId
       }
+      await HTTP.put('/category/' + this.infoToUpdate.id, item).then((res) => {
+        console.log(item);
+        this.alertBlue= true;
+      })
     },
     async addCategory(){
       if (State.data.loggedIn) {

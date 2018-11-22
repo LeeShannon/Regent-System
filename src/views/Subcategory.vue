@@ -324,9 +324,6 @@ export default {
           }
           count++
         }
-      }
-      if (!catId && !subId && this.selected.subCategoryName.length>0 
-      && this.selected.subCategoryPosition.length>0) {
         let sub = {
           subCategoryName: this.selected.subCategoryName,
           subCategoryPosition: this.selected.subCategoryPosition,
@@ -335,7 +332,6 @@ export default {
         console.log(sub)
         await HTTP.put('/subcategory/' + subId, sub).then((res) => {console.log(res)})
       }
-
     },
     async addSubcategory(){
       if (State.data.loggedIn) {
