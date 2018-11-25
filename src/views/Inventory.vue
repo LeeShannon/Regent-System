@@ -396,6 +396,7 @@ export default {
     subCategoryData: [],
     productData: [],
     category: [],
+    array: [],
     newCategory: [],
     subCategory: [],
     subSubCategory: [],
@@ -408,8 +409,11 @@ export default {
   }),
   methods: {
     async populate() {
+      // this.products = []
+      // this.product = []
       this.categoryData = []
       this.subCategoryData = []
+      // this.searched = []
       this.productData = []
       this.errorData = '';
       try {
@@ -522,7 +526,7 @@ export default {
         // Place where I am probably gonna fuck this shit up
         let counter = 0
         while (counter < this.product.length) {
-          if ( this.product[counter].visible ) {
+          if ( this.product[counter].visible && this.product[counter].quantity > 0) {
             this.products.push(this.product[counter])
           }
           counter++

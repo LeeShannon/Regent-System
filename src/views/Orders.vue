@@ -22,8 +22,12 @@
 
   <div class="error-msg" v-show="alertRed1">
     <i class="fa fa-times-circle"></i>
-    <strong>Error</strong> something went wrong
+    <strong>Error</strong> in the form could not save orders
     <i style="float: right; cursor: pointer" @click="alertRed1 = !alertRed1" class="fas fa-times"></i>
+    <b>Please correct the following error(s) when adding a new Incoming order:</b>
+    <ul>
+      <li v-for="error in errors">{{ error }}</li>
+    </ul>
   </div>
 
   <!-- Incoming TABLE -->
@@ -86,8 +90,12 @@
 
   <div class="error-msg" v-show="alertRed2">
     <i class="fa fa-times-circle"></i>
-    <strong>Error</strong> something went wrong
-    <i style="float: right; cursor: pointer" @click="alertRed = !alertRed" class="fas fa-times"></i>
+    <strong>Error</strong> in the form could not save orders
+    <i style="float: right; cursor: pointer" @click="alertRed2 = !alertRed2" class="fas fa-times"></i>
+    <b>Please correct the following error(s) when adding a new Outgoing order:</b>
+    <ul>
+      <li v-for="error in errors">{{ error }}</li>
+    </ul>
   </div>
 
   <!-- Outgoing TABLE -->
@@ -182,8 +190,8 @@
             <div class="modal-header">
               <h5 class="modal-title" id="addUserModalLabel">Add Incoming Order</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+              <span aria-hidden="true">&times;</span>
+            </button>
             </div>
             <div class="modal-body">
 
@@ -214,7 +222,7 @@
                       </md-field>
                     </div>
                   </div>
-                  <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(rwo.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
+                  <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(rwo)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
                 </div>
 
                 <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
@@ -223,20 +231,16 @@
                   <div class="col">
                     <md-field class="modal-input">
                       <label>Supplier</label>
-                      <md-input type="text" required v-model="newOrder.supplier"></md-input>
+                      <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.supplier">
+                        <option v-for="supplier in supplierName" v-bind:value="supplier"  :key="supplier.id">{{supplier}}</option>
+                      </select>
                     </md-field>
                   </div>
                   <div class="col">
-
                     <label>Shipment</label>
-
                     <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
-
-                  <option v-for="option in shipOption" v-bind:value="option.shipId"  :key="option.id">{{option.shipName}}</option>
-
-
-                </select>
-
+                      <option v-for="option in shipOption" v-bind:value="option.shipId"  :key="option.id">{{option.shipName}}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-row">
@@ -272,8 +276,8 @@
             <div class="modal-header">
               <h5 class="modal-title" id="addUserModalLabel">Add Outgoing Order</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+                  <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
 
@@ -284,7 +288,9 @@
                     <div class="col">
                       <md-field class="modal-input">
                         <label>Product</label>
-                        <md-input type="text" v-model="row.productN" required></md-input>
+                        <select class="form-control" id="exampleFormControlSelect1" v-model="row.productN">
+                          <option v-for="product in productName" v-bind:value="product"  :key="product.id">{{product}}</option>
+                        </select>
                       </md-field>
                     </div>
                   </div>
@@ -302,7 +308,7 @@
                       </md-field>
                     </div>
                   </div>
-                  <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(row.id)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
+                  <button type="button" class="my-btn-icon minus-icon" name="button" @click="removeRow(row)"><i class="fas fa-minus-circle" style="font-size: 1.5em; color: #d32632"></i></button>
                 </div>
 
                 <button type="button" name="button" class="my-btn-icon plus-icon" @click="addRow"><i class="fas fa-plus-circle" style="font-size: 1.5em; color: #2fb714"></i></button>
@@ -311,19 +317,16 @@
                   <div class="col">
                     <md-field class="modal-input">
                       <label>Client</label>
-                      <md-input type="text" required v-model="newOrder.supplier"></md-input>
+                      <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.supplier">
+                        <option v-for="supplier in clientName" v-bind:value="supplier"  :key="supplier.id">{{supplier}}</option>
+                      </select>
                     </md-field>
                   </div>
                   <div class="col">
-
                     <label>Shipment</label>
-
                     <select class="form-control" id="exampleFormControlSelect1" v-model="newOrder.shipCo">
-
-                  <option v-for="option in shipOption" v-bind:value="option.shipId" :key="option.id">{{option.shipName}}</option>
-
-
-                </select>
+                      <option v-for="option in shipOption" v-bind:value="option.shipId" :key="option.id">{{option.shipName}}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-row">
@@ -357,8 +360,8 @@
             <div class="modal-header">
               <h5 class="modal-title" id="addUserModalLabel">Edit Incoming Order Details</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+              <span aria-hidden="true">&times;</span>
+            </button>
             </div>
             <div class="modal-body">
 
@@ -385,7 +388,7 @@
 
               <!-- <option v-model="incomingUpdateContent[0].shipName" value="incomingUpdateContent[0].shipId">{{incomingUpdateContent[0].shipName}}</option> -->
               <option v-for="option in incomingUpdateContent[0].shipTable" v-bind:value="option.shipmentId" :key="option.id">{{option.companyName}}</option>
-            </select>
+              </select>
                   </div>
                 </div>
               </form>
@@ -405,8 +408,8 @@
             <div class="modal-header">
               <h5 class="modal-title" id="addUserModalLabel">Edit Outgoing Order Details</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+                  <span aria-hidden="true">&times;</span>
+          </button>
             </div>
             <div class="modal-body">
               <form class="" action="index.html" method="post">
@@ -457,8 +460,8 @@
             <div class="modal-header">
               <h5 class="modal-title" id="addUserModalLabel">View Incoming Order</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+              <span aria-hidden="true">&times;</span>
+            </button>
             </div>
             <div class="modal-body">
               <form class="" action="index.html" method="post">
@@ -468,6 +471,8 @@
                     <tr>
                       <th scope="col">Product</th>
                       <th scope="col">Quantity</th>
+                      <th scope="col">Unit</th>
+                      <th scope="col">Weight per unit</th>
                       <th scope="col">Price</th>
                     </tr>
                   </thead>
@@ -475,10 +480,14 @@
                     <tr>
                       <td>{{p.productName}}</td>
                       <td>{{p.productQuantity}}</td>
+                      <td>{{p.productUnit}}</td>
+                      <td>{{p.productWeight}}</td>
                       <td>R {{p.productPrice}}</td>
                     </tr>
                   </tbody>
                   <tfoot>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td style="font-weight: 400">Total:</td>
                     <td style="font-weight: 400">
@@ -491,6 +500,7 @@
                   <div class="col" style="padding-left: 5%">
                     <label class="home-headers">Supplier:</label>
                     <p style="font-weight: 300;" value:="incomingOfferedOrderData[2]">{{ incomingOfferedOrderData[2] }}</p>
+
                   </div>
                   <div class="col">
                     <label class="home-headers">Created Date:</label>
@@ -546,8 +556,8 @@
             <div class="modal-header">
               <h5 class="modal-title" id="addUserModalLabel">View Outgoing Order</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+                  <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
 
@@ -559,6 +569,8 @@
                         <tr>
                           <th scope="col">Product</th>
                           <th scope="col">Quantity</th>
+                          <th scope="col">Unit</th>
+                          <th scope="col">Weight per unit</th>
                           <th scope="col">Price</th>
                         </tr>
                       </thead>
@@ -566,10 +578,14 @@
                         <tr>
                           <td>{{p.productName}}</td>
                           <td>{{p.productQuantity}}</td>
+                          <td>{{p.productUnit}}</td>
+                          <td>{{p.productWeight}}</td>
                           <td>R {{p.productPrice}}</td>
                         </tr>
                       </tbody>
                       <tfoot>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td style="font-weight: 400">Total:</td>
                         <td style="font-weight: 400">
@@ -634,12 +650,8 @@
 
     </div>
 </template>
-
 <script>
-import {
-  HTTP
-} from '../http-common'
-
+import {HTTP} from '../http-common'
 const toLower = text => {
   return text.toString().toLowerCase()
 }
@@ -653,7 +665,6 @@ export default {
   name: 'TableSearch',
   data: () => ({
     search: null,
-    errorData: '',
     alertBlue1: false,
     alertGreen1: false,
     alertOrange1: false,
@@ -681,7 +692,8 @@ export default {
     order: [],
     requestOrder: [],
     orderTable: {
-      adminId: '16'
+      adminId: '16',
+      wayBill: ''
     },
     totOrders: '',
     totShipOrders: [],
@@ -733,12 +745,43 @@ export default {
     outgoingProductOrderToDeleteIds: [],
     selectedIncomingRow: [],
     selectedOutgoingRow: [],
-    orders: []
+    orders: [],
+    suppliers: [],
+    supplierName: [],
+    clients: [],
+    clientName: [],
+    products: [],
+    productName: [],
+    errors: []
   }),
   methods: {
     async populate() {
-      this.shipData = await HTTP.get('/shipment')
+      this.products = await HTTP.get('/product');
+      this.products = this.products.data.product.records;
       let count = 0;
+      while (count < this.products.length){
+        this.productName.push(this.products[count][2])
+        count++;
+      }
+      console.log(this.productName)
+      this.suppliers = await HTTP.get('/supplier');
+      this.suppliers = this.suppliers.data.supplier.records;
+      count = 0;
+      while (count < this.suppliers.length){
+        this.supplierName.push(this.suppliers[count][1])
+        count++;
+      }
+      console.log(this.supplierName)
+      this.clients = await HTTP.get('/client');
+      this.clients = this.clients.data.client.records;
+      count = 0;
+      while (count < this.clients.length){
+        this.clientName.push(this.clients[count][1])
+        count++;
+      }
+      console.log(this.clientName)
+      this.shipData = await HTTP.get('/shipment')
+      count = 0;
       while (count < this.shipData.data.shipment.records.length) {
         this.shipOption.push({
           shipId: this.shipData.data.shipment.records[count][0],
@@ -749,15 +792,23 @@ export default {
         })
         count++
       }
+//TO REMOVE
+// console.log("shipOption")
+// console.log(this.shipOption)
       await HTTP.get('/offeredorder').then((res) => {
         let count = 0;
         this.offeredOrderData = res.data.offeredorder.records;
       })
+//TO REMOVE
+// console.log("offeredOrderData")
+// console.log(this.offeredOrderData)
       await HTTP.get('/requestedorder').then((res) => {
         this.requestedOrderData = res.data.requestedorder.records;
       })
+//TO REMOVE
+// console.log("requestedOrderData")
+// console.log(this.requestedOrderData)
       let count2 = 0;
-//REDFLAG
       while (count2 < this.offeredOrderData.length) {
         let id = this.offeredOrderData[count2][1];
         await HTTP.get('/orders/' + id).then((res) => {
@@ -767,58 +818,62 @@ export default {
         })
         count2++;
       }
-      console.log("OFFERED/INCOMING ORDER IDs");
-      console.log(this.orderTableData);
+// console.log("orderTableData")
+// console.log("OFFERED/INCOMING ORDER IDs");
+// console.log(this.orderTableData);
       let inc = 0;
-//REDFLAG
       while (inc < this.requestedOrderData.length) {
         let id = this.requestedOrderData[inc][1];
         await HTTP.get('/orders/' + id).then((res) => {
           this.orderTableDataOut.push({
-            orderId: res.data.orderId
+            orderId: res.data.orderId,
+            client: this.requestedOrderData[inc][2]
           })
         })
         inc++;
       }
-      console.log("REQUESTED/OUTGOING ORDER IDs");
-      console.log(this.orderTableDataOut);
+//TO REMOVE
+// console.log("orderTableDataOut")
+// console.log("REQUESTED/OUTGOING ORDER IDs");
+// console.log(this.orderTableDataOut);
       await HTTP.get('/shipmentorder').then((res) => {
         this.totShipOrders = res.data.shipmentorder.records;
       })
-      console.log("SHIPMENT ORDER TABLE");
-      console.log(this.totShipOrders);
+//TO REMOVE
+// console.log("______________________________________________")
+// console.log("totShipOrders")
+// console.log("SHIPMENT ORDER TABLE");
+// console.log(this.totShipOrders);
+// console.log("______________________________________________")
       let g = 0;
       while (g < this.orderTableData.length) {
+// console.log("Length")
+// console.log(this.orderTableData.length)
         let k = 0;
         while (k < this.totShipOrders.length) {
+// console.log("Length")
+// console.log(this.orderTableData[g].orderId)
+// console.log("Condition One")
+// console.log(this.totShipOrders.length)
+// console.log("Condition Two")
+// console.log(this.totShipOrders[k][5])
           if (this.orderTableData[g].orderId == this.totShipOrders[k][5]) {
             this.offeredOrderShipData.push({
               departure: this.totShipOrders[k][3],
               arrival: this.totShipOrders[k][4],
+              id: this.totShipOrders[k][5]
             })
           }
           k++;
         }
         g++;
       }
-      console.log("OFFERED SHIPMENT ORDER TABLE");
-      console.log(this.offeredOrderShipData);
-      let g1 = 0;
-      while (g < this.orderTableData.length) {
-        let k = 0;
-        while (k < this.totShipOrders.length) {
-          if (this.orderTableData[g].orderId == this.totShipOrders[k][5]) {
-            this.offeredOrderShipData.push({
-              departure: this.totShipOrders[k][3],
-              arrival: this.totShipOrders[k][4],
-            })
-          }
-          k++;
-        }
-        g1++;
-      }
-      console.log("OFFERED SHIPMENT ORDER TABLE");
-      console.log(this.offeredOrderShipData);
+//TO REMOVE
+// console.log("______________________________________________")
+// console.log("offeredOrderShipData")
+// console.log("OFFERED SHIPMENT ORDER TABLE");
+// console.log(this.offeredOrderShipData);
+// console.log("______________________________________________")
       let g2 = 0;
       while (g2 < this.orderTableDataOut.length) {
         let k2 = 0;
@@ -827,14 +882,21 @@ export default {
             this.requestedOrderShipData.push({
               departure: this.totShipOrders[k2][3],
               arrival: this.totShipOrders[k2][4],
+              id: this.totShipOrders[k2][5],
+              client: this.orderTableDataOut[g2].client
             })
           }
           k2++;
         }
         g2++;
       }
-      console.log("REQUESTED SHIPMENT ORDER TABLE");
-      console.log(this.requestedOrderShipData);
+//TO REMOVE
+// console.log("requestedOrderShipData")
+// console.log("REQUESTED SHIPMENT ORDER TABLE");
+// console.log(this.requestedOrderShipData);
+
+
+
       let z = 0;
       while (z < this.orderTableData.length) {
         this.allIncomingOrdersDisplay.push({
@@ -847,18 +909,24 @@ export default {
       }
       console.log("INCOMING DISPLAY ORDER  TABLE");
       console.log(this.allIncomingOrdersDisplay);
+
+
+
       let z1 = 0;
-      while (z1 < this.orderTableDataOut.length) {
+      while (z1 < this.requestedOrderShipData.length) {
         this.allOutgoingOrdersDisplay.push({
-          orderid: this.orderTableDataOut[z1].orderId,
-          client: this.requestedOrderData[z1][2],
+          orderid: this.requestedOrderShipData[z1].id,
+          client: this.requestedOrderShipData[z1].client,
           departure: this.requestedOrderShipData[z1].departure,
           arrival: this.requestedOrderShipData[z1].arrival
         })
         z1++;
       }
+
       console.log("OUTGOING DISPLAY ORDER TABLE");
       console.log(this.allOutgoingOrdersDisplay);
+
+
       this.orders.push({
         incoming: this.allIncomingOrdersDisplay,
         outgoing: this.allOutgoingOrdersDisplay
@@ -872,17 +940,31 @@ export default {
       let count = 0;
       while (count < this.totproductOrder.length) {
         if (id == this.totproductOrder[count][2]) {
+          let counter = 0;
+          let unit = "";//11
+          let weight = 0;//12
+          while (counter < this.products) {
+            console.log(this.totproductOrder[count][3] + " - " + this.products[1])
+            if (this.totproductOrder[count][3] == this.products[1]) {
+              unit = this.products[11]
+              weight = this.products[12]
+            }
+            counter++;
+          }
           // console.log(this.totproductOrder[count]);
           this.incomingProductOrderData.push({
             productName: this.totproductOrder[count][3],
             productQuantity: this.totproductOrder[count][4],
             productPrice: this.totproductOrder[count][5],
-            shipmentId: this.totproductOrder[count][1]
+            shipmentId: this.totproductOrder[count][1],
+            productUnit: unit,
+            productWeight: weight
           })
         }
         count++;
       }
-      // console.log(this.incomingProductOrderData);
+      console.log("Is this a fucking problem");
+      console.log(this.incomingProductOrderData);
       await HTTP.get("/shipmentorder").then((res) => {
         this.totIncomingShipOrder = res.data.shipmentorder.records;
       })
@@ -891,6 +973,7 @@ export default {
       })
       let up = 0;
       while (up < this.allincomingOfferedOrderDetails.length) {
+
         if (id == this.allincomingOfferedOrderDetails[up][1]) {
           // console.log(this.allincomingOfferedOrderDetails[up]);
           this.incomingOfferedOrderData = this.allincomingOfferedOrderDetails[up];
@@ -969,6 +1052,7 @@ export default {
         count1++;
       }
       await HTTP.get("/shipment").then((res) => {
+
         this.allShipmentCompanyDetails = res.data.shipment.records;
       })
       let count2 = 0;
@@ -1011,6 +1095,7 @@ export default {
                 shipTable: this.incomingUpdateContentShip,
                 orderId: this.totShipOrders[count][5],
                 shipmentkeyId: this.totShipOrders[count][0]
+
               })
             }
             count1++;
@@ -1018,22 +1103,28 @@ export default {
         }
         count++;
       }
+
       console.log(this.incomingUpdateContent[0]);
+
     },
     async saveEditedIncomingOrder() {
       console.log(this.incomingUpdateContent[0]);
       console.log(this.allIncomingOrdersDisplay);
+
       let item = this.incomingUpdateContent[0];
       let id = this.incomingUpdateContent[0].shipmentkeyId;
-//REDFLAG
+
       await HTTP.put('/shipmentorder/' + id, item).then((res) => {
         this.alertBlue1 = true;
         console.log("i guess you can sleep. With love, God");
       })
+
     },
     async outgoingEditProduct(orderId) {
+
       this.outgoingUpdateContent = [],
         this.outgoingUpdateContentShip = []
+
       HTTP.get("/shipment").then((res) => {
         this.alertBlue2 = true;
         let count = 0;
@@ -1041,6 +1132,7 @@ export default {
           this.outgoingUpdateContentShip.push({
             shipmentId: res.data.shipment.records[count][0],
             companyName: res.data.shipment.records[count][1],
+
           })
           count++;
         }
@@ -1158,6 +1250,7 @@ export default {
       this.outgoingProductOrderToDeleteIds = []
       let count = 0;
       let requestedOrderTableId = 0;
+
       while (count < this.requestedOrderData.length) {
         if (id == this.requestedOrderData[count][1]) {
           console.log(this.requestedOrderData[count]);
@@ -1228,148 +1321,303 @@ export default {
       });
     },
     async addOrderIn() {
-      let count = 0;
-      while (count < this.inputRows.length) {
-        console.log(this.inputRows[count].productN);
-        this.order.push({
-          ship: this.newOrder.shipCo,
-          supplier: this.newOrder.supplier,
-          departure: this.newOrder.departure,
-          arrival: this.newOrder.arrival,
-          productN: this.inputRows[count].productN,
-          quantity: this.inputRows[count].quantity,
-          price: this.inputRows[count].price
-        })
-        count++
+      this.errors = [];
+      let c = 0;
+      while (c < this.inputRows.length) {
+        console.log(this.inputRows[c].productN);
+        if (!this.inputRows[c].productN) {
+          this.errors.push('A product name required.');
+        }
+        if (!this.inputRows[c].quantity) {
+          this.errors.push('A quantity is required for every product.');
+        }
+        if (!this.inputRows[c].price) {
+          this.errors.push('A price is required for every product.');
+        }
+        c++;
       }
-      let iterate = 0;
-      let totalAmount = 0;
-      while (iterate < this.order.length) {
-        totalAmount += this.order[iterate].quantity * this.order[iterate].price;
-        iterate++;
+      if (!this.newOrder.supplier) {
+        this.errors.push('Supplier name required.');
       }
-      console.log(this.order);
-      let item = this.orderTable;
-      var orderId;
-      var adminNo;
-      await HTTP.post('/orders', item).then((res) => {
-        console.log(res)
-        console.log("success adding");
-        orderId = res.data;
-      })
-      console.log(orderId);
-      this.offeredOrderTable.push({
-        orderId: orderId,
-        supplierName: this.newOrder.supplier,
-        adminId: this.orderTable.adminId,
-        total: totalAmount
-      })
-      let item2 = this.offeredOrderTable;
-      await HTTP.post('/offeredorder', item2).then((res) => {
-        console.log(res)
-        console.log("success adding");
-      })
-      let count2 = 0;
-      while (count2 < this.order.length) {
-        this.productOrderTable.push({
-          shipmentOrderId: this.newOrder.shipCo,
-          orderId: orderId,
-          productOrderName: this.inputRows[count2].productN,
-          productQuantity: this.inputRows[count2].quantity,
-          productPrice: this.inputRows[count2].price
-        })
-        count2++;
+      if (!this.newOrder.shipCo) {
+        this.errors.push('A shipment is needed.');
       }
-      await HTTP.post('/productorder', this.productOrderTable).then((res) => {
-        console.log(res)
-        console.log("success P adding");
-      })
-      console.log(this.newOrder.supplier);
-      console.log(this.inputRows[0].productN);
-      this.shipmentOrderTable.push({
-        shipmentId: this.newOrder.shipCo,
-        adminId: this.orderTable.adminId,
-        departure: this.newOrder.departure,
-        arrival: this.newOrder.arrival,
-        orderId: orderId
-      })
-      await HTTP.post('/shipmentorder', this.shipmentOrderTable).then((res) => {
-        this.alertGreen1 = true;
-        console.log(res)
-        console.log("success S adding");
-      })
+      if (!this.newOrder.departure) {
+        this.errors.push('A Departure date is required.');
+      }
+      if (!this.newOrder.arrival) {
+        this.errors.push('An Arrival date is required.');
+      }
+      if (this.newOrder.departure > this.newOrder.arrival) {
+        this.errors.push('The arrival of an order cannot be before the departure.');
+      }
+      //detailed validation
+      const textOnly = /^[a-zA-Z\s]+$/;
+      let extraValid = true;
+      let c1 = 0;
+      while (c1 < this.inputRows.length) {
+        if (!textOnly.test(this.inputRows[c1].productN)) {
+          this.errors.push('Product Name may not contain any numbers.');
+        }
+        c1++;
+      }
+      if(!textOnly.test(this.newOrder.supplier)){
+        this.errors.push('Supplier may not contain any numbers')
+        extraValid = false;
+      }
+      if(this.errors.length > 0) {
+        this.alertRed1 = true;
+        extraValid = false;
+      }
+      if(extraValid){
+        if(this.inputRows.length >= 0 && this.newOrder.supplier != '' && this.newOrder.shipCo != '' && this.newOrder.departure != '' && this.newOrder.arrival != ''){
+          let count = 0;
+          while (count < this.inputRows.length) {
+            console.log(this.inputRows[count].productN);
+            this.order.push({
+              ship: this.newOrder.shipCo,
+              supplier: this.newOrder.supplier,
+              departure: this.newOrder.departure,
+              arrival: this.newOrder.arrival,
+              productN: this.inputRows[count].productN,
+              quantity: this.inputRows[count].quantity,
+              price: this.inputRows[count].price
+            })
+            count++
+          }
+          let iterate = 0;
+          let totalAmount = 0;
+          while (iterate < this.order.length) {
+            totalAmount += this.order[iterate].quantity * this.order[iterate].price;
+            iterate++;
+          }
+          console.log(this.order);
+          // Setting the waybill number
+          orderTable.wayBill = this.generateWayBill();
+          let item = this.orderTable;
+          var orderId;
+          var adminNo;
+          await HTTP.post('/orders', item).then((res) => {
+            console.log(res)
+            console.log("success adding");
+            orderId = res.data;
+          })
+          console.log(orderId);
+          this.offeredOrderTable.push({
+            orderId: orderId,
+            supplierName: this.newOrder.supplier,
+            adminId: this.orderTable.adminId,
+            total: totalAmount
+          })
+          let item2 = this.offeredOrderTable;
+          await HTTP.post('/offeredorder', item2).then((res) => {
+            console.log(res)
+            console.log("success adding");
+          })
+          let count2 = 0;
+          while (count2 < this.order.length) {
+            this.productOrderTable.push({
+              shipmentOrderId: this.newOrder.shipCo,
+              orderId: orderId,
+              productOrderName: this.inputRows[count2].productN,
+              productQuantity: this.inputRows[count2].quantity,
+              productPrice: this.inputRows[count2].price
+            })
+            count2++;
+          }
+          await HTTP.post('/productorder', this.productOrderTable).then((res) => {
+            console.log(res)
+            console.log("success P adding");
+          })
+          console.log(this.newOrder.supplier);
+          console.log(this.inputRows[0].productN);
+          // Generate tracking number      
+          this.shipmentOrderTable.push({
+            shipmentId: this.newOrder.shipCo,
+            adminId: this.orderTable.adminId,
+            departure: this.newOrder.departure,
+            arrival: this.newOrder.arrival,
+            orderId: orderId,
+            tracking: this.generateTrackingNumber()
+          })
+          await HTTP.post('/shipmentOrder', this.shipmentOrderTable).then((res) => {
+            this.alertGreen1 = true;
+            console.log(res)
+            console.log("success S adding");
+          })
+          this.allIncomingOrdersDisplay.push({
+            orderid: orderId,
+            supplier: this.newOrder.supplier,
+            departure: this.newOrder.departure,
+            arrival: this.newOrder.arrival
+          })
+        }
+      }
+    },
+    generateWayBill() {
+      var output = "";
+      // Get time in millis
+      var d = new Date();
+      d = d.getTime();
+      const convertion = ['A','B','C','D','E','F','G','H','I','J','K'];
+      let count = 0
+      let string = d+""
+      // Convert time numbers to letters
+      while (count< string.length) {
+        output += convertion[parseInt(string.charAt(count))]+"";
+        count++;
+      }
+      // Add prefix and random letters (1-9) at the end
+      output = "W-B-"+ output + "-" + convertion[Math.floor(Math.random() * 9) + 1] + "-" + convertion[Math.floor(Math.random() * 9) + 1]
+      return output;
+    },
+    generateTrackingNumber() {
+      var output = "";
+      // Get time in millis
+      var d = new Date();
+      d = d.getTime();
+      const convertion = ['A','B','C','D','E','F','G','H','I','J','K'];
+      let count = 0
+      let string = d+""
+      // Convert time numbers to letters
+      while (count< string.length) {
+        output += convertion[parseInt(string.charAt(count))]+"";
+        count++;
+      }
+      // Add prefix and random letters (1-9) at the end
+      output = "T-N-"+ output + "-" + convertion[Math.floor(Math.random() * 9) + 1] + "-" + convertion[Math.floor(Math.random() * 9) + 1]
+      return output;
     },
     async addOrderOut() {
-      this.alertGreen2 = true;
-      console.log(this.newOrder.supplier);
-      console.log(this.inputRows[0].productN);
-      let count = 0;
-      while (count < this.inputRows.length) {
-        console.log(this.inputRows[count].productN);
-        this.requestOrder.push({
-          ship: this.newOrder.shipCo,
-          supplier: this.newOrder.supplier,
-          departure: this.newOrder.departure,
-          arrival: this.newOrder.arrival,
-          productN: this.inputRows[count].productN,
-          quantity: this.inputRows[count].quantity,
-          price: this.inputRows[count].price
-        })
-        count++
+      this.errors = [];
+      let c = 0;
+      while (c < this.inputRows.length) {
+        console.log(this.inputRows[c].productN);
+        if (!this.inputRows[c].productN) {
+          this.errors.push('A product name required.');
+        }
+        if (!this.inputRows[c].quantity) {
+          this.errors.push('A quantity is required for every product.');
+        }
+        if (!this.inputRows[c].price) {
+          this.errors.push('A price is required for every product.');
+        }
+        c++;
       }
-      let iterate = 0;
-      let totalAmount = 0;
-      while (iterate < this.requestOrder.length) {
-        totalAmount += this.requestOrder[iterate].quantity * this.requestOrder[iterate].price;
-        iterate++;
+      if (!this.newOrder.supplier) {
+        this.errors.push('Supplier name required.');
       }
-      console.log(this.requestOrder);
-      var orderId;
-      var adminNo;
-      await HTTP.post('/orders', this.orderTable).then((res) => {
-        console.log(res)
-        console.log("success adding");
-        orderId = res.data;
-      })
-      this.requestedOrderTable.push({
-        orderId: orderId,
-        clientName: this.newOrder.supplier,
-        adminId: this.orderTable.adminId,
-        total: totalAmount
-      })
-      await HTTP.post('/requestedorder', this.requestedOrderTable).then((res) => {
-        console.log(res)
-        console.log("success adding");
-      })
-      let count3 = 0;
-      while (count3 < this.requestOrder.length) {
-        this.productOrderTable.push({
-          shipmentOrderId: this.newOrder.shipCo,
-          orderId: orderId,
-          productOrderName: this.inputRows[count3].productN,
-          productQuantity: this.inputRows[count3].quantity,
-          productPrice: this.inputRows[count3].price
-        })
-        count3++;
+      if (!this.newOrder.shipCo) {
+        this.errors.push('A shipment is needed.');
       }
-      await HTTP.post('/productorder', this.productOrderTable).then((res) => {
-        console.log(res)
-        console.log("success P adding");
-      })
-      this.shipmentOrderTable.push({
-        shipmentId: this.newOrder.shipCo,
-        adminId: this.orderTable.adminId,
-        departure: this.newOrder.departure,
-        arrival: this.newOrder.arrival,
-        orderId: orderId
-      })
-      await HTTP.post('/shipmentorder', this.shipmentOrderTable).then((res) => {
-        console.log(res)
-        console.log("success S adding");
-      })
+      if (!this.newOrder.departure) {
+        this.errors.push('A Departure date is required.');
+      }
+      if (!this.newOrder.arrival) {
+        this.errors.push('An Arrival date is required.');
+      }
+      if (this.newOrder.departure > this.newOrder.arrival) {
+        this.errors.push('The arrival of an order cannot be before the departure.');
+      }
+      //detailed validation
+      const textOnly = /^[a-zA-Z\s]+$/;
+      let extraValid = true;
+      let c1 = 0;
+      while (c1 < this.inputRows.length) {
+        if (!textOnly.test(this.inputRows[c1].productN)) {
+          this.errors.push('Product Name may not contain any numbers.');
+        }
+        c1++;
+      }
+      if(!textOnly.test(this.newOrder.supplier)){
+        this.errors.push('Supplier may not contain any numbers')
+        extraValid = false;
+      }
+      if(this.errors.length > 0) {
+        this.alertRed2 = true;
+        extraValid = false;
+      }
+        if(extraValid){
+          this.alertGreen2 = true;
+          let count = 0;
+          while (count < this.inputRows.length) {
+            console.log(this.inputRows[count].productN);
+            this.requestOrder.push({
+              ship: this.newOrder.shipCo,
+              supplier: this.newOrder.supplier,
+              departure: this.newOrder.departure,
+              arrival: this.newOrder.arrival,
+              productN: this.inputRows[count].productN,
+              quantity: this.inputRows[count].quantity,
+              price: this.inputRows[count].price
+            })
+            count++
+          }
+          let iterate = 0;
+          let totalAmount = 0;
+          while (iterate < this.requestOrder.length) {
+            totalAmount += this.requestOrder[iterate].quantity * this.requestOrder[iterate].price;
+            iterate++;
+          }
+          console.log(this.requestOrder);
+          this.orderTable.wayBill = this.generateWayBill()
+          var orderId;
+          var adminNo;
+          await HTTP.post('/orders', this.orderTable).then((res) => {
+            console.log(res)
+            console.log("success adding");
+            orderId = res.data;
+
+          })
+          this.requestedOrderTable.push({
+            orderId: orderId,
+            clientName: this.newOrder.supplier,
+            adminId: this.orderTable.adminId,
+            total: totalAmount
+          })
+          await HTTP.post('/requestedorder', this.requestedOrderTable).then((res) => {
+            console.log(res)
+            console.log("success adding");
+          })
+          let count3 = 0;
+          while (count3 < this.requestOrder.length) {
+            this.productOrderTable.push({
+              shipmentOrderId: this.newOrder.shipCo,
+              orderId: orderId,
+              productOrderName: this.inputRows[count3].productN,
+              productQuantity: this.inputRows[count3].quantity,
+              productPrice: this.inputRows[count3].price
+            })
+            count3++;
+          }
+          await HTTP.post('/productorder', this.productOrderTable).then((res) => {
+            console.log(res)
+            console.log("success P adding");
+          })
+          // Generate tracking number
+          this.shipmentOrderTable.push({
+            shipmentId: this.newOrder.shipCo,
+            adminId: this.orderTable.adminId,
+            departure: this.newOrder.departure,
+            arrival: this.newOrder.arrival,
+            orderId: orderId,
+            tracking: this.generateTrackingNumber()
+          })
+          await HTTP.post('/shipmentorder', this.shipmentOrderTable).then((res) => {
+            console.log(res)
+            console.log("success S adding");
+          })
+          this.allOutgoingOrdersDisplay.push({
+            orderid: orderId,
+            client: this.newOrder.supplier,
+            departure: this.newOrder.departure,
+            arrival: this.newOrder.arrival
+          })
+        }
     },
     removeRow(index) {
-      this.inputRows.splice(index, 1);
+      // this.inputRows.splice(index, 1);
+      this.inputRows.pop(index);
     },
     onLoad() {
       //I know its stupid but, selecting elements by name doesnt work so.... yea
@@ -1419,17 +1667,10 @@ export default {
     this.onLoad()
   },
   beforeMount() {
-    console.log(State.data.loggedIn)
-    if (State.data.loggedIn) {
-      this.populate();
-    } else {
-      this.errorData = 'You need to be logged in to make a view data';
-      console.log('You need to be logged in to make a view data')
-    }
+    this.populate()
   }
 }
 </script>
-
 <style lang="css">
 .submit-btn {
   border-radius: 20px !important;
